@@ -16,9 +16,7 @@ Lots of flags available on this one:
 var api = require("./lib/ap");
 
 module.exports = function(grunt) {
-
   grunt.registerTask("elex", function() {
-
     grunt.task.requires("json"); // we need the schedule sheet
 
     var done = this.async();
@@ -36,8 +34,10 @@ module.exports = function(grunt) {
       today = new Date(y, m - 1, d);
     }
     var eventHorizon = new Date(today - 1000 * 60 * 60 * 24);
-    
-    var races = schedule.filter(r => r.timestamp <= today && r.timestamp >= eventHorizon);
+
+    var races = schedule.filter(
+      r => r.timestamp <= today && r.timestamp >= eventHorizon
+    );
 
     var test = grunt.option("test");
     var offline = grunt.option("offline");
@@ -45,13 +45,35 @@ module.exports = function(grunt) {
       calls: grunt.data.json.calls,
       candidates: grunt.data.json.candidates
     };
-    
-    api.getResults({ races, overrides, test, offline }).then(function(results) {
-      grunt.data.election = Object.assign(grunt.data.election || {}, results);
-      console.log(JSON.stringify(grunt.data.election, null, 2));
-      done();
-    }).catch(err => console.log(err))
 
+    api
+      .getResults({ races, overrides, test, offline })
+      .then(function(results) {
+        grunt.data.election = Object.assign(grunt.data.election || {}, results);
+
+        for (var state in grunt.data.election) {
+          var s = grunt.data.election[state];
+          for (var office in s) {
+            var o = s[office];
+            for (var date in o) {
+              var d = date.replace(/\//g, "");
+              var result = o[date];
+              grunt.file.write(
+                `build/data/${state}_${office}_${d}.json`,
+                JSON.stringify(result.state, null, 2)
+              );
+              if (result.counties) {
+                grunt.file.write(
+                  `build/data/${state}_${office}_${d}_counties.json`,
+                  JSON.stringify(result.counties, null, 2)
+                );
+              }
+            }
+          }
+        }
+
+        done();
+      })
+      .catch(err => console.log(err));
   });
-
-}
+};

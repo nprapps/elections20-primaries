@@ -122,7 +122,6 @@ var getResults = async function(options) {
     var data = await loadData(ticket, options);
     rawResults.push(data);
   }
-  console.log(rawResults);
   return normalizeResults(rawResults, options.overrides)
 };
 

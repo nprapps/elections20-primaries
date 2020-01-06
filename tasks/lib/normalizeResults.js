@@ -64,6 +64,7 @@ module.exports = function(resultArray, overrides) {
             first: c.first,
             last: c.last
           };
+          dest.votes += remapped.votes;
           var override = overrides.candidates[remapped.id];
           if (override) {
             Object.assign(remapped, override);
