@@ -36,6 +36,17 @@ Common tasks that you may want to run include:
   * ``publish:live`` uploads to production
   * ``publish:simulated`` does a dry run of uploaded files and their compressed sizes
 
+This particular project includes some special tasks:
+
+* ``elex`` - Loads data from the AP and outputs result JSON files into ``build/data``. You should have ``$AP_API_KEY`` set in your environment. This task has several command-line flags:
+
+  * ``--date=M/D/YYYY`` - sets the date for which the rig should grab results. Defaults to the current date if not provided. It will pull anything within a day back of this date (meaning that by default it will grab today's and yesterday's races). 
+  * ``--test`` - request test numbers from the AP.
+  * ``--offline`` - use cached data if we have it. Obviously, you need to run this against the API at least once before you can try this.
+  * ``--archive`` - mark all exported results as non-live.
+
+* ``ap`` - Run the elex task and its prerequisites together
+
 Troubleshooting
 ---------------
 
