@@ -41,9 +41,14 @@ module.exports = function(grunt) {
 
     var test = grunt.option("test");
     var offline = grunt.option("offline");
+    var overrides = {
+      calls: grunt.data.json.calls,
+      candidates: grunt.data.json.candidates
+    };
     
-    api.getResults({ races, test, offline }).then(function(results) {
+    api.getResults({ races, overrides, test, offline }).then(function(results) {
       grunt.data.election = Object.assign(grunt.data.election || {}, results);
+      console.log(JSON.stringify(grunt.data.election, null, 2));
       done();
     }).catch(err => console.log(err))
 

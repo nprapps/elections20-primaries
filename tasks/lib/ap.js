@@ -106,6 +106,7 @@ var loadData = async function(ticket, options) {
       await fs.mkdir("temp", { recursive: true });
       await fs.writeFile(`temp/${tag}.json`, JSON.stringify(data, null, 2));
       etags[tag] = response.headers.etag;
+      return data;
     } catch (err) {
       console.log(err);
       throw err;
@@ -121,7 +122,8 @@ var getResults = async function(options) {
     var data = await loadData(ticket, options);
     rawResults.push(data);
   }
-  return normalizeResults(rawResults)
+  console.log(rawResults);
+  return normalizeResults(rawResults, options.overrides)
 };
 
 module.exports = { getResults, apDate };
