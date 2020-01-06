@@ -42,7 +42,7 @@ var issueTickets = function(races) {
       }
     });
   });
-  // combine other tickets by date
+  // combine other tickets by date and granularity
   var grouped = {};
   mergable.forEach(function(r) {
     var level = r.counties ? "FIPScode" : "state";
@@ -68,7 +68,7 @@ var issueTickets = function(races) {
   return tickets;
 };
 
-var loadData = async function(ticket, options) {
+var redeemTicket = async function(ticket, options) {
   var tag =
     ticket.date +
     "_" +
@@ -112,7 +112,7 @@ var getResults = async function(options) {
   var tickets = issueTickets(races);
   var rawResults = [];
   for (var ticket of tickets) {
-    var data = await loadData(ticket, options);
+    var data = await redeemTicket(ticket, options);
     rawResults.push(data);
   }
   return normalizeResults(rawResults, options.overrides)
