@@ -52,6 +52,9 @@ module.exports = function(resultArray, overrides) {
           votes: 0,
           results: []
         };
+        if (call && call.winner) {
+          dest.winner = call.winner;
+        }
         if (ru.statePostal) state = ru.statePostal;
         dest.results = ru.candidates.map(function(c) {
           var remapped = {
@@ -61,9 +64,19 @@ module.exports = function(resultArray, overrides) {
             first: c.first,
             last: c.last
           };
-          if (c.winner == "X") {
-            remapped.winner = true;
-            dest.winner = remapped.id;
+          var override = overrides.candidates[remapped.id];
+          if (override) {
+            Object.assign(remapped, override);
+          }
+          if (call) {
+            if (call == remapped.id) {
+              remapped.winner = true;
+            }
+          } else {
+            if (c.winner == "X") {
+              remapped.winner = true;
+              dest.winner = remapped.id;
+            }
           }
           return remapped;
         });
