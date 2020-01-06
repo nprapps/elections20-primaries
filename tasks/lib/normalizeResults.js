@@ -2,7 +2,7 @@
 
 Constructs a nested primary results object of nested granularity:
 
-state -> office -> date -> ".state"|".county"
+state -> office -> date -> ".state"|".counties" -> party
 
 A state/county results object contains:
 
