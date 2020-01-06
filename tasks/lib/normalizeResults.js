@@ -19,6 +19,8 @@ These are then passed back so that the elex task can look up results per-race an
 
 */
 
+var depths = require("./depths");
+
 var nprDate = apDate => {
   var [y, m, d] = apDate.split("-").map(parseFloat);
   return [m, d, y].join("/");
@@ -29,7 +31,6 @@ module.exports = function(resultArray, overrides) {
   // handle each AP results call
   resultArray.forEach(function(results) {
     var date = nprDate(results.electionDate);
-    var updated = Date.parse(results.timestamp);
     var state = null;
     // create race objects
     results.races.forEach(function(race) {
@@ -37,62 +38,57 @@ module.exports = function(resultArray, overrides) {
       var id = race.raceID;
       var call = overrides.calls[id];
       var office = race.officeID;
+      var party = race.party;
       var data = {
-        state: {
-          test, id, votes: 0, results: []
-        },
-        counties: null
-      };
+        state: { test, id, candidates: [] },
+        counties: { test, id, results: [] }
+      }
       // process results at each geographic reporting unit
       race.reportingUnits.forEach(function(ru) {
-        var winner;
-        // update the result object
-        var dest = ru.level == "state" ? data.state : {
-          fips: fipsCode,
-          votes: 0,
-          results: []
-        };
-        if (call && call.winner) {
-          dest.winner = call.winner;
-        }
-        if (ru.statePostal) state = ru.statePostal;
-        dest.results = ru.candidates.map(function(c) {
-          var remapped = {
+        var updated = Date.parse(ru.lastUpdated);
+        var candidates = ru.candidates.map(function(c) {
+          var candidate = {
+            first: c.first,
+            last: c.last,
             party: c.party,
             id: c.polID,
             votes: c.voteCount,
-            first: c.first,
-            last: c.last
+            winner: call ? call.winner == c.polID : c.winner == "X"
           };
-          dest.votes += remapped.votes;
-          var override = overrides.candidates[remapped.id];
+          var override = overrides.candidates[candidate.id];
           if (override) {
-            Object.assign(remapped, override);
+            Object.assign(candidate, override);
           }
-          if (call) {
-            if (call == remapped.id) {
-              remapped.winner = true;
-            }
-          } else {
-            if (c.winner == "X") {
-              remapped.winner = true;
-              dest.winner = remapped.id;
-            }
-          }
-          return remapped;
+          return candidate;
         });
-        if (ru.level == "FIPScode") {
-          // create county array if necessary and add this result
-          if (!data.counties) data.counties = [];
-          data.counties.push(dest);
+
+        var winner = candidates.filter(c => c.winner).pop() || {};
+
+        if (ru.level == "FIPSCode") {
+          data.counties.results.push({
+            fips: ru.fipsCode,
+            winner: winner.id,
+            updated,
+            candidates
+          });
+        } else {
+          state = ru.statePostal;
+          data.state.winner = winner.id;
+          data.state.updated = updated;
+          data.state.candidates = candidates;
         }
       });
+
+      data.state.total = data.state.candidates.reduce((acc, c) => acc + c.votes * 1, 0);
       
       // assemble object
-      if (!election[state]) election[state] = {};
-      if (!election[state][office]) election[state][office] = {};
-      election[state][office][date] = data;
+      depths.set(election, [state, office, date, "state", party].join("."), data.state);
+      if (data.counties.results.length) {
+        data.counties.total = data.state.total;
+        depths.set(election, [state, office, date, "counties", party].join("."), data.counties);
+      }
     });
   });
+  // console.log(JSON.stringify(election, null, 2));
   return election;
 };

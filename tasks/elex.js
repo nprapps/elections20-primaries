@@ -14,6 +14,7 @@ Lots of flags available on this one:
 */
 
 var api = require("./lib/ap");
+var depths = require("./lib/depths");
 
 module.exports = function(grunt) {
   grunt.registerTask("elex", function() {
@@ -41,6 +42,7 @@ module.exports = function(grunt) {
 
     var test = grunt.option("test");
     var offline = grunt.option("offline");
+    var live = !grunt.option("archive");
     var overrides = {
       calls: grunt.data.json.calls,
       candidates: grunt.data.json.candidates
@@ -51,26 +53,24 @@ module.exports = function(grunt) {
       .then(function(results) {
         grunt.data.election = Object.assign(grunt.data.election || {}, results);
 
-        for (var state in grunt.data.election) {
-          var s = grunt.data.election[state];
-          for (var office in s) {
-            var o = s[office];
-            for (var date in o) {
-              var d = date.replace(/\//g, "");
-              var result = o[date];
-              grunt.file.write(
-                `build/data/${state}_${office}_${d}.json`,
-                JSON.stringify(result.state, null, 2)
-              );
-              if (result.counties) {
-                grunt.file.write(
-                  `build/data/${state}_${office}_${d}_counties.json`,
-                  JSON.stringify(result.counties, null, 2)
-                );
-              }
-            }
+        var keypath = "state.office.date";
+        depths.recurse(grunt.data.election, keypath, function(params, data) {
+          var tag = keypath
+            .split(".")
+            .map(p => params[p].replace(/\//g, ""))
+            .join("_");
+          var { state, counties } = data;
+          grunt.file.write(
+            `build/data/${tag}.json`,
+            JSON.stringify(state, null, 2)
+          );
+          if (counties) {
+            grunt.file.write(
+              `build/data/${tag}_counties.json`,
+              JSON.stringify(counties, null, 2)
+            );
           }
-        }
+        });
 
         done();
       })

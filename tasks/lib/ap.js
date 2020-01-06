@@ -1,5 +1,6 @@
 var axios = require("axios");
 var fs = require("fs").promises;
+var depths = require("./depths");
 var etags = {};
 
 var resultsURL = "https://api.ap.org/v2/elections/";
@@ -7,13 +8,6 @@ var resultsParams = {
   apikey: process.env.AP_API_KEY,
   uncontested: false,
   format: "json"
-};
-
-var offices = {
-  president: "P",
-  senate: "S",
-  house: "H",
-  governor: "G"
 };
 
 var apDate = function(d) {
@@ -40,7 +34,7 @@ var issueTickets = function(races) {
   var mergable = races.filter(function(r) {
     if (!r.raceID) return true;
     tickets.push({
-      date: apDate(r.date),
+      date: apDate(r.timestamp),
       params: {
         raceID: r.raceID,
         statePostal: r.state,
@@ -49,29 +43,28 @@ var issueTickets = function(races) {
     });
   });
   // combine other tickets by date
-  var byDate = {};
+  var grouped = {};
   mergable.forEach(function(r) {
-    if (!byDate[r.date]) byDate[r.date] = [];
-    byDate[r.date].push(r);
+    var level = r.counties ? "FIPScode" : "state";
+    var keypath = apDate(r.timestamp) + "." + level;
+    var group = depths.get(grouped, keypath) || [];
+    group.push(r);
+    depths.set(grouped, keypath, group);
   });
-  for (var d in byDate) {
+  depths.recurse(grouped, "date.level", function(params, data) {
+    var { date, level } = params;
+    var states = data.map(r => r.state);
+    var offices = data.map(r => r.office);
     var merged = {
-      date: apDate(d),
+      date,
       params: {
-        statePostal: new Set(),
-        officeID: new Set()
+        level,
+        statePostal: [...new Set(states)],
+        officeID: [...new Set(offices)]
       }
     };
-    byDate[d].forEach(function(r) {
-      merged.params.statePostal.add(r.state);
-      merged.params.officeID.add(offices[r.office]);
-      if (r.counties) merged.params.level = "FIPScode";
-    });
-    ["statePostal", "officeID"].forEach(
-      p => (merged.params[p] = Array.from(merged.params[p]).join())
-    );
     tickets.push(merged);
-  }
+  });
   return tickets;
 };
 
@@ -109,7 +102,7 @@ var loadData = async function(ticket, options) {
       return data;
     } catch (err) {
       console.log(err);
-      throw err;
+      // throw err;
     }
   }
 }
