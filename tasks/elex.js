@@ -51,26 +51,20 @@ module.exports = function(grunt) {
     api
       .getResults({ races, overrides, test, offline })
       .then(function(results) {
-        grunt.data.election = Object.assign(grunt.data.election || {}, results);
+        var elex = grunt.data.election = Object.assign(grunt.data.election || {}, results);
 
-        var keypath = "state.office.date";
-        depths.recurse(grunt.data.election, keypath, function(params, data) {
-          var tag = keypath
-            .split(".")
-            .map(p => params[p].replace(/\//g, ""))
-            .join("_");
-          var { state, counties } = data;
-          grunt.file.write(
-            `build/data/${tag}.json`,
-            JSON.stringify(state, null, 2)
-          );
+        races.forEach(function(r) {
+          var { state, office, date, counties } = r;
+          var tag = [state, office, date].join("_").replace(/\//g, "_");
+          var data = depths.get(elex, [state, office, date]);
+          if (!data) return console.log(`No data found from AP for ${state} - ${office} on ${date}`);
+          grunt.file.write(`build/data/${tag}.json`, JSON.stringify(data.state, null, 2));
+
           if (counties) {
-            grunt.file.write(
-              `build/data/${tag}_counties.json`,
-              JSON.stringify(counties, null, 2)
-            );
+            grunt.file.write(`build/data/${tag}_counties.json`, JSON.stringify(data.counties, null, 2));
           }
         });
+
 
         done();
       })

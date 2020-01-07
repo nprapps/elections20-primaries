@@ -3,8 +3,10 @@
 
 module.exports = {
   // get a value at the keypath or undefined if any step failed in the chain
-  get: function(obj, keypath) {
-    var keys = keypath.split(".");
+  get: function(obj, keys) {
+    if (typeof keys == "string") {
+      keys = keys.split(".");
+    }
     var end = keys.pop();
     var branch = obj;
     for (var k of keys) {
@@ -15,8 +17,10 @@ module.exports = {
   },
 
   // set a value at the keypath, creating missing intermediate objects
-  set: function(obj, keypath, value) {
-    var keys = keypath.split(".");
+  set: function(obj, keys, value) {
+    if (typeof keys == "string") {
+      keys = keys.split(".");
+    }
     var end = keys.pop();
     var branch = obj;
     for (var k of keys) {
@@ -29,8 +33,10 @@ module.exports = {
   // recurse down a path
   // callback will get the keypath params, plus the final data value
   // i.e., "a.b.c" will result in `{ a: keyForA, b: keyForB }, c` at the callback
-  recurse: function(obj, keypath, callback) {
-    var keys = keypath.split(".");
+  recurse: function(obj, keys, callback) {
+    if (typeof keys == "string") {
+      keys = keys.split(".");
+    }
 
     var walk = function(branch, params, path) {
       if (path.length) {

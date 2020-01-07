@@ -39,9 +39,11 @@ module.exports = function(resultArray, overrides) {
       var call = overrides.calls[id];
       var office = race.officeID;
       var party = race.party;
+      var eevp = race.eevp;
+      var type = race.raceType;
       var data = {
-        state: { test, id, candidates: [] },
-        counties: { test, id, results: [] }
+        state: { test, id, eevp, type, candidates: [] },
+        counties: { test, id, eevp, type, results: [] }
       }
       // process results at each geographic reporting unit
       race.reportingUnits.forEach(function(ru) {
@@ -52,9 +54,14 @@ module.exports = function(resultArray, overrides) {
             last: c.last,
             party: c.party,
             id: c.polID,
-            votes: c.voteCount,
-            winner: call ? call.winner == c.polID : c.winner == "X"
+            votes: c.voteCount
           };
+          // add winner field only if they won
+          if (call) {
+            if (call.winner == c.polID) candidate.winner = true;
+          } else if (c.winner == "X") {
+            candidate.winner = true;
+          }
           var override = overrides.candidates[candidate.id];
           if (override) {
             Object.assign(candidate, override);
@@ -62,24 +69,25 @@ module.exports = function(resultArray, overrides) {
           return candidate;
         });
 
-        var winner = candidates.filter(c => c.winner).pop() || {};
+        var winner = (candidates.filter(c => c.winner).pop() || {}).id || false;
+        var total = candidates.reduce((acc, c) => acc + c.votes * 1, 0);
+        candidates.forEach(c => c.percentage = (c.votes / total * 100).toFixed(2) * 1);
 
         if (ru.level == "FIPSCode") {
           data.counties.results.push({
             fips: ru.fipsCode,
-            winner: winner.id,
+            winner,
+            total,
             updated,
             candidates
           });
+
         } else {
           state = ru.statePostal;
-          data.state.winner = winner.id;
-          data.state.updated = updated;
-          data.state.candidates = candidates;
+          Object.assign(data.state, { winner, updated, candidates, total });
         }
       });
 
-      data.state.total = data.state.candidates.reduce((acc, c) => acc + c.votes * 1, 0);
       
       // assemble object
       depths.set(election, [state, office, date, "state", party].join("."), data.state);
