@@ -30,7 +30,7 @@ module.exports = {
     branch[end] = value;
   },
 
-  // recurse down a path
+  // recurse down an object and read the leaves at a given depth
   // callback will get the keypath params, plus the final data value
   // i.e., "a.b.c" will result in `{ a: keyForA, b: keyForB }, c` at the callback
   recurse: function(obj, keys, callback) {

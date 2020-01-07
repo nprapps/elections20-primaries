@@ -10,7 +10,8 @@ module.exports = function(grunt) {
     "json",
     "csv",
     "markdown",
-    "archieml"
+    "archieml",
+    "elex"
   ]);
   grunt.registerTask("template", "Build HTML from content/templates", [
     "content",

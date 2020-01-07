@@ -92,9 +92,14 @@ var redeemTicket = async function(ticket, options) {
       var response = await axios({
         url: resultsURL + ticket.date,
         params: Object.assign({}, resultsParams, ticket.params, { test: !!options.test }),
-        headers
+        headers,
+        validateStatus: status => status == 200 || status == 304
       });
       console.log(`Loaded API data for ${tag}`);
+      if (response.status == 304) {
+        console.log(`No change since last request for ${tag}`);
+        return null;
+      }
       var data = response.data;
       await fs.mkdir("temp", { recursive: true });
       await fs.writeFile(`temp/${tag}.json`, JSON.stringify(data, null, 2));

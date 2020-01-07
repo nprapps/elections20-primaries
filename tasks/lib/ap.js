@@ -8,7 +8,7 @@ var getResults = async function(options) {
   var rawResults = [];
   for (var ticket of tickets) {
     var data = await redeemTicket(ticket, options);
-    rawResults.push(data);
+    if (data) rawResults.push(data);
   }
   return normalizeResults(rawResults, options.overrides)
 };

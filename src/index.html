@@ -6,6 +6,37 @@
   </head>
   <body>
 
+    <main class="calendar">
+      <%
+        var byDate = {};
+        json.races.forEach(function(item) {
+          if (!byDate[item.date]) byDate[item.date] = [];
+          byDate[item.date].push(item);
+        });
+        var dates = Object.keys(byDate)
+          .map(function(key) {
+            var [m, d, y] = key.split("/");
+            var date = new Date(y, m - 1, d);
+            return { date, key }
+          });
+        dates.sort((a, b) => a.date - b.date);
+        dates.forEach(function(d) { %>
+      <h2><%= d.key %></h2>
+        <%
+          var races = byDate[d.key];
+          races.forEach(function(r) { %>
+        <h3><%= r.state %> <%= r.office %></h3>
+        <% try { var data = grunt.data.election[r.state][r.office][r.date]; %>
+          Data exists
+        <% } catch(err) { %>
+          No data
+        <% } %>
+          <% 
+          })
+        })
+      %>
+    </main>
+
     <script src="app.js" async></script>
     <%= t.include("partials/_analytics.html") %>
   </body>

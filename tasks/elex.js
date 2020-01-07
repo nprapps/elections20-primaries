@@ -17,6 +17,9 @@ var api = require("./lib/ap");
 var depths = require("./lib/depths");
 
 module.exports = function(grunt) {
+
+  var elex = {};
+
   grunt.registerTask("elex", function() {
     grunt.task.requires("json"); // we need the schedule sheet
 
@@ -51,7 +54,7 @@ module.exports = function(grunt) {
     api
       .getResults({ races, overrides, test, offline })
       .then(function(results) {
-        var elex = grunt.data.election = Object.assign(grunt.data.election || {}, results);
+        grunt.data.election = Object.assign(elex, results);
 
         races.forEach(function(r) {
           var { state, office, date, counties } = r;
