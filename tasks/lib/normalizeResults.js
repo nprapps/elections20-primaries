@@ -46,7 +46,7 @@ module.exports = function(resultArray, overrides) {
         counties: { test, id, eevp, type, results: [] }
       }
       // process results at each geographic reporting unit
-      // races that haven't run yet won't have these
+      // races that haven't run yet won't have these in non-test mode
       if (race.reportingUnits) race.reportingUnits.forEach(function(ru) {
         var updated = Date.parse(ru.lastUpdated);
         var candidates = ru.candidates.map(function(c) {
