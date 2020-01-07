@@ -98,7 +98,9 @@ var redeemTicket = async function(ticket, options) {
       console.log(`Loaded API data for ${tag}`);
       if (response.status == 304) {
         console.log(`No change since last request for ${tag}`);
-        return null;
+        var proxyOptions = Object.assign({}, options, { offline: true });
+        var data = await redeemTicket(ticket, proxyOptions);
+        return data;
       }
       var data = response.data;
       await fs.mkdir("temp", { recursive: true });
