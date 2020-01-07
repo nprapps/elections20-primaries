@@ -7,34 +7,47 @@
   <body>
 
     <main class="calendar">
+      <ul class="schedule">
       <%
-        var byDate = {};
-        json.races.forEach(function(item) {
-          if (!byDate[item.date]) byDate[item.date] = [];
-          byDate[item.date].push(item);
+      var localize = str => json.strings[str] || str;
+
+      var groupBy = function(array, key) {
+        var grouped = {};
+        array.forEach(function(item) {
+          var k = item[key];
+          if (!grouped[k]) grouped[k] = [];
+          grouped[k].push(item);
         });
-        var dates = Object.keys(byDate)
-          .map(function(key) {
-            var [m, d, y] = key.split("/");
-            var date = new Date(y, m - 1, d);
-            return { date, key }
-          });
-        dates.sort((a, b) => a.date - b.date);
-        dates.forEach(function(d) { %>
-      <h2><%= d.key %></h2>
+        return grouped;
+      };
+
+      var byDate = groupBy(json.races, "date");
+      var dates = Object.keys(byDate)
+        .map(function(key) {
+          var [m, d, y] = key.split("/");
+          var date = new Date(y, m - 1, d);
+          return { date, key }
+        });
+      dates.sort((a, b) => a.date - b.date);
+      var months = "Jan. Feb. Mar. Apr. May June July Aug. Sep. Oct. Nov. Dec.".split(" ");
+      dates.forEach(function(d) { %>
+      <li> <%= months[d.date.getMonth()] %> <%= d.date.getDate() %>, 2020
+        <ul>
         <%
           var races = byDate[d.key];
-          races.forEach(function(r) { %>
-        <h3><%= r.state %> <%= r.office %></h3>
-        <% try { var data = grunt.data.election[r.state][r.office][r.date]; %>
-          Data exists
-        <% } catch(err) { %>
-          No data
-        <% } %>
-          <% 
-          })
-        })
-      %>
+          var byType = groupBy(races, "office");
+          Object.keys(byType).forEach(function(o) { %>
+          <li><%= localize(o) %>
+            <ul>
+            <% byType[o].forEach(function(r) { %>
+              <li> <%= localize(r.state) %></h4>
+            <% }); %>
+            </ul>
+          <% }); %>
+        </ul>
+        <% }); %>
+
+      </ul>
     </main>
 
     <script src="app.js" async></script>
