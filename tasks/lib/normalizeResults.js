@@ -1,21 +1,9 @@
 /*
 
-Constructs a nested primary results object of nested granularity:
-
-state -> office -> date -> ".state"|".counties" -> party
-
-A state/county results object contains:
-
-- test: whether this was a test
-- id: the AP race ID
-- updated: last timestamp for the race from AP
-- results
-  - for state, this is an array of candidates
-  - for county, this is a map of county FIPS to arrays of candidates
-- winner: ID of the winner (also marked on the candidate result object)
-- reporting: estimated expected vote percentage (EEVP) or by precinct
-
-These are then passed back so that the elex task can look up results per-race and write out
+Builds an array of normalized races from an array of multiple API responses.
+These are not yet grouped--it's just to compute subtotals and rename columns.
+The calling task will need to create the lookup map from races to individual
+race IDs.
 
 */
 
@@ -27,11 +15,10 @@ var nprDate = apDate => {
 }
 
 module.exports = function(resultArray, overrides) {
-  var election = {};
+  var races = [];
   // handle each AP results call
   resultArray.forEach(function(results) {
     var date = nprDate(results.electionDate);
-    var state = null;
     // create race objects
     results.races.forEach(function(race) {
       var test = race.test;
@@ -41,14 +28,21 @@ module.exports = function(resultArray, overrides) {
       var party = race.party;
       var eevp = race.eevp;
       var type = race.raceType;
+      // this is the final race output object
       var data = {
-        state: { test, id, eevp, type, candidates: [] },
-        counties: { test, id, eevp, type, results: [] }
+        id, date, test,
+        state: null, // will be filled in later based on state RU, it's weird
+        eevp, party, type, office,
+        results: {
+          state: [],
+          county: []
+        }
       }
-      // process results at each geographic reporting unit
+      // group results by reporting unit
       // races that haven't run yet won't have these in non-test mode
       if (race.reportingUnits) race.reportingUnits.forEach(function(ru) {
         var updated = Date.parse(ru.lastUpdated);
+
         var candidates = ru.candidates.map(function(c) {
           var candidate = {
             first: c.first,
@@ -70,34 +64,35 @@ module.exports = function(resultArray, overrides) {
           return candidate;
         });
 
+        // generate subtotals/percentages
         var winner = (candidates.filter(c => c.winner).pop() || {}).id || false;
         var total = candidates.reduce((acc, c) => acc + c.votes * 1, 0);
         candidates.forEach(c => c.percentage = (c.votes / total * 100).toFixed(2) * 1);
 
         if (ru.level == "FIPSCode") {
-          data.counties.results.push({
+          // do not set a winner at the county level
+          data.results.county.push({
             fips: ru.fipsCode,
-            winner,
+            id,
+            party,
             total,
             updated,
             candidates
           });
-
         } else {
-          state = ru.statePostal;
-          Object.assign(data.state, { winner, updated, candidates, total });
+          data.state = ru.statePostal; // here it is
+          data.results.state.push({
+            id,
+            winner,
+            party,
+            total,
+            updated,
+            candidates
+          });
         }
       });
-
-      
-      // assemble object
-      depths.set(election, [state, office, date, "state", party].join("."), data.state);
-      if (data.counties.results.length) {
-        data.counties.total = data.state.total;
-        depths.set(election, [state, office, date, "counties", party].join("."), data.counties);
-      }
+      races.push(data);
     });
   });
-  // console.log(JSON.stringify(election, null, 2));
-  return election;
+  return races;
 };

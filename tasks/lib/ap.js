@@ -10,7 +10,7 @@ var getResults = async function(options) {
     var data = await redeemTicket(ticket, options);
     if (data) rawResults.push(data);
   }
-  return normalizeResults(rawResults, options.overrides)
+  return normalizeResults(rawResults, options.overrides);
 };
 
 module.exports = { getResults };

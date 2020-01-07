@@ -30,39 +30,44 @@ var issueTickets = function(races) {
   // build a list of "tickets" - API requests that will satisfy the races we want
   var tickets = [];
   // races that have their own ID need their own ticket
-  var mergable = races.filter(function(r) {
+  var generic = races.filter(function(r) {
     if (!r.raceID) return true;
     tickets.push({
       date: apDate(r.timestamp),
       params: {
         raceID: r.raceID,
         statePostal: r.state,
-        level: r.counties ? "FIPScode" : "state"
+        level: r.office == "H" ? "state" : "FIPScode"
       }
     });
   });
-  // combine other tickets by date and granularity
-  var grouped = {};
-  mergable.forEach(function(r) {
-    var level = r.counties ? "FIPScode" : "state";
-    var keypath = apDate(r.timestamp) + "." + level;
-    var group = depths.get(grouped, keypath) || [];
-    group.push(r);
-    depths.set(grouped, keypath, group);
-  });
-  depths.recurse(grouped, "date.level", function(params, data) {
-    var { date, level } = params;
-    var states = data.map(r => r.state);
-    var offices = data.map(r => r.office);
-    var merged = {
-      date,
-      params: {
-        level,
-        statePostal: [...new Set(states)],
-        officeID: [...new Set(offices)]
-      }
-    };
-    tickets.push(merged);
+  // split into at least two sets of tickets, based on geographic specificity
+  // only house races do not use county results
+  var stateLevel = generic.filter(r => r.office == "H");
+  var countyLevel = generic.filter(r => r.office != "H");
+
+  [stateLevel, countyLevel].forEach(function(list, requestCounties) {
+    // group races by date
+    var byDate = {};
+    list.forEach(function(r) {
+      if (!byDate[r.date]) byDate[r.date] = [];
+      byDate[r.date].push(r);
+    });
+    // issue tickets for each day's combo of items
+    for (var d in byDate) {
+      var date = apDate(d);
+      var list = byDate[d];
+      var states = list.map(r => r.state);
+      var offices = list.map(r => r.office);
+      tickets.push({
+        date,
+        params: {
+          level: requestCounties ? "FIPScode" : "state",
+          statePostal: [...new Set(states)],
+          officeID: [...new Set(offices)]
+        }
+      });
+    }
   });
   return tickets;
 };

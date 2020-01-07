@@ -54,20 +54,53 @@ module.exports = function(grunt) {
     api
       .getResults({ races, overrides, test, offline })
       .then(function(results) {
-        grunt.data.election = Object.assign(elex, results);
 
-        races.forEach(function(r) {
-          var { state, office, date, counties } = r;
+        races.forEach(function(contest) {
+          var { state, office, date } = contest;
           var tag = [state, office, date].join("_").replace(/\//g, "_");
-          var data = depths.get(elex, [state, office, date]);
-          if (!data) return console.log(`No data found from AP for ${state} - ${office} on ${date}`);
-          grunt.file.write(`build/data/${tag}.json`, JSON.stringify(data.state, null, 2));
 
-          if (counties) {
-            grunt.file.write(`build/data/${tag}_counties.json`, JSON.stringify(data.counties, null, 2));
+          var fromAP = results.filter(function(result) {
+            return result.office == contest.office &&
+              result.state == contest.state &&
+              result.date == contest.date;
+          });
+          if (!fromAP.length) {
+            return console.log(`No date from AP for ${contest.state}/${contest.office}`)
           }
-        });
 
+          var serialize = d => JSON.stringify(d, null, 2);
+
+          var subsetResults = function(geo = "state") {
+            var copyKeys = "id eevp type party".split(" ");
+            return fromAP.map(function(race) {
+              var copy = {};
+              for (var k of copyKeys) copy[k] = race[k];
+              copy.results = race.results[geo];
+              return copy;
+            });
+          }
+
+          var stateResults = subsetResults("state");
+
+          console.log(`Generating results: ${tag}.json`)
+          grunt.file.write(`build/data/${tag}.json`, serialize(stateResults));
+
+          if (contest.office != "H") {
+            var countyResults = subsetResults("county");
+            // add county name from the FIPS table
+            countyResults.forEach(function(race) {
+              race.results.forEach(function(result) {
+                var county = grunt.data.json.fips[result.fips];
+                if (county && county.name) {
+                  result.county = county.name;
+                }
+              })
+            });
+            console.log(`Generating county results: ${tag}_counties.json`)
+            grunt.file.write(`build/data/${tag}_counties.json`, serialize(countyResults));
+          }
+
+        });
 
         done();
       })

@@ -1,12 +1,18 @@
 // a set of utility functions for safely working with deep object paths
 // call with dot.separated.keypaths within an object
 
+var cutKeys = function(keys) {
+  if (typeof keys == "string") {
+    return keys.split(".");
+  } else {
+    return keys.slice();
+  }
+}
+
 module.exports = {
   // get a value at the keypath or undefined if any step failed in the chain
-  get: function(obj, keys) {
-    if (typeof keys == "string") {
-      keys = keys.split(".");
-    }
+  get: function(obj, keypath) {
+    var keys = cutKeys(keypath);
     var end = keys.pop();
     var branch = obj;
     for (var k of keys) {
@@ -17,10 +23,8 @@ module.exports = {
   },
 
   // set a value at the keypath, creating missing intermediate objects
-  set: function(obj, keys, value) {
-    if (typeof keys == "string") {
-      keys = keys.split(".");
-    }
+  set: function(obj, keypath, value) {
+    var keys = cutKeys(keypath);
     var end = keys.pop();
     var branch = obj;
     for (var k of keys) {
@@ -33,10 +37,8 @@ module.exports = {
   // recurse down an object and read the leaves at a given depth
   // callback will get the keypath params, plus the final data value
   // i.e., "a.b.c" will result in `{ a: keyForA, b: keyForB }, c` at the callback
-  recurse: function(obj, keys, callback) {
-    if (typeof keys == "string") {
-      keys = keys.split(".");
-    }
+  recurse: function(obj, keypath, callback) {
+    var keys = cutKeys(keypath);
 
     var walk = function(branch, params, path) {
       if (path.length) {
