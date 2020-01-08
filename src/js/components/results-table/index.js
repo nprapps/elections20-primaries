@@ -18,6 +18,10 @@ class ResultsTable extends ElementBase {
     this.timeout = null;
   }
 
+  static get boundMethods() {
+    return ["load"];
+  }
+
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
@@ -48,7 +52,7 @@ class ResultsTable extends ElementBase {
     var interval = this.hasAttribute("refresh")
       ? this.getAttribute("refresh")
       : defaultRefresh;
-    this.timeout = setTimeout(() => this.load(), interval * 1000);
+    this.timeout = setTimeout(this.load, interval * 1000);
   }
 }
 
