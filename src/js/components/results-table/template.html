@@ -1,11 +1,12 @@
-<% data.forEach(function(race) { %>
+<% data.contests.forEach(function(seat) { %>
 
-  <h1><%= race.party %> <%= race.type %></h1>
+  <h1><%= seat.party %> <%= seat.type %></h1>
 
-  <% race.results.forEach(function(result) { %>
+  <% seat.results.forEach(function(result) { %>
 
   <div class="metadata">
-    Updated at <%= new Date(result.updated).toLocaleString() %>
+    <% var timestamp = new Date(result.updated); %>
+    Updated at <%= data.apDate(timestamp) %> <%= data.time(timestamp) %>
   </div>
 
   <table>

@@ -8,6 +8,8 @@ var dot = require("../../lib/dot");
 var template = dot.compile(require("./template.html"));
 require("./style.less");
 
+var { apDate, time } = require("../utils");
+
 var ElementBase = require("../elementBase");
 
 var defaultRefresh = 15;
@@ -16,6 +18,7 @@ class ResultsTable extends ElementBase {
   constructor() {
     super();
     this.timeout = null;
+    this.lastUpdated = null;
   }
 
   static get boundMethods() {
@@ -42,8 +45,13 @@ class ResultsTable extends ElementBase {
     var response = await fetch(src);
     if (response.status >= 300)
       return (this.innerHTML = "No data for this race");
-    var data = await response.json();
-    this.innerHTML = template(data);
+    var contests = await response.json();
+    var timestamps = [].concat(...contests.map(d => d.results)).map(r => r.updated);
+    var newest = Math.max(...timestamps);
+    if (!this.lastUpdated || newest != this.lastUpdated) {
+      this.lastUpdated = newest;
+      this.innerHTML = template({ contests, apDate, time });
+    }
     if (this.hasAttribute("live")) this.scheduleRefresh();
   }
 
