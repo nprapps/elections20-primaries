@@ -11,6 +11,8 @@
       <%
       var localize = str => json.strings[str] || str;
 
+      var jsonFile = r => [r.state, r.office, r.date].join("_").replace(/\//g, "_");
+
       var groupBy = function(array, key) {
         var grouped = {};
         array.forEach(function(item) {
@@ -36,12 +38,16 @@
         <%
           var races = byDate[d.key];
           var byType = groupBy(races, "office");
+
           Object.keys(byType).forEach(function(o) { %>
           <li><%= localize(o) %>
             <ul>
+
             <% byType[o].forEach(function(r) { %>
-              <li> <%= localize(r.state) %></h4>
+              <li> <%= localize(r.state) %>
+                <results-table src="data/<%= jsonFile(r) %>.json"></results-table>
             <% }); %>
+
             </ul>
           <% }); %>
         </ul>
