@@ -16,10 +16,6 @@ class ResultsTable extends ElementBase {
     super();
   }
 
-  connectedCallback() {
-
-  }
-
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
@@ -32,14 +28,9 @@ class ResultsTable extends ElementBase {
     return ["src"];
   }
 
-  disconnectedCallback() {
-
-  }
-
   async load(src) {
-    console.log(src);
     var response = await fetch(src);
-    if (response.status >= 300) return;
+    if (response.status >= 300) return this.innerHTML = "No data for this race";
     var data = await response.json();
     this.innerHTML = template(data);
   }

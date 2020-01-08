@@ -65,7 +65,7 @@ module.exports = function(grunt) {
               result.date == contest.date;
           });
           if (!fromAP.length) {
-            return console.log(`No date from AP for ${contest.state}/${contest.office}`)
+            return console.log(`No data from AP for ${contest.state}/${contest.office}`)
           }
 
           var serialize = d => JSON.stringify(d, null, 2);

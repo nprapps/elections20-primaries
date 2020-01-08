@@ -3,13 +3,23 @@
   <h1><%= race.party %> <%= race.type %></h1>
 
   <% race.results.forEach(function(result) { %>
-  Updated at <%= new Date(result.updated).toLocaleString() %>
+
+  <div class="metadata">
+    Updated at <%= new Date(result.updated).toLocaleString() %>
+  </div>
+
   <table>
+    <thead>
+      <tr>
+        <td>Name
+        <td class="numeric">Votes
+        <td class="numeric">%
+    <tbody>
     <% result.candidates.forEach(function(c) { %>
-    <tr>
-      <td><%= c.first %> <%= c.last %>
-      <td><%= c.votes.toLocaleString() %>
-      <td><%= c.percentage %>%
+      <tr>
+        <td><%= c.first || "" %> <%= c.last %>
+        <td class="numeric"><%= c.votes.toLocaleString() %>
+        <td class="numeric"><%= c.percentage.toFixed(1) %>%
     <% }); %>
   </table>
   <% }); %>

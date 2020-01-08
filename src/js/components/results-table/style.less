@@ -1,3 +1,27 @@
+@import "../../../css/values.less";
+
 results-table {
   display: block;
+
+  .metadata {
+    .knockout();
+    margin-bottom: 4px;
+  }
+
+  table {
+    .gotham();
+    border-collapse: collapse;
+
+    thead {
+      font-weight: bold;
+    }
+
+    td {
+      padding: 0 4px 2px 0;
+    }
+
+    .numeric {
+      text-align: right;
+    }
+  }
 }
