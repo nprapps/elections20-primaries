@@ -55,6 +55,8 @@ module.exports = function(grunt) {
       .getResults({ races, overrides, test, offline })
       .then(function(results) {
 
+        var unmatched = [];
+
         races.forEach(function(contest) {
           var { state, office, date } = contest;
           var tag = [state, office, date].join("_").replace(/\//g, "_");
@@ -65,7 +67,7 @@ module.exports = function(grunt) {
               result.date == contest.date;
           });
           if (!fromAP.length) {
-            return console.log(`No data from AP for ${contest.state}/${contest.office}`)
+            return unmatched.push(contest);
           }
 
           var serialize = d => JSON.stringify(d, null, 2);
@@ -82,7 +84,7 @@ module.exports = function(grunt) {
 
           var stateResults = subsetResults("state");
 
-          console.log(`Generating results: ${tag}.json`)
+          // console.log(`Generating results: ${tag}.json`)
           grunt.file.write(`build/data/${tag}.json`, serialize(stateResults));
 
           if (contest.office != "H") {
@@ -96,11 +98,20 @@ module.exports = function(grunt) {
                 }
               })
             });
-            console.log(`Generating county results: ${tag}_counties.json`)
+            // console.log(`Generating county results: ${tag}_counties.json`)
             grunt.file.write(`build/data/${tag}_counties.json`, serialize(countyResults));
           }
 
         });
+
+        if (unmatched.length) {
+          var dates = [...new Set(unmatched.map(r => r.date))];
+          console.log("AP data not found for: ");
+          dates.sort().forEach(function(d) {
+            var missing = unmatched.filter(r => r.date == d).map(r => [r.state, r.office].join("-"));
+            console.log(`  > ${d} - ${missing.join(", ")}`)
+          })
+        }
 
         done();
       })

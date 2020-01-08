@@ -88,7 +88,7 @@ var redeemTicket = async function(ticket, options) {
       return data;
     } catch(err) {
       console.log(`Couldn't load data for tag ${tag} - does the file exist?`);
-      throw err;
+      // throw err;
     }
   } else {
     var headers = {};
