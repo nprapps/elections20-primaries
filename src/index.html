@@ -33,7 +33,7 @@
       dates.sort((a, b) => a.date - b.date);
       var months = "Jan. Feb. Mar. Apr. May June July Aug. Sep. Oct. Nov. Dec.".split(" ");
       dates.forEach(function(d) { %>
-      <li> <%= months[d.date.getMonth()] %> <%= d.date.getDate() %>, 2020
+      <li> <%= months[d.date.getMonth()] %> <%= d.date.getDate() %>, <%= d.date.getFullYear() %>
         <ul>
         <%
           var races = byDate[d.key];
@@ -45,7 +45,8 @@
 
             <% byType[o].forEach(function(r) { %>
               <li> <%= localize(r.state) %>
-                <results-table src="data/<%= jsonFile(r) %>.json"></results-table>
+                <results-table live refresh=5 src="data/<%= jsonFile(r) %>.json">
+                </results-table>
             <% }); %>
 
             </ul>
