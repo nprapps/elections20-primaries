@@ -13,30 +13,30 @@
 
       var jsonFile = r => [r.state, r.office, r.date].join("_").replace(/\//g, "_");
 
-      var groupBy = function(array, key) {
-        var grouped = {};
-        array.forEach(function(item) {
-          var k = item[key];
-          if (!grouped[k]) grouped[k] = [];
-          grouped[k].push(item);
-        });
-        return grouped;
-      };
+      var utils = require("../src/js/components/utils.js");
+      var { parseDate, apDate, groupBy } = utils;
 
-      var byDate = groupBy(json.races, "date");
-      var dates = Object.keys(byDate)
-        .map(function(key) {
-          var [m, d, y] = key.split("/");
-          var date = new Date(y, m - 1, d);
-          return { date, key }
-        });
-      dates.sort((a, b) => a.date - b.date);
-      var months = "Jan. Feb. Mar. Apr. May June July Aug. Sep. Oct. Nov. Dec.".split(" ");
+      var today = new Date();
+      if (grunt.option("date")) {
+        today = parseDate(grunt.option("date"));
+      } else {
+        today.setHours(0);
+        today.setMinutes(0);
+        today.setSeconds(0);
+      }
+      var now = today.getTime();
+
+      json.races.forEach(r => r.timestamp = parseDate(r.date).getTime());
+
+      var byDate = groupBy(json.races, "timestamp");
+
+      var dates = Object.keys(byDate);
+
       dates.forEach(function(d) { %>
-      <li> <%= months[d.date.getMonth()] %> <%= d.date.getDate() %>, <%= d.date.getFullYear() %>
+      <li> <%= apDate(new Date(d * 1)) %>
         <ul>
         <%
-          var races = byDate[d.key];
+          var races = byDate[d];
           var byType = groupBy(races, "office");
 
           Object.keys(byType).forEach(function(o) { %>
@@ -45,8 +45,12 @@
 
             <% byType[o].forEach(function(r) { %>
               <li> <%= localize(r.state) %>
+                <% if (r.timestamp <= now) { %>
                 <results-table live refresh=5 src="data/<%= jsonFile(r) %>.json">
                 </results-table>
+                <% } else { %>
+                Not yet
+                <% } %>
             <% }); %>
 
             </ul>

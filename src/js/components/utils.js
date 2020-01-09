@@ -11,6 +11,11 @@ var time = function(date) {
   return `${h}:${m} ${suffix}`;
 };
 
+var parseDate = function(d) {
+  var [m, d, y] = d.split("/");
+  return new Date(y, m - 1, d);
+};
+
 var groupBy = function(list, key) {
   var grouped = {};
   list.forEach(function(item) {
@@ -25,5 +30,6 @@ module.exports = {
   apMonths,
   apDate,
   time,
+  parseDate,
   groupBy
 }
