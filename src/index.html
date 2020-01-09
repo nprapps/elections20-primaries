@@ -14,11 +14,11 @@
       var jsonFile = r => [r.state, r.office, r.date].join("_").replace(/\//g, "_");
 
       var utils = require("../src/js/components/utils.js");
-      var { parseDate, apDate, groupBy } = utils;
+      var { parseNPRDate, formatAPDate, groupBy } = utils;
 
       var today = new Date();
       if (grunt.option("date")) {
-        today = parseDate(grunt.option("date"));
+        today = parseNPRDate(grunt.option("date"));
       } else {
         today.setHours(0);
         today.setMinutes(0);
@@ -26,14 +26,14 @@
       }
       var now = today.getTime();
 
-      json.races.forEach(r => r.timestamp = parseDate(r.date).getTime());
+      json.races.forEach(r => r.timestamp = parseNPRDate(r.date).getTime());
 
       var byDate = groupBy(json.races, "timestamp");
 
       var dates = Object.keys(byDate);
 
       dates.forEach(function(d) { %>
-      <li> <%= apDate(new Date(d * 1)) %>
+      <li> <%= formatAPDate(new Date(d * 1)) %>
         <ul>
         <%
           var races = byDate[d];

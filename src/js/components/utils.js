@@ -1,7 +1,7 @@
 var apMonths = [ "Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec." ];
 
-var apDate = date => `${apMonths[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-var time = function(date) {
+var formatAPDate = date => `${apMonths[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+var formatTime = function(date) {
   var h = date.getHours()
   var m = date.getMinutes().toString().padStart(2, "0");
   var suffix = h > 12 ? "PM" : "AM";
@@ -11,7 +11,7 @@ var time = function(date) {
   return `${h}:${m} ${suffix}`;
 };
 
-var parseDate = function(d) {
+var parseNPRDate = function(d) {
   var [m, d, y] = d.split("/");
   return new Date(y, m - 1, d);
 };
@@ -28,8 +28,8 @@ var groupBy = function(list, key) {
 
 module.exports = {
   apMonths,
-  apDate,
-  time,
-  parseDate,
+  formatAPDate,
+  formatTime,
+  parseNPRDate,
   groupBy
 }

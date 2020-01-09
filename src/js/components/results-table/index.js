@@ -8,7 +8,7 @@ var dot = require("../../lib/dot");
 var template = dot.compile(require("./template.html"));
 require("./results-table.less");
 
-var { apDate, time } = require("../utils");
+var { formatAPDate, formatTime } = require("../utils");
 
 var ElementBase = require("../elementBase");
 
@@ -50,7 +50,7 @@ class ResultsTable extends ElementBase {
     var newest = Math.max(...timestamps);
     if (!this.lastUpdated || newest != this.lastUpdated) {
       this.lastUpdated = newest;
-      this.innerHTML = template({ contests, apDate, time });
+      this.innerHTML = template({ contests, formatAPDate, formatTime });
     }
     if (this.hasAttribute("live")) this.scheduleRefresh();
   }
