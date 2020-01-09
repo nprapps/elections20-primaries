@@ -1,0 +1,50 @@
+<% /* expects: races (all or filtered somehow)*/ %>
+
+<ul class="schedule">
+<%
+var localize = str => grunt.data.json.strings[str] || str;
+
+var jsonFile = r => [r.state, r.office, r.date].join("_").replace(/\//g, "_");
+
+var utils = require("../src/js/components/utils.js");
+var { parseNPRDate, formatAPDate, groupBy } = utils;
+
+var today = new Date();
+if (grunt.option("date")) {
+  today = parseNPRDate(grunt.option("date"));
+} else {
+  today.setHours(0);
+  today.setMinutes(0);
+  today.setSeconds(0);
+}
+var now = today.getTime();
+
+races.forEach(r => r.timestamp = parseNPRDate(r.date).getTime());
+
+var byDate = groupBy(races, "timestamp");
+
+var dates = Object.keys(byDate);
+
+dates.forEach(function(d) { %>
+<li> <%= formatAPDate(new Date(d * 1)) %>
+  <ul>
+  <%
+    var races = byDate[d];
+    var byType = groupBy(races, "office");
+
+    Object.keys(byType).forEach(function(o) { %>
+
+      <% byType[o].forEach(function(r) { %>
+        <li> <b><%= localize(r.state) %> - <%= localize(o) %></b>
+          <% if (r.timestamp <= now) { %>
+          <results-table live refresh=5 src="data/<%= jsonFile(r) %>.json">
+          </results-table>
+          <% } else { %>
+          Not yet
+          <% } %>
+      <% }); %>
+    <% }); %>
+  </ul>
+  <% }); %>
+
+</ul>
