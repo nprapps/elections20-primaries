@@ -37,7 +37,12 @@ dates.forEach(function(d) { %>
       <% byType[o].forEach(function(r) { %>
         <li> <b><%= localize(r.state) %> - <%= localize(o) %></b>
           <% if (r.timestamp <= now) { %>
-          <results-table live refresh=5 src="data/<%= jsonFile(r) %>.json">
+          <results-table
+            <% if (r.timestamp == now) { %>
+            live
+            <% } %>
+            src="data/<%= jsonFile(r) %>.json"
+          >
           </results-table>
           <% } else { %>
           Not yet
