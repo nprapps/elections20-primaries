@@ -31,11 +31,11 @@ var issueTickets = function(races) {
   var tickets = [];
   // races that have their own ID need their own ticket
   var generic = races.filter(function(r) {
-    if (!r.raceID) return true;
+    if (!r.ids.length) return true;
     tickets.push({
       date: apDate(r.timestamp),
       params: {
-        raceID: r.raceID,
+        raceID: r.ids.join(","),
         statePostal: r.state,
         level: r.office == "H" ? "state" : "FIPScode"
       }
