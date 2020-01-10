@@ -7,7 +7,7 @@
   <body>
 
     <main class="calendar">
-      <%= t.include("_contestList.html", { races: json.races }) %>
+      <%= t.include("_contestList.html", { races: json.races.filter(r => !r.feedOnly) }) %>
     </main>
 
     <script src="app.js" async></script>

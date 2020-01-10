@@ -30,19 +30,40 @@ var issueTickets = function(races) {
   // build a list of "tickets" - API requests that will satisfy the races we want
   var tickets = [];
   // races that have their own ID need their own ticket
-  var generic = races.filter(function(r) {
-    if (!r.ids.length) return true;
+  var specific = races.filter(r => r.ids.length);
+
+  // this loop is a little weird since the loop is also a filter
+  while (specific.length) {
+    var r = specific.shift();
+
+    // find and add races with the same state/date/level
+    var similar = [];
+    specific = specific.filter(function(p) {
+      if (p == r) return;
+      if (p.state == r.state && p.date == r.date) {
+        var rHouse = r.office == "H";
+        var pHouse = p.office == "H";
+        if (rHouse == pHouse) {
+          similar.push(...r.ids);
+          return false;
+        }
+      }
+      return true;
+    });
+
     tickets.push({
       date: apDate(r.timestamp),
       params: {
-        raceID: r.ids.join(","),
+        raceID: [...new Set(r.ids.concat(similar))].join(","),
         statePostal: r.state,
         level: r.office == "H" ? "state" : "FIPScode"
       }
     });
-  });
+  }
+
   // split into at least two sets of tickets, based on geographic specificity
   // only house races do not use county results
+  var generic = races.filter(r => !r.ids.length);
   var stateLevel = generic.filter(r => r.office == "H");
   var countyLevel = generic.filter(r => r.office != "H");
 
