@@ -20,6 +20,8 @@ module.exports = function(grunt) {
 
   var elex = {};
 
+  var serialize = d => JSON.stringify(d, null, 2);
+
   grunt.registerTask("elex", function() {
     grunt.task.requires("json"); // we need the schedule sheet
 
@@ -56,7 +58,7 @@ module.exports = function(grunt) {
 
     api
       .getResults({ races, overrides, test, offline })
-      .then(function(results) {
+      .then(async function(results) {
 
         var unmatched = [];
 
@@ -75,8 +77,6 @@ module.exports = function(grunt) {
           if (!fromAP.length) {
             return unmatched.push(contest);
           }
-
-          var serialize = d => JSON.stringify(d, null, 2);
 
           var subsetResults = function(geo = "state") {
             var copyKeys = "id eevp type party".split(" ");
@@ -119,8 +119,13 @@ module.exports = function(grunt) {
           })
         }
 
-        done();
+        // load delegate report for today
+        var now = new Date();
+        var delegateFile = ["delegates", now.getMonth() + 1, now.getDate(), now.getFullYear()].join("_");
+        var report = await api.getDelegates();
+        grunt.file.write(`build/data/${delegateFile}.json`, serialize(report));
       })
+      .then(done)
       .catch(err => console.log(err));
   });
 };

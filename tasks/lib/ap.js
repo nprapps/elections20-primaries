@@ -1,5 +1,6 @@
 var { issueTickets, redeemTicket } = require("./apResults");
 var normalizeResults = require("./normalizeResults");
+var reports = require("./apReports");
 
 /*
 
@@ -35,4 +36,4 @@ var getResults = async function(options) {
   return normalizeResults(rawResults, options.overrides);
 };
 
-module.exports = { getResults };
+module.exports = { getResults, ...reports };
