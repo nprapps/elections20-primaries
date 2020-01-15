@@ -8,6 +8,7 @@ module.exports = function(grunt) {
     var env = {
       GOOGLE_OAUTH_CLIENT_ID: null,
       GOOGLE_OAUTH_CONSUMER_SECRET: null,
+      AP_API_KEY: null,
       NODE_VERSION: 12
     }
     for (var v in env) {

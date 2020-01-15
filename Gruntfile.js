@@ -32,4 +32,7 @@ module.exports = function(grunt) {
   grunt.registerTask("ap", "Get AP data", ["state", "json", "elex"]);
   grunt.registerTask("serve", "Start the dev server", ["connect:dev", "watch"]);
   grunt.registerTask("default", ["clean", "static", "serve"]);
+  // server tasks
+  grunt.registerTask("deploy", "Deploy HTML to stage on a timer", ["sheets", "static", "publish", "cron:15:publish"]);
+  grunt.registerTask("deploy-live", "Deploy HTML to live on a timer", ["sheets", "static", "publish:live", "cron:15:publishLive"]);
 };
