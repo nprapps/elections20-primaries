@@ -18,7 +18,7 @@
     <tbody>
     <% result.candidates.forEach(function(c) { %>
       <tr>
-        <td><%= c.first || "" %> <%= c.last %>
+        <td><%= c.first || "" %> <%= c.last %> <%= c.winner ? "&bigstar;" : "" %>
         <td class="numeric"><%= c.votes.toLocaleString() %>
         <td class="numeric"><%= c.percentage.toFixed(1) %>%
     <% }); %>
