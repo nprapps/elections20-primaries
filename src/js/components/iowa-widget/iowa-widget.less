@@ -1,0 +1,89 @@
+@import "../../../css/values.less";
+
+iowa-widget {
+  @mug-size: 60px;
+  @flourish-margin: 8px;
+  .gotham();
+
+  .board {
+    border-collapse: collapse;
+    display: block;
+
+    tbody, thead {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    thead tr.duplicate {
+      .visible {
+        display: none;
+      }
+
+      @media @mobile {
+        display: none;
+      }
+    }
+
+    tr {
+      flex: 0 0 calc(50% - 8px);
+      margin-bottom: 4px;
+      display: flex;
+      position: relative;
+
+      @media @mobile {
+        flex: 0 0 100%;
+      }
+    }
+
+    th, td {
+      text-align: right;
+      flex: 0 0 60px;
+
+      &:last-child {
+        padding-right: 8px;
+      }
+    }
+
+    tbody {
+      tr {
+        border-radius: @mug-size 0 0 @mug-size;
+        background: #F8F8F8;
+      }
+
+      td {
+        padding-top: 15px;
+      }
+    }
+
+    .flourishes {
+      padding: 0;
+      padding-right: @flourish-margin;
+
+      .mugshot {
+        width: @mug-size;
+        height: @mug-size;
+        display: block;
+        border-radius: 100%;
+        background: black;
+      }
+
+      .bar-container {
+        position: absolute;
+        top: 0;
+        left: @mug-size + @flourish-margin;
+        right: 0;
+      }
+
+      .bar {
+        height: 10px;
+        background: var(--accent);
+      }
+    }
+
+    .name {
+      flex: 1;
+      text-align: left;
+    }
+  }
+}

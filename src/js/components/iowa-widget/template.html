@@ -1,1 +1,28 @@
-IOWA
+<table class="board" role="table">
+  <thead role="rowgroup">
+  <% ["original", "duplicate"].forEach(function(header) { %>
+    <tr class="<%= header %>" role="row" aria-hidden="<%= (header == "duplicate").toString() %>">
+      <th role="columnheader" class="name" colspan=2>
+        <span class="visible" aria-hidden="true">RESULTS</span>
+        <span class="sr-only">Name</span>
+      <th role="columnheader" class="percentage">%
+      <th role="columnheader" class="votes">Votes
+      <th role="columnheader" class="sde">SDEs*
+  <% }); %>
+  </thead>
+  <tbody role="rowgroup">
+  <% data.candidates.forEach(function(c) { %>
+    <tr class="candidate" role="row" data-fold="<%= (data.fold.indexOf(c.last) > -1).toString() %>">
+      <td aria-hidden="true" class="flourishes">
+        <img class="mugshot" src="<%= c.mugshot || "" %>">
+        <div class="bar-container">
+          <div class="bar" style="width: <%= c.percentage / data.highest * 90 %>%"></div>
+        </div>
+      <td role="cell" class="name"><%= c.first || "" %> <%= c.last %>
+      <td role="cell" class="percentage"><%= c.percentage.toFixed(1) %>%
+      <td role="cell" class="votes"><%= c.votes.toLocaleString() %>
+      <td role="cell" class="sde"><%= c.sde %>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

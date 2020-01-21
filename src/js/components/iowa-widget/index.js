@@ -14,6 +14,18 @@ var ElementBase = require("../elementBase");
 
 var defaultRefresh = 15;
 
+var fold = [
+  "Biden",
+  "Buttigieg",
+  "Klobuchar",
+  "Sanders",
+  "Steyer",
+  "Warren"
+];
+var mugMap = {
+  "Biden": ""
+}
+
 class IowaWidget extends ElementBase {
   constructor() {
     super();
@@ -50,8 +62,50 @@ class IowaWidget extends ElementBase {
     var timestamps = [].concat(...contests.map(d => d.results)).map(r => r.updated);
     var newest = Math.max(...timestamps);
     if (!this.lastUpdated || newest != this.lastUpdated) {
+      var merged = {};
+      var hasVotes = false;
+      contests.forEach(function(contest) {
+        contest.results[0].candidates.forEach(function(c) {
+          if (c.votes) hasVotes = true;
+          var merging = merged[c.last] || {
+            last: c.last,
+            first: c.first,
+            mugshot: mugMap[c.last]
+          };
+          // add fields from each feed type
+          if (contest.id == "17275") {
+            // SDEs and winner
+            merging.sde = c.votes;
+            merging.winner = c.winner;
+            merging.percentage = c.percentage;
+          } else {
+            merging.votes = c.votes;
+          }
+          merged[c.last] = merging;
+        });
+      });
+      var candidates = Object.keys(merged).map(m => merged[m]);
+      var highest = candidates.map(c => c.percentage).sort((a, b) => a - b).pop();
+      if (hasVotes) {
+        candidates.sort(function(a, b) {
+          return b.percentage - a.percentage;
+        });
+      } else {
+        candidates.sort(function(a, b) {
+          var aIndex = (fold.indexOf(a.last) + 1) || 100;
+          var bIndex = (fold.indexOf(b.last) + 1) || 100;
+          return aIndex - bIndex;
+        });
+      }
+
       this.lastUpdated = newest;
-      this.innerHTML = template({ contests, formatAPDate, formatTime });
+      this.innerHTML = template({
+        candidates,
+        fold,
+        highest,
+        formatAPDate,
+        formatTime
+      });
     }
     if (this.hasAttribute("live")) this.scheduleRefresh();
   }
