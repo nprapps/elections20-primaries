@@ -10,14 +10,16 @@
     }
   },
   "styles": {
-    "src/css/seed.less": "build/style.css"
+    "src/css/seed.less": "build/style.css",
+    "src/css/embed.less": "build/embed.css"
   },
   "scripts": {
-    "src/js/main.js": "build/app.js"
+    "src/js/main.js": "build/app.js",
+    "src/js/embed.js": "build/embed.js"
   },
-  "title": "",
+  "title": "2020 Primary Results",
   "description": "",
-  "url": "",
+  "url": "https://apps.npr.org/elections20-primaries/",
   "image": "assets/logo.png",
   "analytics": {
     "topicIDs": [],
@@ -26,6 +28,6 @@
   },
   "sheets": ["1OQjETCNrojeOulPutjoSX2mb8ZDvY_eBTU7N2XbQNCM"],
   "docs": {},
-  "embedded": true,
+  "embedded": false,
   "production": true
 }
