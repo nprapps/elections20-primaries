@@ -1,28 +1,33 @@
-<table class="board" role="table">
-  <thead role="rowgroup">
+<div class="board" role="table">
+  <div class="thead" role="rowgroup">
   <% ["original", "duplicate"].forEach(function(header) { %>
-    <tr class="<%= header %>" role="row" aria-hidden="<%= (header == "duplicate").toString() %>">
-      <th role="columnheader" class="name" colspan=2>
+    <div class="tr <%= header %>" role="row" aria-hidden="<%= (header == "duplicate").toString() %>">
+      <div role="columnheader" class="th name" colspan=2>
         <span class="visible" aria-hidden="true">RESULTS</span>
         <span class="sr-only">Name</span>
-      <th role="columnheader" class="percentage">%
-      <th role="columnheader" class="votes">Votes
-      <th role="columnheader" class="sde">SDEs*
+      </div>
+      <div role="columnheader" class="th percentage">%</div>
+      <div role="columnheader" class="th votes">Votes</div>
+      <div role="columnheader" class="th sde">SDEs*</div>
+    </div>
   <% }); %>
-  </thead>
-  <tbody role="rowgroup">
+  </div>
+  <div class="tbody" role="rowgroup">
   <% data.candidates.forEach(function(c) { %>
-    <tr class="candidate" role="row" data-fold="<%= (data.fold.indexOf(c.last) > -1).toString() %>">
-      <td aria-hidden="true" class="flourishes">
+  <div class="row-wrapper" role="presentation">
+    <div class="tr candidate" role="row" data-fold="<%= (data.fold.indexOf(c.last) > -1).toString() %>">
+      <div aria-hidden="true" class="td flourishes">
         <img class="mugshot" src="<%= c.mugshot || "" %>">
         <div class="bar-container">
           <div class="bar" style="width: <%= c.percentage / data.highest * 90 %>%"></div>
         </div>
-      <td role="cell" class="name"><%= c.first || "" %> <%= c.last %>
-      <td role="cell" class="percentage"><%= c.percentage.toFixed(1) %>%
-      <td role="cell" class="votes"><%= c.votes.toLocaleString() %>
-      <td role="cell" class="sde"><%= c.sde %>
-    </tr>
+      </div>
+      <div role="cell" class="td name"><%= c.first || "" %> <%= c.last %></div>
+      <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>
+      <div role="cell" class="td votes"><%= c.votes.toLocaleString() %></div>
+      <div role="cell" class="td sde"><%= c.sde %></div>
+    </div>
+  </div>
   <% }); %>
-  </tbody>
-</table>
+  </div>
+</div>
