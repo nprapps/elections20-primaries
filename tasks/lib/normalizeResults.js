@@ -42,6 +42,10 @@ module.exports = function(resultArray, overrides) {
       // races that haven't run yet won't have these in non-test mode
       if (race.reportingUnits) race.reportingUnits.forEach(function(ru) {
         var updated = Date.parse(ru.lastUpdated);
+        var precincts = ru.precinctsTotal;
+        var reporting = ru.precinctsReporting;
+        var reportingPercentage = ru.precinctsReportingPct;
+        var metadata = { id, party, updated, precincts, reporting, reportingPercentage }
 
         var candidates = ru.candidates.map(function(c) {
           var candidate = {
@@ -73,20 +77,16 @@ module.exports = function(resultArray, overrides) {
           // do not set a winner at the county level
           data.results.county.push({
             fips: ru.fipsCode,
-            id,
-            party,
+            ...metadata,
             total,
-            updated,
             candidates
           });
         } else {
           data.state = ru.statePostal; // here it is
           data.results.state.push({
-            id,
+            ...metadata,
             winner,
-            party,
             total,
-            updated,
             candidates
           });
         }
