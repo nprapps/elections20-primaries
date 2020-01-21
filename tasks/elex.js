@@ -123,7 +123,7 @@ module.exports = function(grunt) {
         var now = new Date();
         var delegateFile = ["delegates", now.getMonth() + 1, now.getDate(), now.getFullYear()].join("_");
         var report = await api.getDelegates();
-        var reportJSON = serializeReport;
+        var reportJSON = serialize(report);
         grunt.file.write(`build/data/${delegateFile}.json`, reportJSON);
         grunt.file.write("build/data/delegates.json", reportJSON);
       })

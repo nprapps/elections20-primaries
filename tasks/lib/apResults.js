@@ -44,7 +44,7 @@ var issueTickets = function(races) {
         var rHouse = r.office == "H";
         var pHouse = p.office == "H";
         if (rHouse == pHouse) {
-          similar.push(...r.ids);
+          similar.push(...p.ids);
           return false;
         }
       }
