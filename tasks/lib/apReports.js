@@ -31,8 +31,8 @@ var processSuperReport = function(report) {
         return {
           name: c.cName,
           id: c.cId,
-          delegates: c.dTot,
-          supers: c.sdTot
+          delegates: c.dTot * 1,
+          supers: c.sdTot * 1
         }
       })
     }
@@ -41,8 +41,8 @@ var processSuperReport = function(report) {
 
   data.forEach(function(d) {
     var party = d.pId;
-    var needed = d.dNeed;
-    var votes = d.dVotes;
+    var needed = d.dNeed * 1;
+    var votes = d.dVotes * 1;
 
     var total = d.State.filter(s => s.sId == "US").pop();
     var states = d.State.filter(s => s.sId != "US");
@@ -65,10 +65,10 @@ var processSumReport = function(report) {
 
   report.delSum.del.forEach(function(d) {
     var party = d.pId;
-    var needed = d.dNeed;
-    var votes = d.dVotes;
-    var chosen = d.dChosen;
-    var remaining = d.dToBeChosen;
+    var needed = d.dNeed * 1;
+    var votes = d.dVotes * 1;
+    var chosen = d.dChosen * 1;
+    var remaining = d.dToBeChosen * 1;
 
     out.parties[party] = {
       needed, votes, chosen, remaining,
@@ -76,10 +76,10 @@ var processSumReport = function(report) {
         return {
           name: c.cName,
           id: c.cId,
-          total: c.dTot,
-          day: c.d1,
-          week: c.d7,
-          month: c.d30
+          total: c.dTot * 1,
+          day: c.d1 * 1,
+          week: c.d7 * 1,
+          month: c.d30 * 1
         }
       })
     }
@@ -108,8 +108,8 @@ var processStateReport = function(report) {
             return {
               name: c.cName,
               id: c.cId,
-              total: c.dTot,
-              day: c.d1
+              total: c.dTot * 1,
+              day: c.d1 * 1
             }
           })
         }
