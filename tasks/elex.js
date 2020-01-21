@@ -64,7 +64,6 @@ module.exports = function(grunt) {
 
         races.forEach(function(contest) {
           var { state, office, date, ids, feedOnly, filename } = contest;
-          var tag = [state, office, date].join("_").replace(/\//g, "_");
 
           var fromAP = results.filter(function(result) {
             if (ids.length) {
@@ -88,10 +87,14 @@ module.exports = function(grunt) {
             });
           }
 
-          var stateResults = subsetResults("state");
+          var stateResults = {
+            chatter: contest.chatter,
+            footnote: contest.footnote,
+            races: subsetResults("state")
+          };
 
-          // console.log(`Generating results: ${tag}.json`)
-          grunt.file.write(`build/data/${filename || tag}.json`, serialize(stateResults));
+          // console.log(`Generating results: ${filename}.json`)
+          grunt.file.write(`build/data/${filename}.json`, serialize(stateResults));
 
           if (contest.office != "H") {
             var countyResults = subsetResults("county");
@@ -104,8 +107,8 @@ module.exports = function(grunt) {
                 }
               })
             });
-            // console.log(`Generating county results: ${tag}_counties.json`)
-            grunt.file.write(`build/data/${filename || tag}_counties.json`, serialize(countyResults));
+            // console.log(`Generating county results: ${filename}_counties.json`)
+            grunt.file.write(`build/data/${filename}_counties.json`, serialize(countyResults));
           }
 
         });
