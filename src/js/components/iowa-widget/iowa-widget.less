@@ -7,6 +7,10 @@ iowa-widget {
 
   .gotham();
 
+  a {
+    color: var(--foreground);
+  }
+
   .board {
     border-collapse: collapse;
     display: block;
@@ -110,4 +114,52 @@ iowa-widget {
       }
     }
   }
+
+  .metadata-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    @media @mobile {
+      display: block;
+    }
+  }
+
+  .show-more {
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+    .knockout();
+    text-transform: uppercase;
+    font-size: 18px;
+
+    &::after {
+      content: " ▲"
+    }
+  }
+
+  &[expanded] {
+    .show-more .more {
+      display: none;
+    }
+  }
+
+  &:not([expanded]) {
+    .show-more {
+      .fewer {
+        display: none;
+      }
+
+      &::after {
+        content: " ▼";
+      }
+    }
+
+    [data-fold="false"] {
+      display: none !important;
+    }
+  }
+
 }

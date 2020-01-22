@@ -5,7 +5,7 @@ Simple generic results table - used for prototyping the custom element code
 */
 
 var dot = require("../../lib/dot");
-var template = dot.compile(require("./template.html"));
+var template = dot.compile(require("./_template.html"));
 require("./results-table.less");
 
 var { formatAPDate, formatTime } = require("../utils");

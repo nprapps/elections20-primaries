@@ -5,7 +5,8 @@ Simple generic results table - used for prototyping the custom element code
 */
 
 var dot = require("../../lib/dot");
-var template = dot.compile(require("./template.html"));
+var outerTemplate = require("./_outer.html");
+var innerTemplate = dot.compile(require("./_inner.html"));
 require("./iowa-widget.less");
 
 var { formatAPDate, formatTime } = require("../utils");
@@ -36,6 +37,24 @@ class IowaWidget extends ElementBase {
     return ["load"];
   }
 
+  createShell() {
+    this.innerHTML = outerTemplate;
+    // connect the button
+    var button = this.querySelector(".show-more");
+    button.addEventListener("click", () => this.toggleAttribute("expanded"));
+    return this.querySelector(".content");
+  }
+
+  toggleAttribute(attr) {
+    var has = this.hasAttribute(attr);
+    if (has) {
+      this.removeAttribute(attr);
+    } else {
+      this.setAttribute(attr, "");
+    }
+    return !has;
+  }
+
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
@@ -58,6 +77,9 @@ class IowaWidget extends ElementBase {
       return (this.innerHTML = "No data for this race");
     var data = await response.json();
     var contests = data.races;
+    var first = contests[0];
+    var { eevp } = first;
+    var { precincts, reporting, reportingPercentage } = first.results[0];
     var timestamps = [].concat(...contests.map(d => d.results)).map(r => r.updated);
     var newest = Math.max(...timestamps);
     if (!this.lastUpdated || newest != this.lastUpdated) {
@@ -97,14 +119,26 @@ class IowaWidget extends ElementBase {
         });
       }
 
+      var contentBlock = this.querySelector(".content");
+
+      if (!contentBlock) {
+        contentBlock = this.createShell();
+      }
+
       this.lastUpdated = newest;
-      this.innerHTML = template({
+      contentBlock.innerHTML = innerTemplate({
         candidates,
         fold,
-        highest,
-        formatAPDate,
-        formatTime
+        highest
       });
+
+      var updateElement = this.querySelector(".updated");
+      var updated = new Date(newest);
+      updateElement.innerHTML = `
+${reportingPercentage}% of precincts reporting
+(${reporting.toLocaleString()} of ${precincts.toLocaleString()}).
+As of ${formatAPDate(updated)} at ${formatTime(updated)}.
+      `;
     }
     if (this.hasAttribute("live")) this.scheduleRefresh();
   }

@@ -14,8 +14,8 @@
   </div>
   <div class="tbody" role="rowgroup">
   <% data.candidates.forEach(function(c) { %>
-  <div class="row-wrapper" role="presentation">
-    <div class="tr candidate <%= c.winner ? "winner" : "default" %>" role="row" data-fold="<%= (data.fold.indexOf(c.last) > -1).toString() %>">
+  <div class="row-wrapper" role="presentation" data-fold="<%= (data.fold.indexOf(c.last) > -1).toString() %>">
+    <div class="tr candidate <%= c.winner ? "winner" : "default" %>" role="row">
       <div aria-hidden="true" class="td flourishes">
         <div class="mugshot" style="background-image: url(<%= c.mugshot || "" %>)"></div>
         <div class="bar-container">
