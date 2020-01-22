@@ -22,9 +22,8 @@ var fold = [
   "Steyer",
   "Warren"
 ];
-var mugMap = {
-  "Biden": ""
-}
+
+var mugs = require("../../../../data/mugs.sheet.json");
 
 class IowaWidget extends ElementBase {
   constructor() {
@@ -70,7 +69,7 @@ class IowaWidget extends ElementBase {
           var merging = merged[c.last] || {
             last: c.last,
             first: c.first,
-            mugshot: mugMap[c.last]
+            mugshot: mugs[c.last] ? mugs[c.last].src : ""
           };
           // add fields from each feed type
           if (contest.id == "17275") {
