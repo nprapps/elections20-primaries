@@ -5,6 +5,9 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+    <script>
+      document.body.classList.add(new URL(window.location).searchParams.get("theme"));
+    </script>
 
     <main class="calendar">
       <%= t.include("_contestList.html", { races: json.races.filter(r => !r.feedOnly) }) %>
