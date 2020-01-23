@@ -135,7 +135,7 @@ class IowaWidget extends ElementBase {
       var updateElement = this.querySelector(".updated");
       var updated = new Date(newest);
       updateElement.innerHTML = `
-${reportingPercentage}% of precincts reporting
+${reportingPercentage.toFixed(1)}% of precincts reporting
 (${reporting.toLocaleString()} of ${precincts.toLocaleString()}).
 As of ${formatAPDate(updated)} at ${formatTime(updated)}.
       `;

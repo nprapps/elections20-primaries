@@ -7,8 +7,8 @@
         <span class="sr-only">Name</span>
       </div>
       <div role="columnheader" class="th percentage">%</div>
-      <div role="columnheader" class="th votes">Votes</div>
       <div role="columnheader" class="th sde">SDEs*</div>
+      <div role="columnheader" class="th votes">Votes</div>
     </div>
   <% }); %>
   </div>
@@ -19,13 +19,13 @@
       <div aria-hidden="true" class="td flourishes">
         <div class="mugshot" style="background-image: url(<%= c.mugshot || "" %>)"></div>
         <div class="bar-container">
-          <div class="bar" style="width: <%= c.percentage / data.highest * 90 %>%"></div>
+          <div class="bar" style="width: <%= c.percentage / data.highest * 75 %>%"></div>
         </div>
       </div>
       <div role="cell" class="td name"><%= c.first || "" %> <%= c.last %></div>
       <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>
-      <div role="cell" class="td votes"><%= c.votes.toLocaleString() %></div>
       <div role="cell" class="td sde"><%= c.sde %></div>
+      <div role="cell" class="td votes"><%= c.votes.toLocaleString() %></div>
     </div>
   </div>
   <% }); %>

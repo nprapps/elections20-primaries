@@ -2,18 +2,24 @@
 
 // CSS vars
 :root {
-  --foreground: black;
+  --foreground: #333;
+  --secondary: #787878;
   --background: white;
   --shaded: #F8F8F8;
-  --outline: #CCC;
+  --outline: var(--background);
   --accent: @true;
+  --link: var(--accent);
+  --link-secondary: --foreground;
 }
 
 body.dark {
   --foreground: white;
+  --secondary: #999;
   --background: #333;
   --shaded: #222;
-  --outline: black;
+  --outline: var(--background);
+  --link: var(--foreground);
+  --link-secondary: #ccc;
 }
 
 html, body {

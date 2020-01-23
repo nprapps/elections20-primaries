@@ -1,9 +1,9 @@
 @import "../../../css/values.less";
 
 iowa-widget {
-  @mug-size: 60px;
+  @mug-size: 45px;
   @flourish-margin: 8px;
-  @bar-height: 10px;
+  @bar-height: 7px;
 
   .gotham();
 
@@ -14,6 +14,7 @@ iowa-widget {
   .board {
     border-collapse: collapse;
     display: block;
+    font-size: 12px;
 
     .tbody, .thead {
       // display: flex;
@@ -28,7 +29,12 @@ iowa-widget {
     }
 
     .thead .name {
+      font-size: 14px;
       font-weight: bold;
+    }
+
+    .thead .sde {
+      margin-right: -.5em;
     }
 
     .thead .tr.duplicate {
@@ -48,9 +54,13 @@ iowa-widget {
 
     .tr {
       flex: 0 0 calc(50% - 8px);
-      margin-bottom: 4px;
+      // margin-bottom: 2px;
       display: flex;
       position: relative;
+    }
+
+    .thead .tr {
+      margin-bottom: 6px;
     }
 
     .th, .td {
@@ -82,7 +92,7 @@ iowa-widget {
         height: @mug-size;
         display: block;
         border-radius: 100%;
-        background: #888;
+        background: var(--shaded);
         border: 2px solid var(--outline);
         background-size: cover;
         background-position: center;
@@ -96,7 +106,7 @@ iowa-widget {
       }
 
       .bar {
-        height: @bar-height + 6px;
+        height: @bar-height;
         background: var(--accent);
       }
     }
@@ -119,9 +129,28 @@ iowa-widget {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-top: 6px;
 
     @media @mobile {
       display: block;
+    }
+
+    .text {
+      font-family: @sans;
+      font-size: 11px;
+      font-style: italic;
+      color: var(--secondary);
+
+      @media @mobile {
+        display: block;
+        margin-top: 11px;
+      }
+
+      a {
+        color: var(--link);
+
+        &:hover, &:active { opacity: 0.7; }
+      }
     }
   }
 
@@ -131,9 +160,17 @@ iowa-widget {
     font-family: inherit;
     font-weight: inherit;
     color: inherit;
-    .knockout();
+    .knockout-header();
     text-transform: uppercase;
-    font-size: 18px;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    color: var(--link);
+    padding: 0;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.7;
+    }
 
     &::after {
       content: " ▲"
