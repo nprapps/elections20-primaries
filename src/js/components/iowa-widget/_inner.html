@@ -18,9 +18,11 @@
     <div class="tr candidate <%= c.winner ? "winner" : "default" %>" role="row">
       <div aria-hidden="true" class="td flourishes">
         <div class="mugshot" style="background-image: url(<%= c.mugshot || "" %>)"></div>
+        <% if (c.votes) { %>
         <div class="bar-container">
           <div class="bar" style="width: <%= c.percentage / data.highest * 75 %>%"></div>
         </div>
+        <% } %>
       </div>
       <div role="cell" class="td name"><%= c.first || "" %> <%= c.last %></div>
       <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>

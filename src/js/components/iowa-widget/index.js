@@ -15,7 +15,7 @@ var ElementBase = require("../elementBase");
 
 var defaultRefresh = 15;
 
-var fold = [
+var defaultFold = [
   "Biden",
   "Buttigieg",
   "Klobuchar",
@@ -76,12 +76,14 @@ class IowaWidget extends ElementBase {
     if (response.status >= 300)
       return (this.innerHTML = "No data for this race");
     var data = await response.json();
+
     var contests = data.races;
     var first = contests[0];
     var { eevp } = first;
     var { precincts, reporting, reportingPercentage } = first.results[0];
     var timestamps = [].concat(...contests.map(d => d.results)).map(r => r.updated);
     var newest = Math.max(...timestamps);
+
     if (!this.lastUpdated || newest != this.lastUpdated) {
       var merged = {};
       var hasVotes = false;
@@ -98,7 +100,7 @@ class IowaWidget extends ElementBase {
             // SDEs and winner
             merging.sde = c.votes;
             merging.winner = c.winner;
-            merging.percentage = c.percentage;
+            merging.percentage = c.percentage || 0;
           } else {
             merging.votes = c.votes;
           }
@@ -107,7 +109,9 @@ class IowaWidget extends ElementBase {
       });
       var candidates = Object.keys(merged).map(m => merged[m]);
       var highest = candidates.map(c => c.percentage).sort((a, b) => a - b).pop();
+      var fold = defaultFold;
       if (hasVotes) {
+        fold = [];
         candidates.sort(function(a, b) {
           return b.percentage - a.percentage;
         });
@@ -118,7 +122,7 @@ class IowaWidget extends ElementBase {
           return aIndex - bIndex;
         });
       }
-
+      
       var contentBlock = this.querySelector(".content");
 
       if (!contentBlock) {
@@ -132,10 +136,18 @@ class IowaWidget extends ElementBase {
         highest
       });
 
+      // adjust reporting numbers
+      if (reporting > 0 && reportingPercentage < 1) {
+        reportingPercentage = "<1";
+      } else if (reporting < precincts && reportingPercentage == 100) {
+        reportingPercentage = ">99";
+      } else {
+        reportingPercentage = reportingPercentage.toFixed(1);
+      }
       var updateElement = this.querySelector(".updated");
       var updated = new Date(newest);
       updateElement.innerHTML = `
-${reportingPercentage.toFixed(1)}% of precincts reporting
+${reportingPercentage}% of precincts reporting
 (${reporting.toLocaleString()} of ${precincts.toLocaleString()}).
 As of ${formatAPDate(updated)} at ${formatTime(updated)}.
       `;
