@@ -7,6 +7,17 @@ iowa-widget {
 
   .gotham();
 
+  &[test]::before {
+    display: block;
+    padding: 8px;
+    margin-bottom: 8px;
+    text-align: center;
+    .knockout();
+    background: red;
+    color: white;
+    content: "TEST DATA"
+  }
+
   a {
     color: var(--foreground);
   }

@@ -45,8 +45,8 @@ class IowaWidget extends ElementBase {
     return this.querySelector(".content");
   }
 
-  toggleAttribute(attr) {
-    var has = this.hasAttribute(attr);
+  toggleAttribute(attr, force) {
+    var has = typeof force != "undefined" ? !force : this.hasAttribute(attr);
     if (has) {
       this.removeAttribute(attr);
     } else {
@@ -77,6 +77,7 @@ class IowaWidget extends ElementBase {
       return (this.innerHTML = "No data for this race");
     var data = await response.json();
     var { test, closing, chatter, footnote } = data;
+    this.toggleAttribute("test", !!test);
 
     var contests = data.races;
     var first = contests[0];
