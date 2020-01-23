@@ -118,6 +118,18 @@ class IowaWidget extends ElementBase {
           merged[c.last] = merging;
         });
       });
+      // merge the other candidate
+      var other = merged.Other;
+      Object.keys(merged).forEach(function(k) {
+        if (k == "Other") return;
+        var candidate = merged[k];
+        if (candidate.percentage < 1) {
+          delete merged[k];
+          other.votes += candidate.votes;
+          other.percentage += candidate.percentage;
+          other.sde += candidate.sde;
+        }
+      })
       var candidates = Object.keys(merged).map(m => merged[m]);
       var highest = candidates.map(c => c.percentage).sort((a, b) => a - b).pop();
       var fold = defaultFold;
