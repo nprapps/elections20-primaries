@@ -115,7 +115,7 @@ class IowaWidget extends ElementBase {
       if (hasVotes) {
         candidates.sort(function(a, b) {
           var aP = a.last == "Other" ? -1 : a.percentage;
-          var bP = a.last == "Other" ? -1 : b.percentage;
+          var bP = b.last == "Other" ? -1 : b.percentage;
           return bP - aP;
         });
         fold = candidates.map(c => c.last).slice(0, 6);
