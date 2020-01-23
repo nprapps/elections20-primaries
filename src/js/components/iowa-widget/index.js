@@ -112,13 +112,15 @@ class IowaWidget extends ElementBase {
       var fold = defaultFold;
       if (hasVotes) {
         candidates.sort(function(a, b) {
-          return b.percentage - a.percentage;
+          var aP = a.last == "Other" ? -1 : a.percentage;
+          var bP = a.last == "Other" ? -1 : b.percentage;
+          return bP - aP;
         });
         fold = candidates.map(c => c.last).slice(0, 6);
       } else {
         candidates.sort(function(a, b) {
-          var aIndex = (fold.indexOf(a.last) + 1) || 100;
-          var bIndex = (fold.indexOf(b.last) + 1) || 100;
+          var aIndex = a.last == "Other" ? 101 : (fold.indexOf(a.last) + 1) || 100;
+          var bIndex = b.last == "Other" ? 101 : (fold.indexOf(b.last) + 1) || 100;
           return aIndex - bIndex;
         });
       }
