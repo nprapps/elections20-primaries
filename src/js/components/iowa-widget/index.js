@@ -148,11 +148,7 @@ class IowaWidget extends ElementBase {
         });
       }
       
-      var contentBlock = this.querySelector(".content");
-
-      if (!contentBlock) {
-        contentBlock = this.createShell();
-      }
+      var contentBlock = this.createShell();
 
       this.lastUpdated = newest;
       contentBlock.innerHTML = innerTemplate({
