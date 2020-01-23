@@ -76,6 +76,7 @@ class IowaWidget extends ElementBase {
     if (response.status >= 300)
       return (this.innerHTML = "No data for this race");
     var data = await response.json();
+    var { test, closing, chatter, footnote } = data;
 
     var contests = data.races;
     var first = contests[0];
@@ -133,6 +134,8 @@ class IowaWidget extends ElementBase {
 
       this.lastUpdated = newest;
       contentBlock.innerHTML = innerTemplate({
+        chatter,
+        footnote,
         candidates,
         fold,
         highest
@@ -148,11 +151,14 @@ class IowaWidget extends ElementBase {
       }
       var updateElement = this.querySelector(".updated");
       var updated = new Date(newest);
-      updateElement.innerHTML = `
+      var updateString = `
 ${reportingPercentage}% of precincts reporting
 (${reporting.toLocaleString()} of ${precincts.toLocaleString()}).
 As of ${formatAPDate(updated)} at ${formatTime(updated)}.
       `;
+      updateElement.innerHTML = hasVotes ? updateString : `First results expected after ${closing}`;
+      var footnoteElement = this.querySelector(".footnote");
+      footnoteElement.innerHTML = footnote;
     }
     if (this.hasAttribute("live")) this.scheduleRefresh();
   }

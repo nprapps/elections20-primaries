@@ -88,6 +88,8 @@ module.exports = function(grunt) {
           }
 
           var stateResults = {
+            test,
+            closing: contest.closing,
             chatter: contest.chatter,
             footnote: contest.footnote,
             races: subsetResults("state")
