@@ -42,7 +42,11 @@ class IowaWidget extends ElementBase {
     // connect the button
     var button = this.querySelector(".show-more");
     button.addEventListener("click", () => this.toggleAttribute("expanded"));
-    return this.querySelector(".content");
+    var link = this.querySelector(".full-results");
+    link.href = this.getAttribute("href");
+    var content = this.querySelector(".content");
+    this.createShell = () => content;
+    return content;
   }
 
   toggleAttribute(attr, force) {
@@ -56,19 +60,24 @@ class IowaWidget extends ElementBase {
   }
 
   attributeChangedCallback(attr, was, value) {
+    if (was == value) return;
     switch (attr) {
       case "src":
         this.load(value);
         break;
+
+      case "href":
+        var link = this.querySelector(".full-results");
+        if (link) link.href = value;
     }
   }
 
   static get observedAttributes() {
-    return ["src"];
+    return ["src", "href", "expanded"];
   }
 
   static get mirroredProps() {
-    return ["src"];
+    return ["src", "href", "expanded"];
   }
 
   async load(src = this.getAttribute("src")) {

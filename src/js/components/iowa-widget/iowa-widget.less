@@ -188,6 +188,21 @@ iowa-widget {
     }
   }
 
+  .full-results {
+    display: none;
+    color: var(--foreground);
+  }
+
+  &[href] {
+    .show-more {
+      display: none;
+    }
+
+    .full-results {
+      display: block;
+    }
+  }
+
   &[expanded] {
     .show-more .more {
       display: none;
@@ -205,8 +220,14 @@ iowa-widget {
       }
     }
 
-    [data-fold="false"] {
+    .fold-6 {
       display: none !important;
+    }
+
+    @media @mobile {
+      .fold-4 {
+        display: none !important;
+      }
     }
   }
 

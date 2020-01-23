@@ -16,23 +16,28 @@
   <% }); %>
   </div>
   <div class="tbody" role="rowgroup">
-  <% data.candidates.forEach(function(c) { %>
-  <div class="row-wrapper" role="presentation" data-fold="<%= (data.fold.indexOf(c.last) > -1).toString() %>">
-    <div class="tr candidate <%= c.winner ? "winner" : "default" %>" role="row">
-      <div aria-hidden="true" class="td flourishes">
-        <div class="mugshot" style="background-image: url(<%= c.mugshot || "" %>)"></div>
-        <% if (c.votes) { %>
-        <div class="bar-container">
-          <div class="bar" style="width: <%= c.percentage / data.highest * 75 %>%"></div>
+  <% data.candidates.forEach(function(c) { 
+    var foldClasses = [];
+    var foldIndex = data.fold.indexOf(c.last);
+    if (foldIndex == -1) foldClasses.push("fold-6");
+    if (foldIndex > 3) foldClasses.push("fold-4");
+    %>
+    <div class="row-wrapper <%= foldClasses.join(" ") %>" role="presentation">
+      <div class="tr candidate <%= c.winner ? "winner" : "default" %>" role="row">
+        <div aria-hidden="true" class="td flourishes">
+          <div class="mugshot" style="background-image: url(<%= c.mugshot || "" %>)"></div>
+          <% if (c.votes) { %>
+          <div class="bar-container">
+            <div class="bar" style="width: <%= c.percentage / data.highest * 75 %>%"></div>
+          </div>
+          <% } %>
         </div>
-        <% } %>
+        <div role="cell" class="td name"><%= c.first || "" %> <%= c.last %></div>
+        <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>
+        <div role="cell" class="td sde"><%= c.sde %></div>
+        <div role="cell" class="td votes"><%= c.votes.toLocaleString() %></div>
       </div>
-      <div role="cell" class="td name"><%= c.first || "" %> <%= c.last %></div>
-      <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>
-      <div role="cell" class="td sde"><%= c.sde %></div>
-      <div role="cell" class="td votes"><%= c.votes.toLocaleString() %></div>
     </div>
-  </div>
   <% }); %>
   </div>
 </div>
