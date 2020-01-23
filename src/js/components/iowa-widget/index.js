@@ -147,7 +147,7 @@ class IowaWidget extends ElementBase {
           return aIndex - bIndex;
         });
       }
-      
+
       var contentBlock = this.createShell();
 
       this.lastUpdated = newest;
@@ -165,7 +165,7 @@ class IowaWidget extends ElementBase {
       } else if (reporting < precincts && reportingPercentage == 100) {
         reportingPercentage = ">99";
       } else {
-        reportingPercentage = reportingPercentage.toFixed(1);
+        reportingPercentage = reportingPercentage.toFixed(0);
       }
       var updateElement = this.querySelector(".updated");
       var updated = new Date(newest);
