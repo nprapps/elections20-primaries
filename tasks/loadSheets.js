@@ -21,7 +21,7 @@ var camelCase = function(str) {
   });
 };
 
-var cast = function(str) {
+var cast = function(str, type) {
   if (typeof str !== "string") {
     if (typeof str.value == "string") {
       str = str.value;
@@ -72,6 +72,14 @@ module.exports = function(grunt) {
         });
         var { values } = response.data;
         var header = values.shift();
+        var types = header.map(function(h, i) {
+          var [ column, type ] = h.split(":");
+          if (type) {
+            header[i] = column;
+            return type;
+          }
+          return null;
+        })
         var isKeyed = header.indexOf("key") > -1;
         var isValued = header.indexOf("value") > -1;
         var out = isKeyed ? {} : [];
@@ -81,7 +89,25 @@ module.exports = function(grunt) {
           var obj = {};
           row.forEach(function(value, i) {
             var key = header[i];
-            obj[key] = cast(value);
+            var type = types[i];
+            // manual cast
+            if (type) {
+              switch (type) {
+                case "number":
+                  obj[key] = value * 1;
+                  break;
+
+                case "boolean":
+                  obj[key] = !!value;
+                  break;
+
+                default:
+                  obj[key] = value + "";
+              }
+            } else {
+              // auto cast
+              obj[key] = cast(value);
+            }
           });
           if (isKeyed) {
             out[obj.key] = isValued ? obj.value : obj;
