@@ -69,6 +69,7 @@ class IowaWidget extends ElementBase {
       case "href":
         var link = this.querySelector(".full-results");
         if (link) link.href = value;
+        break;
     }
   }
 
@@ -81,6 +82,9 @@ class IowaWidget extends ElementBase {
   }
 
   async load(src = this.getAttribute("src")) {
+    //schedule now in case the fetch fails
+    if (this.hasAttribute("live")) this.scheduleRefresh();
+
     var response = await fetch(src);
     if (response.status >= 300)
       return (this.innerHTML = "No data for this race");
@@ -178,7 +182,6 @@ As of ${formatAPDate(updated)} at ${formatTime(updated)}.
       var footnoteElement = this.querySelector(".footnote");
       footnoteElement.innerHTML = footnote;
     }
-    if (this.hasAttribute("live")) this.scheduleRefresh();
   }
 
   scheduleRefresh() {

@@ -24,6 +24,7 @@ module.exports = function(resultArray, overrides) {
       var test = race.test;
       var id = race.raceID;
       var call = overrides.calls[id];
+      if (call) call = call.winner.split(/,\s*/);
       var office = race.officeID;
       var party = race.party;
       var eevp = race.eevp;
@@ -45,7 +46,6 @@ module.exports = function(resultArray, overrides) {
         var precincts = ru.precinctsTotal;
         var reporting = ru.precinctsReporting;
         var reportingPercentage = ru.precinctsReportingPct;
-        var metadata = { id, party, updated, precincts, reporting, reportingPercentage }
 
         var candidates = ru.candidates.map(function(c) {
           var candidate = {
@@ -57,7 +57,8 @@ module.exports = function(resultArray, overrides) {
           };
           // add winner field only if they won
           if (call) {
-            if (call.winner == c.polID) candidate.winner = true;
+            updated = Date.now();
+            if (call.indexOf(c.polID) > -1) candidate.winner = true;
           } else if (c.winner == "X") {
             candidate.winner = true;
           }
@@ -69,9 +70,11 @@ module.exports = function(resultArray, overrides) {
         });
 
         // generate subtotals/percentages
-        var winner = (candidates.filter(c => c.winner).pop() || {}).id || false;
+        var winners = candidates.filter(c => c.winner).map(c => c.id) || [];
         var total = candidates.reduce((acc, c) => acc + c.votes * 1, 0);
         candidates.forEach(c => c.percentage = (c.votes / total * 100).toFixed(2) * 1);
+
+        var metadata = { id, party, updated, precincts, reporting, reportingPercentage };
 
         if (ru.level == "FIPSCode") {
           // do not set a winner at the county level
@@ -85,7 +88,7 @@ module.exports = function(resultArray, overrides) {
           data.state = ru.statePostal; // here it is
           data.results.state.push({
             ...metadata,
-            winner,
+            winners,
             total,
             candidates
           });

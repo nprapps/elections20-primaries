@@ -47,6 +47,12 @@ This particular project includes some special tasks:
 
 * ``ap`` - Run the elex task and its prerequisites together
 
+There are also three tasks that are related to testing the app in "persistent" mode (i.e., running with regular updates and either displaying them locally or publishing them). 
+
+* ``local`` - Run the rig as a local preview server, without live reload, but with results pulled from AP every 15 seconds
+* ``deploy`` - Run the rig as a deployment server, publishing new updates to staging S3
+* ``deploy-live`` - Run the rig as a deployment server, publishing new updates to live S3
+
 Troubleshooting
 ---------------
 
