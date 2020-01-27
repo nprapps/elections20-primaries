@@ -73,6 +73,15 @@ class IowaWidget extends ElementBase {
     }
   }
 
+  connectedCallback() {
+    if (!this.timeout) this.load();
+  }
+
+  disconnectedCallback() {
+    if (this.timeout) clearTimeout(this.timeout);
+    this.timeout = null;
+  }
+
   static get observedAttributes() {
     return ["src", "href", "expanded"];
   }
@@ -84,6 +93,8 @@ class IowaWidget extends ElementBase {
   async load(src = this.getAttribute("src")) {
     //schedule now in case the fetch fails
     if (this.hasAttribute("live")) this.scheduleRefresh();
+
+    if (!src) return;
 
     var response = await fetch(src);
     if (response.status >= 300)
