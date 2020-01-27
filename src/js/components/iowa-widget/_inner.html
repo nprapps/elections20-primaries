@@ -9,14 +9,14 @@
         <span class="visible" aria-hidden="true">RESULTS</span>
         <span class="sr-only">Name</span>
       </div>
-      <div role="columnheader" class="th percentage">%</div>
+      <div role="columnheader" class="th percentage">Percent</div>
       <div role="columnheader" class="th sde">SDEs*</div>
       <div role="columnheader" class="th votes">Votes</div>
     </div>
   <% }); %>
   </div>
   <div class="tbody" role="rowgroup">
-  <% data.candidates.forEach(function(c) { 
+  <% data.candidates.forEach(function(c) {
     var foldClasses = [];
     var foldIndex = data.fold.indexOf(c.last);
     if (foldIndex == -1) foldClasses.push("fold-6");
