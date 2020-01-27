@@ -130,7 +130,7 @@ class IowaWidget extends ElementBase {
       Object.keys(merged).forEach(function(k) {
         if (k == "Other") return;
         var candidate = merged[k];
-        if (candidate.percentage < 1) {
+        if (hasVotes && candidate.percentage < 1) {
           delete merged[k];
           other.votes += candidate.votes;
           other.percentage += candidate.percentage;
