@@ -95,6 +95,9 @@ class IowaWidget extends ElementBase {
     var contests = data.races;
     var first = contests[0];
     var { eevp } = first;
+    if (!first.results.length) {
+      return this.innerHTML = "No results available yet.";
+    }
     var { precincts, reporting, reportingPercentage } = first.results[0];
     var timestamps = [].concat(...contests.map(d => d.results)).map(r => r.updated);
     var newest = Math.max(...timestamps);
