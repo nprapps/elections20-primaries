@@ -6,7 +6,7 @@
   <% ["original", "duplicate"].forEach(function(header) { %>
     <div class="tr <%= header %>" role="row" aria-hidden="<%= (header == "duplicate").toString() %>">
       <div role="columnheader" class="th name" colspan=2>
-        <span class="visible" aria-hidden="true">RESULTS</span>
+        <span class="visible" aria-hidden="true">Democratic results</span>
         <span class="sr-only">Name</span>
       </div>
       <div role="columnheader" class="th percentage">Percent</div>
@@ -32,7 +32,7 @@
           </div>
           <% } %>
         </div>
-        <div role="cell" class="td name"><%= c.first || "" %> <%= c.last %></div>
+        <div role="cell" class="td name"><%= c.first || "" %> <%= c.last == "Other" ? "Other candidates" : c.last %></div>
         <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>
         <div role="cell" class="td sde"><%= c.sde %></div>
         <div role="cell" class="td votes"><%= c.votes.toLocaleString() %></div>
