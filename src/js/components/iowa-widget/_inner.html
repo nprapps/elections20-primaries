@@ -5,10 +5,7 @@
   <div class="thead" role="rowgroup">
   <% ["original", "duplicate"].forEach(function(header) { %>
     <div class="tr <%= header %>" role="row" aria-hidden="<%= (header == "duplicate").toString() %>">
-      <div role="columnheader" class="th name" colspan=2>
-        <span class="visible">Candidates</span>
-        <span class="sr-only">Name</span>
-      </div>
+      <div role="columnheader" class="th name" colspan=2>Candidate</div>
       <div role="columnheader" class="th percentage">Percent</div>
       <div role="columnheader" class="th sde">SDE*</div>
       <div role="columnheader" class="th votes">Votes</div>
@@ -23,16 +20,16 @@
     if (foldIndex > 3) foldClasses.push("fold-4");
     %>
     <div class="row-wrapper <%= foldClasses.join(" ") %>" role="presentation">
-      <div class="tr candidate <%= c.winner ? "winner" : "default" %>" role="row">
+      <div class="tr candidate <%= c.winner ? "winner" : "default" %> <% if (!c.mugshot) { %>noimg<% } %>" role="row">
         <div aria-hidden="true" class="td flourishes">
-          <div class="mugshot" style="background-image: url(<%= c.mugshot || "" %>)"></div>
+          <div class="mugshot <% if (!c.mugshot) { %>noimg<% } %>" style="background-image: url(<%= c.mugshot || "" %>)"></div>
           <% if (c.votes) { %>
           <div class="bar-container">
             <div class="bar" style="width: <%= c.percentage / data.highest * 75 %>%"></div>
           </div>
           <% } %>
         </div>
-        <div role="cell" class="td name"><%= c.first || "" %> <%= c.last == "Other" ? "Other candidates" : c.last %></div>
+        <div role="cell" class="td name"><span class="first"><%= c.first || "" %> </span><%= c.last == "Other" ? "Other candidates" : c.last %></div>
         <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>
         <div role="cell" class="td sde"><%= c.sde %></div>
         <div role="cell" class="td votes"><%= c.votes.toLocaleString() %></div>
