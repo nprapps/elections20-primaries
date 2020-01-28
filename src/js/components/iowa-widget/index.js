@@ -187,18 +187,17 @@ class IowaWidget extends ElementBase {
       }
       var updateElement = this.querySelector(".updated");
       var updated = new Date(newest);
-      var updateString = `As of ${formatTime(updated)} on ${formatAPDate(updated)}`;
+      var updateString = `as of ${formatTime(updated)} on ${formatAPDate(updated)}`;
       updateElement.innerHTML = updateString;
-      
-      
+
+
       var reportingElement = this.querySelector(".reporting");
       var reportingString = `
 ${reportingPercentage}% of precincts reporting
-(${reporting.toLocaleString()} of ${precincts.toLocaleString()}).
+(${reporting.toLocaleString()} of ${precincts.toLocaleString()})
       `;
-      reportingElement.innerHTML = reportingString;
-      
-      updateElement.innerHTML = hasVotes ? updateString : `First results expected after ${closing}`;
+      reportingElement.innerHTML = hasVotes ? reportingString : `First results expected after ${closing}`;
+
       var footnoteElement = this.querySelector(".footnote");
       footnoteElement.innerHTML = footnote;
     }
