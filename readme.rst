@@ -55,6 +55,25 @@ There are also three tasks that are related to testing the app in "persistent" m
 * ``deploy`` - Run the rig as a deployment server, publishing new updates to staging S3
 * ``deploy-live`` - Run the rig as a deployment server, publishing new updates to live S3
 
+Data inputs
+-----------
+
+This app expects a number of sheets to exist with the following names:
+
+* races - a calendar list of races and associated metadata or chatter
+* mugs - candidate photos
+* chatter - A sheet of text for the top of each state page
+* calls - overrides for race results
+* candidates - overrides for candidate data (name, party, etc)
+* strings - application-wide text lookup
+
+To call races, you should update the calls sheet with the AP id of the race
+you want to call in the "key" column, and a comma-separated list of winner IDs
+in the "winner" column. You can get the ID numbers for the races and
+candidates from the AP feed (Elex is a good way to find these) or from the
+data files the rig produces. If you want to un-call the race, set this to a
+value that won't match any candidate, such as "false".
+
 Deployment server
 -----------------
 
