@@ -55,7 +55,6 @@ module.exports = function(resultArray, overrides) {
         };
         // add winner field only if they won
         if (call) {
-          updated = Date.now();
           if (call.indexOf(c.polID) > -1) candidate.winner = true;
         } else if (c.winner == "X") {
           candidate.winner = true;
@@ -71,7 +70,7 @@ module.exports = function(resultArray, overrides) {
       // races that haven't run yet won't have these in non-test mode
       if (race.reportingUnits) {
         race.reportingUnits.forEach(function(ru) {
-          var updated = Date.parse(ru.lastUpdated);
+          var updated = call ? Date.now() : Date.parse(ru.lastUpdated);
           var precincts = ru.precinctsTotal;
           var reporting = ru.precinctsReporting;
           var reportingPercentage = ru.precinctsReportingPct;
@@ -118,7 +117,7 @@ module.exports = function(resultArray, overrides) {
           var metadata = {
             id,
             party,
-            updated: Date.parse(race.lastUpdated),
+            updated: call ? Date.now() : Date.parse(race.lastUpdated),
             precincts: 0,
             reporting: 0,
             reportingPercentage: 0
