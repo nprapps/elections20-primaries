@@ -55,6 +55,28 @@ There are also three tasks that are related to testing the app in "persistent" m
 * ``deploy`` - Run the rig as a deployment server, publishing new updates to staging S3
 * ``deploy-live`` - Run the rig as a deployment server, publishing new updates to live S3
 
+Deployment server
+-----------------
+
+We are currently deploying this on EC2 using SystemD to run it as a Linux
+service. This means the server will restart it when it crashes, and provide a
+standard mechanism for collecting/following log messages.
+
+You can create the systemd unit file by running ``grunt systemd``. This file
+includes instructions for installing and starting the service at the top. Once
+the service is installed, you can use the ``systemctl`` command to check on it
+and control its operation::
+
+    sudo systemctl start primaries
+    sudo systemctl stop primaries
+    sudo systemctl status primaries
+
+To update the code running on the server, SSH into the EC2 box, enter the
+``elections20-primaries`` directory, and ``git pull`` to get the latest
+source. To be safe, restart the server with ``sudo systemctl restart
+primaries``--this will force the server to redeploy all resources (the
+schedule deployments only run AP data processing, not front-end code).
+
 Troubleshooting
 ---------------
 
