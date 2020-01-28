@@ -40,14 +40,16 @@ This particular project includes some special tasks:
 
 * ``elex`` - Loads data from the AP and outputs result JSON files into ``build/data``. You should have ``$AP_API_KEY`` set in your environment. This task has several command-line flags:
 
-  * ``--date=M/D/YYYY`` - sets the date for which the rig should grab results. Defaults to the current date if not provided. It will pull anything within a day back of this date (meaning that by default it will grab today's and yesterday's races). 
+  * ``--date=M/D/YYYY`` - sets the date for which the rig should grab results. Defaults to the current date if not provided. It will pull anything within a day back of this date (meaning that by default it will grab today's and yesterday's races).
   * ``--test`` - request test numbers from the AP.
   * ``--offline`` - use cached data if we have it. Obviously, you need to run this against the API at least once before you can try this.
   * ``--archive`` - mark all exported results as non-live.
 
 * ``ap`` - Run the elex task and its prerequisites together
 
-There are also three tasks that are related to testing the app in "persistent" mode (i.e., running with regular updates and either displaying them locally or publishing them). 
+To get started with Iowa data, run `grunt state json elex --date=02/3/2020`
+
+There are also three tasks that are related to testing the app in "persistent" mode (i.e., running with regular updates and either displaying them locally or publishing them).
 
 * ``local`` - Run the rig as a local preview server, without live reload, but with results pulled from AP every 15 seconds
 * ``deploy`` - Run the rig as a deployment server, publishing new updates to staging S3
