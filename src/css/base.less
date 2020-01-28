@@ -8,9 +8,10 @@
   --shaded: #efefef;
   --outline: var(--background);
   --accent: @true;
-  --accent-fade: fade(@true, 25%);
+  --accent-fade: fade(@true, 30%);
   --link: var(--accent);
   --link-secondary: --foreground;
+  --font-size: 14px;
 }
 
 body.dark {
@@ -21,6 +22,10 @@ body.dark {
   --outline: var(--background);
   --link: var(--foreground);
   --link-secondary: #ccc;
+}
+
+body.social {
+  --font-size: 17px;
 }
 
 html, body {
@@ -47,9 +52,7 @@ body {
   margin: 0;
   //remove 300ms click delay in Safari, AKA still the worst
   touch-action: manipulation;
-  font-family: @sans;
-  font-size: 14px;
-  line-height: 1.4;
+  font: 14px/1.4 @sans;
 }
 
 img, svg {

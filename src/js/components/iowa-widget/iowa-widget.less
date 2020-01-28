@@ -1,11 +1,12 @@
 @import "../../../css/values.less";
 
 iowa-widget {
-  @mug-size: 45px;
-  @flourish-margin: 8px;
-  @bar-height: 7px;
+  @mug-size: 4em;
+  @flourish-margin: .6em;
+  @bar-height: .6em;
 
   .gotham();
+  font-size: var(--font-size);
 
   &[test]::before {
     display: block;
@@ -26,7 +27,7 @@ iowa-widget {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 11px;
+    margin-bottom: 1em;
 
     @media @mobile {
        display: block;
@@ -34,7 +35,7 @@ iowa-widget {
 
     h3 {
       margin: 0;
-      font-size: 14px;
+      font-size: 1em;
       font-weight: bold;
       text-transform: uppercase;
     }
@@ -42,14 +43,14 @@ iowa-widget {
     .reporting {
       color: var(--secondary);
       font-family: @sans;
-      font-size: 12px;
+      font-size: 0.85em;
     }
   }
 
   .board {
     border-collapse: collapse;
     display: block;
-    font-size: 12px;
+    font-size: 0.85em;
 
     .tbody, .thead {
       // display: flex;
@@ -84,8 +85,7 @@ iowa-widget {
     }
 
     .tr {
-      flex: 0 0 calc(50% - 8px);
-      // margin-bottom: 2px;
+      flex: 0 0 calc(50% - .5em);
       display: flex;
       position: relative;
     }
@@ -96,7 +96,7 @@ iowa-widget {
 
     .th, .td {
       text-align: right;
-      flex: 0 0 60px;
+      flex: 0 0 5em;
 
       &:last-child {
         padding-right: 8px;
@@ -112,8 +112,7 @@ iowa-widget {
       }
 
       .td {
-        padding-top: @bar-height * 2;
-        overflow-y: hidden;
+        padding-top: @bar-height * 2.4;
       }
     }
 
@@ -160,6 +159,9 @@ iowa-widget {
       @media @mobile {
         .first { display: inline; }
       }
+      @media @tiny {
+        .first { display: none; }
+      }
     }
 
     .winner .name {
@@ -173,18 +175,11 @@ iowa-widget {
   }
 
   .metadata-row {
-    // display: flex;
-    // justify-content: space-between;
-    // align-items: flex-start;
     margin-top: 6px;
-
-    // @media @mobile {
-    //   display: block;
-    // }
 
     .text {
       font-family: @sans;
-      font-size: 12px;
+      font-size: 0.85em;
       font-style: italic;
       color: var(--secondary);
       margin-top: 15px;
@@ -215,7 +210,7 @@ iowa-widget {
     color: inherit;
     .knockout-header();
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 1em;
     letter-spacing: 0.01em;
     color: var(--link);
     padding: 0;
@@ -273,5 +268,24 @@ iowa-widget {
       }
     }
   }
+}
 
+// SOCIAL-SPECIFIC VERSION
+body.social {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 50px;
+
+  iowa-widget {
+    .results-header h3 { display: none; }
+    .board .tbody,
+    .board .thead {
+      columns: 1;
+    }
+    .board .thead .tr.duplicate { display: none; }
+    .metadata-row .show-more { display: none; }
+    .metadata-row .footnote { display: none; }
+    .fold-4 { display: none !important; }
+  }
 }
