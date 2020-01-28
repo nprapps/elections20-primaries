@@ -194,7 +194,6 @@ class IowaWidget extends ElementBase {
       var reportingElement = this.querySelector(".reporting");
       var reportingString = `
 ${reportingPercentage}% of precincts reporting
-(${reporting.toLocaleString()} of ${precincts.toLocaleString()})
       `;
       reportingElement.innerHTML = hasVotes ? reportingString : `First results expected after ${closing}`;
 
