@@ -12,10 +12,15 @@
       document.body.classList.add(here.searchParams.get("theme"));
     </script>
 
-    <iowa-widget src="../data/IA_P_2_3_2020.json" live></iowa-widget>
+    <%
+      var race = grunt.data.json.races.filter(r => r.filename == "IA_P_2_3_2020").pop();
+    %>
+
+    <iowa-widget src="../data/IA_P_2_3_2020.json" live headline="<%= race.title %>"></iowa-widget>
     <script>
+      var widget = document.querySelector("iowa-widget");
       if (here.searchParams.get("link")) {
-        document.querySelector("iowa-widget").setAttribute("href", here.searchParams.get("link"));
+        widget.setAttribute("href", here.searchParams.get("link"));
       }
     </script>
 

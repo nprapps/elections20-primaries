@@ -44,6 +44,9 @@ class IowaWidget extends ElementBase {
     button.addEventListener("click", () => this.toggleAttribute("expanded"));
     var link = this.querySelector(".full-results");
     link.href = this.getAttribute("href");
+    var title = this.querySelector("h3");
+    var headline = this.getAttribute("headline").trim();
+    if (headline) title.innerHTML = headline;
     var content = this.querySelector(".content");
     this.createShell = () => content;
     return content;
