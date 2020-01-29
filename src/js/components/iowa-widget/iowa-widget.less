@@ -228,7 +228,14 @@ iowa-widget {
 
   .full-results {
     display: none;
-    color: var(--foreground);
+    color: var(--link);
+    .knockout-header();
+    text-decoration: none;
+
+    &:hover, &:active {
+      cursor: pointer;
+      opacity: 0.7;
+    }
   }
 
   &[href] {
