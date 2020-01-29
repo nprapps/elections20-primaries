@@ -14,7 +14,7 @@ var formatTime = function(date) {
   var suffix = h > 12 ? "p.m." : "a.m.";
   var offset = date.getTimezoneOffset() / 60;
   var zone = "";
-  if (offset > 5 && offset < 9) {
+  if (offset >= 5 && offset < 9) {
     var ts = date.toTimeString();
     var match = timezones.filter(tz => ts.match(tz.re)).pop();
     if (match) zone = " " + match.zone;
