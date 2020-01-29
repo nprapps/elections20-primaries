@@ -162,14 +162,20 @@ iowa-widget {
       @media @tiny {
         .first { display: none; }
       }
+
+      .winner-icon {
+        width: 1em;
+        height: 1em;
+        display: none;
+        margin-left: 4px;
+      }
     }
 
     .winner .name {
       font-weight: bold;
 
-      &::after {
-        content: "\00a0✔";
-        color: var(--foreground);
+      .winner-icon {
+        display: inline-block;
       }
     }
   }
