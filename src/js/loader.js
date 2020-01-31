@@ -18,7 +18,7 @@ if (!window.sidechainObserved) {
   var observer = new MutationObserver(function(events) {
     events.forEach(function(mutation) {
       if (mutation.type == "childList") {
-        var added = Array.from(mutation.addedNodes).filter(n => n.dataset && n.dataset.sidechainSrc);
+        var added = Array.from(mutation.addedNodes).filter(n => n && n.dataset && n.dataset.sidechainSrc);
         added.forEach(upgrade);
       }
     });

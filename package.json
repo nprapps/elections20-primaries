@@ -10,7 +10,7 @@
   "dependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
-    "@nprapps/sidechain": "^1.0.11",
+    "@nprapps/sidechain": "^1.0.12",
     "@webcomponents/custom-elements": "^1.3.2",
     "archieml": "^0.4.2",
     "async": "^2.0.0-rc.1",
