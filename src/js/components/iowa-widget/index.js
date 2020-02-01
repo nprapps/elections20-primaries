@@ -36,22 +36,7 @@ class IowaWidget extends ElementBase {
   static get boundMethods() {
     return ["load"];
   }
-
-  createShell() {
-    this.innerHTML = outerTemplate;
-    // connect the button
-    var button = this.querySelector(".show-more");
-    button.addEventListener("click", () => this.toggleAttribute("expanded"));
-    var link = this.querySelector(".full-results");
-    link.href = this.getAttribute("href");
-    var title = this.querySelector("h3");
-    var headline = this.getAttribute("headline").trim();
-    if (headline) title.innerHTML = headline;
-    var content = this.querySelector(".content");
-    this.createShell = () => content;
-    return content;
-  }
-
+  
   toggleAttribute(attr, force) {
     var has = typeof force != "undefined" ? !force : this.hasAttribute(attr);
     if (has) {
@@ -63,6 +48,7 @@ class IowaWidget extends ElementBase {
   }
 
   attributeChangedCallback(attr, was, value) {
+    var { resultsLink } = this.reveal();
     if (was == value) return;
     switch (attr) {
       case "src":
@@ -70,8 +56,7 @@ class IowaWidget extends ElementBase {
         break;
 
       case "href":
-        var link = this.querySelector(".full-results");
-        if (link) link.href = value;
+        resultsLink.href = value;
         break;
     }
   }
@@ -83,6 +68,20 @@ class IowaWidget extends ElementBase {
   disconnectedCallback() {
     if (this.timeout) clearTimeout(this.timeout);
     this.timeout = null;
+  }
+
+  static get template() {
+    return outerTemplate;
+  }
+
+  //override reveal to add the button listener
+  //this should still only happen once
+  reveal() {
+    var elements = super.reveal();
+    elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
+    elements.resultsLink.href = this.getAttribute("href");
+    elements.headline = this.getAttribute("headline").trim();
+    return elements;
   }
 
   static get observedAttributes() {
@@ -169,10 +168,10 @@ class IowaWidget extends ElementBase {
         });
       }
 
-      var contentBlock = this.createShell();
+      var elements = this.reveal();
 
       this.lastUpdated = newest;
-      contentBlock.innerHTML = innerTemplate({
+      elements.content.innerHTML = innerTemplate({
         chatter,
         footnote,
         candidates,
@@ -188,20 +187,16 @@ class IowaWidget extends ElementBase {
       } else {
         reportingPercentage = reportingPercentage.toFixed(0);
       }
-      var updateElement = this.querySelector(".updated");
       var updated = new Date(newest);
       var updateString = `as of ${formatTime(updated)} on ${formatAPDate(updated)}`;
-      updateElement.innerHTML = updateString;
+      elements.updated.innerHTML = updateString;
 
-
-      var reportingElement = this.querySelector(".reporting");
       var reportingString = `
 ${reportingPercentage}% of precincts reporting
       `;
-      reportingElement.innerHTML = hasVotes ? reportingString : `First results expected after ${closing}`;
+      elements.reporting.innerHTML = hasVotes ? reportingString : `First results expected after ${closing}`;
 
-      var footnoteElement = this.querySelector(".footnote");
-      footnoteElement.innerHTML = footnote;
+      elements.footnote.innerHTML = footnote;
     }
   }
 

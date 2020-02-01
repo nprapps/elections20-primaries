@@ -2,8 +2,6 @@
 
 Custom element base class. Provides utility methods and common code patterns.
 
-Possible good things to have:
-
 */
 
 class ElementBase extends HTMLElement {
@@ -42,6 +40,23 @@ class ElementBase extends HTMLElement {
       e.stopPropagation();
       listener(e);
     });
+  }
+
+  // looks for a static template getter on the class
+  // injects that HTML into the element's light DOM
+  // returns a hash of "data-landmark" elements
+  // this is memoized and will only "run" once
+  reveal() {
+    var template = this.constructor.template;
+    this.innerHTML = template;
+    var territory = {};
+    var landmarks = this.querySelectorAll("[data-landmark]");
+    for (var l of landmarks) {
+      var key = l.dataset.landmark;
+      territory[key] = l;
+    }
+    this.reveal = () => territory;
+    return territory;
   }
 }
 

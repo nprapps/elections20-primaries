@@ -78,3 +78,11 @@ All our elements should inherit from the base class, which eases some of the pai
 * setting the ``mirroredProps`` static getter will cause properties to automatically set the matching DOM attribute.
 * the ``dispatch()`` method makes it easier to send a custom event up the DOM.
 * likewise, ``capture()`` lets you register a listener that will halt propagation on an event from a child element (often used to modify the event before re-dispatching it).
+
+To simplify the process of creating and accessing the inner contents of the
+component, you can specify ``static get template`` on your class, then call
+``this.reveal()`` to inject that markup and return an object containing all
+elements marked with a ``data-landmark`` attribute. After the first call,
+``reveal()`` is memoized: it will only set HTML and find landmarks once,
+meaning that those bindings are stable for adding event listeners or injecting
+templated content into specific parts of the component's DOM.
