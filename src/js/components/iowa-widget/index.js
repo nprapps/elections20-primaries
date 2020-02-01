@@ -36,7 +36,7 @@ class IowaWidget extends ElementBase {
   static get boundMethods() {
     return ["load"];
   }
-  
+
   toggleAttribute(attr, force) {
     var has = typeof force != "undefined" ? !force : this.hasAttribute(attr);
     if (has) {
@@ -172,8 +172,6 @@ class IowaWidget extends ElementBase {
 
       this.lastUpdated = newest;
       elements.content.innerHTML = innerTemplate({
-        chatter,
-        footnote,
         candidates,
         fold,
         highest
@@ -195,7 +193,7 @@ class IowaWidget extends ElementBase {
 ${reportingPercentage}% of precincts reporting
       `;
       elements.reporting.innerHTML = hasVotes ? reportingString : `First results expected after ${closing}`;
-
+      elements.chatter.innerHTML = chatter;
       elements.footnote.innerHTML = footnote;
     }
   }
