@@ -48,7 +48,7 @@ class IowaWidget extends ElementBase {
   }
 
   attributeChangedCallback(attr, was, value) {
-    var { resultsLink } = this.reveal();
+    var { resultsLink } = this.illuminate();
     if (was == value) return;
     switch (attr) {
       case "src":
@@ -74,10 +74,10 @@ class IowaWidget extends ElementBase {
     return outerTemplate;
   }
 
-  //override reveal to add the button listener
+  //override illuminate to add the button listener
   //this should still only happen once
-  reveal() {
-    var elements = super.reveal();
+  illuminate() {
+    var elements = super.illuminate();
     elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
     elements.resultsLink.href = this.getAttribute("href");
     elements.headline = this.getAttribute("headline").trim();
@@ -168,7 +168,7 @@ class IowaWidget extends ElementBase {
         });
       }
 
-      var elements = this.reveal();
+      var elements = this.illuminate();
 
       this.lastUpdated = newest;
       elements.content.innerHTML = innerTemplate({

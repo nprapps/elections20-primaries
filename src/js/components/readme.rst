@@ -81,8 +81,8 @@ All our elements should inherit from the base class, which eases some of the pai
 
 To simplify the process of creating and accessing the inner contents of the
 component, you can specify ``static get template`` on your class, then call
-``this.reveal()`` to inject that markup and return an object containing all
-elements marked with a ``data-landmark`` attribute. After the first call,
-``reveal()`` is memoized: it will only set HTML and find landmarks once,
+``this.illuminate()`` to inject that markup and return an object containing
+all elements marked with a ``data-as`` attribute. After the first call,
+``illuminate()`` is memoized: it will only set HTML and find landmarks once,
 meaning that those bindings are stable for adding event listeners or injecting
 templated content into specific parts of the component's DOM.

@@ -44,19 +44,19 @@ class ElementBase extends HTMLElement {
 
   // looks for a static template getter on the class
   // injects that HTML into the element's light DOM
-  // returns a hash of "data-landmark" elements
+  // returns a hash of "data-as" elements
   // this is memoized and will only "run" once
-  reveal() {
+  illuminate() {
     var template = this.constructor.template;
     this.innerHTML = template;
-    var territory = {};
-    var landmarks = this.querySelectorAll("[data-landmark]");
+    var manuscript = {};
+    var landmarks = this.querySelectorAll("[data-as]");
     for (var l of landmarks) {
-      var key = l.dataset.landmark;
-      territory[key] = l;
+      var key = l.dataset.as;
+      manuscript[key] = l;
     }
-    this.reveal = () => territory;
-    return territory;
+    this.illuminate = () => manuscript;
+    return manuscript;
   }
 }
 
