@@ -31,6 +31,7 @@ class IowaWidget extends ElementBase {
     super();
     this.timeout = null;
     this.lastUpdated = null;
+    this.etag = "";
   }
 
   static get boundMethods() {
@@ -98,9 +99,16 @@ class IowaWidget extends ElementBase {
 
     if (!src) return;
 
-    var response = await fetch(src);
-    if (response.status >= 300)
+    var response = await fetch(src, {
+      headers: {
+        "If-None-Match": this.etag
+      }
+    });
+    this.etag = response.headers.get("etag");
+    if (response.status >= 400)
       return (this.innerHTML = "No data for this race");
+    if (response.status == 304)
+      return; // No change since last request
     var data = await response.json();
     var { test, closing, chatter, footnote } = data;
     this.toggleAttribute("test", !!test);
