@@ -122,7 +122,7 @@ var processStateReport = function(report) {
 
 var getDelegates = async function(params = {}) {
   console.log("Getting report lookup file...");
-  var links = await getAPIData(endpoint, params, { type: "delegates" });
+  var links = await getAPIData(endpoint, params, { type: "delegates", geo: "US" });
   var output = {};
   var normalize = {
     delSuper: processSuperReport,
