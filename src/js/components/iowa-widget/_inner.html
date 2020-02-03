@@ -22,7 +22,7 @@
           <div class="mugshot <% if (!c.mugshot) { %>noimg<% } %>" style="background-image: url(<%= c.mugshot || "" %>)"></div>
           <% if (c.votes) { %>
           <div class="bar-container">
-            <div class="bar" style="width: <%= c.percentage / data.highest * 75 %>%"></div>
+            <div class="bar" style="width: <%= data.highest ? c.percentage / data.highest * 75 : 0 %>%"></div>
           </div>
           <% } %>
         </div>

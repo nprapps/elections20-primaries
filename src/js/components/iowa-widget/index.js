@@ -128,7 +128,6 @@ class IowaWidget extends ElementBase {
       var hasVotes = false;
       contests.forEach(function(contest) {
         contest.results[0].candidates.forEach(function(c) {
-          if (c.votes) hasVotes = true;
           var merging = merged[c.last] || {
             last: c.last,
             first: c.first,
@@ -140,6 +139,7 @@ class IowaWidget extends ElementBase {
             merging.sde = c.votes;
             merging.winner = c.winner;
             merging.percentage = c.percentage || 0;
+            if (merging.percentage) hasVotes = true;
           } else {
             merging.votes = c.votes;
           }
