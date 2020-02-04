@@ -59,11 +59,11 @@ module.exports = function(grunt) {
 
     var done = this.async();
 
-    for (var spreadsheetId of sheetKeys) {
+    var bookRequests = sheetKeys.map(async function(spreadsheetId) {
       var book = (await api.spreadsheets.get({ auth, spreadsheetId })).data;
       var { sheets, spreadsheetId } = book;
-      for (var sheet of sheets) {
-        if (sheet.properties.title[0] == "_") continue;
+      var sheetRequests = sheets.map(async function(sheet) {
+        if (sheet.properties.title[0] == "_") return;
         var response = await api.spreadsheets.values.get({
           auth,
           spreadsheetId,
@@ -118,8 +118,12 @@ module.exports = function(grunt) {
         var filename = `data/${sheet.properties.title.replace(/\s+/g, "_")}.sheet.json`;
         console.log(`Saving sheet to ${filename}`);
         grunt.file.write(filename, JSON.stringify(out, null, 2));
-      }
-    }
+      });
+
+      await Promise.all(sheetRequests);
+    });
+
+    await Promise.all(bookRequests);
 
     done();
 
