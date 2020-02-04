@@ -21,6 +21,8 @@ var formatTime = function(date) {
   }
   if (h > 12) {
     h -= 12;
+  } else if (h == 0) {
+    h = 12;
   }
   return `${h}:${m} ${suffix}${zone}`;
 };
