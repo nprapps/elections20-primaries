@@ -200,7 +200,8 @@ class IowaWidget extends ElementBase {
       var reportingString = `
 ${reportingPercentage}% of precincts reporting
       `;
-      elements.reporting.innerHTML = hasVotes ? reportingString : `First results expected after ${closing}`;
+      // elements.reporting.innerHTML = hasVotes ? reportingString : `First results expected after ${closing}`;
+      elements.reporting.innerHTML = reportingString;
       elements.chatter.innerHTML = chatter;
       elements.footnote.innerHTML = footnote;
     }
