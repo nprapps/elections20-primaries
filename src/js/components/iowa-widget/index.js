@@ -15,16 +15,8 @@ var ElementBase = require("../elementBase");
 
 var defaultRefresh = 15;
 
-var defaultFold = [
-  "Biden",
-  "Buttigieg",
-  "Klobuchar",
-  "Sanders",
-  "Steyer",
-  "Warren"
-];
-
 var mugs = require("../../../../data/mugs.sheet.json");
+var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 
 class IowaWidget extends ElementBase {
   constructor() {
@@ -216,4 +208,4 @@ ${reportingPercentage}% of precincts reporting
   }
 }
 
-window.customElements.define("iowa-widget", IowaWidget);
+IowaWidget.define("iowa-widget");

@@ -58,6 +58,15 @@ class ElementBase extends HTMLElement {
     this.illuminate = () => manuscript;
     return manuscript;
   }
+
+  // handle registration
+  static define(tag) {
+    try {
+      window.customElements.define(tag, this);
+    } catch (err) {
+      console.log(`Couldn't (re)define ${tag} element`);
+    }
+  }
 }
 
 module.exports = ElementBase;

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <%= t.include("partials/_webfonts.html") %>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../embed.css">
+    <base target="_blank">
+  </head>
+  <body>
+    <script>
+      var here = new URL(window.location);
+      document.body.classList.add(here.searchParams.get("theme"));
+    </script>
+
+    <president-primary src="../data/NH_P_2_11_2020.json" live></president-primary>
+
+    <script src="../embed.js" async></script>
+    <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>
+  </body>
+</html>

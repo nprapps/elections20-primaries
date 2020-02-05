@@ -37,15 +37,23 @@ module.exports = function(grunt) {
     });
 
     var date = grunt.option("date");
-    var today = new Date();
+    var now = new Date();
+    var day = 1000 * 60 * 60 * 24;
+    var today;
     if (date) {
-      var [m, d, y] = date.split("/");
+      // date is provided
+      var [m, d, y] = date.split("/").map(Number);
       today = new Date(y, m - 1, d);
+    } else {
+      // start from tomorrow and work back
+      today = new Date(today.valueOf() + day);
     }
-    var eventHorizon = new Date(today - 1000 * 60 * 60 * 24);
+    // Our window is 72 hours back in time
+    // this should catch everything in the last day regardless of TZ
+    var retroactive = new Date(today.valueOf() - day * 3);
 
     var races = schedule.filter(
-      r => r.timestamp <= today && r.timestamp >= eventHorizon
+      r => r.alwaysRun || (r.timestamp <= today && r.timestamp >= retroactive)
     );
 
     var test = grunt.option("test");
