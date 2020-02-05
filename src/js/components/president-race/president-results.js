@@ -10,6 +10,11 @@ var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 
 class PresidentResults extends ElementBase {
 
+  constructor() {
+    super();
+    this.updated = null;
+  }
+
   //override illuminate to add the button listener
   //this should still only happen once
   illuminate() {
@@ -23,6 +28,8 @@ class PresidentResults extends ElementBase {
     elements.headline.innerHTML = `${data.party == "GOP" ? "GOP" : "Democratic"} primary results`;
     var result = data.results[0]; // only one for president
     var { candidates, precincts, reporting, reportingPercentage, updated } = result;
+    if (updated == this.updated) return;
+    this.updated = updated;
     this.setAttribute("party", data.party);
     // assign mugs
     candidates.forEach(c => c.mugshot = mugs[c.last] ? mugs[c.last].src : "");

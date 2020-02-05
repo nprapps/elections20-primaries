@@ -33,6 +33,7 @@ class PresidentPrimary extends ElementBase {
     });
     if (response.status >= 400) return (this.innerHTML = "No data");
     if (response.status == 304) return console.log(`No change for ${src}`);
+    this.etag = response.headers.get("etag");
     var data = await response.json();
     var { races } = data;
     var children = Array.from(this.children);
