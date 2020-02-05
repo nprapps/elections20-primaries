@@ -36,6 +36,11 @@ class PresidentPrimary extends ElementBase {
     this.etag = response.headers.get("etag");
     var data = await response.json();
     var { races } = data;
+    // filter on party
+    if (this.hasAttribute("party")) {
+      var party = this.getAttribute("party");
+      races = races.filter(r => r.party == party);
+    }
     var children = Array.from(this.children);
     // handle existing children
     children.forEach(child => {
@@ -51,7 +56,6 @@ class PresidentPrimary extends ElementBase {
 
       // either set results or remove the child
       if (matched) {
-        console.log(child, matched);
         child.race = matched;
       } else {
         this.removeChild(child);
