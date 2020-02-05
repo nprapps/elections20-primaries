@@ -196,6 +196,8 @@ ${reportingPercentage}% of precincts reporting
       elements.reporting.innerHTML = reportingString;
       elements.chatter.innerHTML = chatter;
       elements.footnote.innerHTML = footnote;
+
+      elements.moreButton.dataset.numCandidates = candidates.length;
     }
   }
 

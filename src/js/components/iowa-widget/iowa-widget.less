@@ -222,6 +222,20 @@ iowa-widget {
     padding: 0;
     white-space: nowrap;
 
+    &[data-num-candidates="1"],
+    &[data-num-candidates="2"],
+    &[data-num-candidates="3"],
+    &[data-num-candidates="4"] {
+      display: none;
+    }
+
+    &[data-num-candidates="5"],
+    &[data-num-candidates="6"] {
+      @media @mobile-above {
+        display: none;
+      }
+    }
+
     &:hover {
       cursor: pointer;
       opacity: 0.7;
