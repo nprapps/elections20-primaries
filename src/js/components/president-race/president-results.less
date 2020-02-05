@@ -5,6 +5,11 @@ president-results {
   @flourish-margin: .6em;
   @bar-height: .6em;
 
+  &[party="GOP"] {
+    --accent: var(--gop);
+    --accent-fade: var(--gop-fade);
+  }
+
   .gotham();
   font-size: var(--font-size);
 
@@ -14,7 +19,7 @@ president-results {
     margin-bottom: 8px;
     text-align: center;
     .knockout();
-    background: red;
+    background: black;
     color: white;
     content: "TEST DATA"
   }
@@ -290,7 +295,7 @@ body.social {
   margin-right: auto;
   padding-top: 50px;
 
-  iowa-widget {
+  president-results {
     .results-header h3 { display: none; }
     .board .tbody,
     .board .thead {
