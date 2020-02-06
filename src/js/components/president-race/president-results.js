@@ -31,9 +31,28 @@ class PresidentResults extends ElementBase {
     if (updated == this.updated) return;
     this.updated = updated;
     this.setAttribute("party", data.party);
-    // assign mugs
-    candidates.forEach(c => c.mugshot = mugs[c.last] ? mugs[c.last].src : "");
+    // assign mugs and normalize percentages
+    candidates.forEach(function(c) {
+      c.mugshot = mugs[c.last] ? mugs[c.last].src : "";
+      c.percentage = c.percentage || 0;
+    });
+    // check for existing votes
     candidates.sort((a, b) => b.percentage - a.percentage);
+    // resort if no votes are cast
+    if (!candidates[0].percentage) {
+      // sort by default view, then by name
+      candidates.sort(function(a, b) {
+        var aValue = (defaultFold.indexOf(a.last) + 1) || (a.last == "Other" ? 101 : 100);
+        var bValue = (defaultFold.indexOf(b.last) + 1) || (b.last == "Other" ? 101 : 100);
+        if (aValue == bValue) {
+          return a.last < b.last ? -1 : 1;
+        }
+        return aValue - bValue;
+      });
+    }
+    var fold = candidates.slice(0, 6).map(c => c.last);
+
+    // filter small candidates into others
     var others = candidates.filter(c => c.last == "Other").pop();
     if (!others) {
       others = {
@@ -43,27 +62,14 @@ class PresidentResults extends ElementBase {
       };
       candidates.push(others);
     }
-    // filter small candidates into others
     candidates = candidates.filter(function(c) {
-      if (c.last != "Other" && c.percentage < 1) {
+      if (c.last != "Other" && c.percentage < 1 && fold.indexOf(c.last) == -1) {
         others.percentage += c.percentage;
         others.votes += c.votes;
         return false;
       }
       return true;
     });
-    if (!candidates[0].percentage) {
-      // sort by default view, then by name
-      candidates.sort(function(a, b) {
-        var aValue = defaultFold.indexOf(a.last) + 1 || a.last == "Other" ? 101 : 100;
-        var bValue = defaultFold.indexOf(b.last) + 1 || a.last == "Other" ? 101 : 100;
-        if (aValue == bValue) {
-          return a.last < b.last ? -1 : 1;
-        }
-        return aValue - bValue;
-      });
-    }
-    var fold = candidates.slice(0, 6).map(c => c.last);
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
     elements.content.innerHTML = tableTemplate({ candidates, highest, fold });
 
