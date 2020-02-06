@@ -72,7 +72,7 @@ var processSumReport = function(report) {
 
     out.parties[party] = {
       needed, votes, chosen, remaining,
-      candidates: d.Cand.map(function(c) {
+      candidates: d.Cand ? d.Cand.map(function(c) {
         return {
           name: c.cName,
           id: c.cId,
@@ -81,7 +81,7 @@ var processSumReport = function(report) {
           week: c.d7 * 1,
           month: c.d30 * 1
         }
-      })
+      }) : []
     }
   });
 
@@ -104,14 +104,14 @@ var processStateReport = function(report) {
       states: d.State.map(function(s) {
         return {
           state: s.sId,
-          candidates: s.Cand.map(function(c) {
+          candidates: s.Cand ? s.Cand.map(function(c) {
             return {
               name: c.cName,
               id: c.cId,
               total: c.dTot * 1,
               day: c.d1 * 1
             }
-          })
+          }) : []
         }
       })
     }
