@@ -13,7 +13,11 @@
       document.body.classList.add(here.searchParams.get("theme"));
     </script>
 
-    <president-primary party="Dem" live src="../data/NH_P_2_11_2020.json" live></president-primary>
+    <div class="embed-row">
+      <president-primary party="Dem" live src="../data/NH_P_2_11_2020.json" live></president-primary>
+      <hr>
+      <delegate-total src="../data/delegates.json" live></delegate-total>
+    </div>
 
     <script src="../embed.js" async></script>
     <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>

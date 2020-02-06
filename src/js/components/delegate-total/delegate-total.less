@@ -1,0 +1,62 @@
+@import "../../../css/values.less";
+
+delegate-total {
+  min-width: 300px;
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1em;
+    color: var(--foreground);
+
+    h3 {
+      margin: 0;
+      text-transform: uppercase;
+      .knockout();
+      color: inherit;
+    }
+  }
+
+
+  .key {
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+
+    span {
+      .knockout();
+      font-size: .85em;
+      color: var(--secondary);
+      text-transform: uppercase;
+      text-align: left;
+      font-weight: normal;
+    }
+  }
+
+  ol {
+    list-style-type: none;
+    display: block;
+    margin: 0;
+    padding: 0;
+
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 4px;
+      background: var(--shaded);
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+
+    .count {
+      text-align: right;
+    }
+  }
+
+  .full-report {
+    .knockout();
+    text-transform: uppercase;
+  }
+}

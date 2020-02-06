@@ -1,0 +1,28 @@
+<% if (data.error) { %>
+<div class="error">
+  <%= data.error %>
+</div>
+<% } %>
+<div class="title">
+  <h3>Delegates</h3>
+  <span>
+    <%= data.needed %> needed 
+  </span>
+</div>
+<div class="key">
+  <span>Candidate</span>
+  <span>Count</span>
+</div>
+<ol>
+  <% (data.candidates || new Array(3).fill({})).forEach(function(c) { %>
+  <li>
+
+    <span class="name">
+      <%= c.name %>
+    </span>
+
+    <span class="count"><%= c.total %></span>
+  </li>
+  <% }); %>
+</ol>
+<a class="full-report">Full delegate report &raquo;</a>
