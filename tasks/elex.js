@@ -46,7 +46,7 @@ module.exports = function(grunt) {
       today = new Date(y, m - 1, d);
     } else {
       // start from tomorrow and work back
-      today = new Date(today.valueOf() + day);
+      today = new Date(now.valueOf() + day);
     }
     // Our window is 72 hours back in time
     // this should catch everything in the last day regardless of TZ
