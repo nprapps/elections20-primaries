@@ -47,7 +47,7 @@ This particular project includes some special tasks:
 
 * ``ap`` - Run the elex task and its prerequisites together
 
-To get started with Iowa data, run `grunt state json elex --date=02/3/2020`
+To get started with Iowa data, run `grunt --date=2/3/2020`
 
 There are also three tasks that are related to testing the app in "persistent" mode (i.e., running with regular updates and either displaying them locally or publishing them).
 
