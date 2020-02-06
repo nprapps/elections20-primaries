@@ -9,13 +9,8 @@
   <% }); %>
   </div>
   <div class="tbody" role="rowgroup">
-  <% data.candidates.forEach(function(c) {
-    var foldClasses = [];
-    var foldIndex = data.fold.indexOf(c.last);
-    if (foldIndex == -1) foldClasses.push("fold-6");
-    if (foldIndex > 3) foldClasses.push("fold-4");
-    %>
-    <div class="row-wrapper <%= foldClasses.join(" ") %>" role="presentation">
+  <% data.candidates.forEach(function(c) { %>
+    <div class="row-wrapper <%= data.fold.indexOf(c.last) > -1 ? "shown" : "foldable" %>" role="presentation">
       <div class="tr candidate <%= c.winner ? "winner" : "default" %> <% if (!c.mugshot) { %>noimg<% } %>" role="row">
         <div aria-hidden="true" class="td flourishes">
           <div class="mugshot <% if (!c.mugshot) { %>noimg<% } %>" style="background-image: url(<%= c.mugshot || "" %>)"></div>

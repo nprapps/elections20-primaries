@@ -7,6 +7,7 @@ var { formatTime, formatAPDate } = require("../utils");
 
 var mugs = require("../../../../data/mugs.sheet.json");
 var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
+var defaultMax = 6;
 
 class PresidentResults extends ElementBase {
 
@@ -50,7 +51,9 @@ class PresidentResults extends ElementBase {
         return aValue - bValue;
       });
     }
-    var fold = candidates.slice(0, 6).map(c => c.last);
+
+    var max = this.getAttribute("max") || defaultMax;
+    var fold = candidates.slice(0, max).map(c => c.last);
 
     // filter small candidates into others
     var others = candidates.filter(c => c.last == "Other").pop();
@@ -63,13 +66,22 @@ class PresidentResults extends ElementBase {
       candidates.push(others);
     }
     candidates = candidates.filter(function(c) {
-      if (c.last != "Other" && c.percentage < 1 && fold.indexOf(c.last) == -1) {
+      if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
         others.percentage += c.percentage;
         others.votes += c.votes;
         return false;
       }
       return true;
     });
+
+    // decide if we need overflow
+    if (candidates.length > fold.length + 1) {
+      this.setAttribute("overflow", "");
+    } else {
+      this.removeAttribute("overflow");
+    }
+
+    // insert content
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
     elements.content.innerHTML = tableTemplate({ candidates, highest, fold });
 

@@ -226,6 +226,7 @@ president-results {
     color: var(--link);
     padding: 0;
     white-space: nowrap;
+    display: none;
 
     &:hover {
       cursor: pointer;
@@ -234,6 +235,37 @@ president-results {
 
     &::after {
       content: " ▲"
+    }
+  }
+
+  &[expanded] {
+  }
+
+  &[overflow] {
+    .show-more {
+      display: block;
+    }
+
+    &[expanded] {
+      .show-more .more {
+        display: none;
+      }
+    }
+
+    &:not([expanded]) {
+      .show-more {
+        .fewer {
+          display: none;
+        }
+
+        &::after {
+          content: " ▼";
+        }
+      }
+
+      .foldable {
+        display: none !important;
+      }
     }
   }
 
@@ -250,40 +282,8 @@ president-results {
   }
 
   &[href] {
-    .show-more {
-      display: none;
-    }
-
     .full-results {
       display: block;
-    }
-  }
-
-  &[expanded] {
-    .show-more .more {
-      display: none;
-    }
-  }
-
-  &:not([expanded]) {
-    .show-more {
-      .fewer {
-        display: none;
-      }
-
-      &::after {
-        content: " ▼";
-      }
-    }
-
-    .fold-6 {
-      display: none !important;
-    }
-
-    @media @mobile {
-      .fold-4 {
-        display: none !important;
-      }
     }
   }
 }

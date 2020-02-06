@@ -27,14 +27,14 @@ var processSuperReport = function(report) {
   var normalizeState = function(state) {
     var data = {
       state: state.sId,
-      candidates: state.Cand.map(function(c) {
+      candidates: state.Cand ? state.Cand.map(function(c) {
         return {
           name: c.cName,
           id: c.cId,
           delegates: c.dTot * 1,
           supers: c.sdTot * 1
         }
-      })
+      }) : []
     }
     return data;
   }

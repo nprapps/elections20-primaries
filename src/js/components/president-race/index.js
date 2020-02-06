@@ -65,8 +65,9 @@ class PresidentPrimary extends ElementBase {
     races.forEach(r => {
       var child = document.createElement("president-results");
       this.appendChild(child);
-      child.race = r;
       child.dataset.race = r.id;
+      if (this.hasAttribute("max")) child.setAttribute("max", this.getAttribute("max"));
+      child.race = r;
       children.push(child);
     });
     // set the test flag
