@@ -1,11 +1,11 @@
 var ElementBase = require("../elementBase");
+var Retriever = require("../retriever");
 require("./president-results");
 
 class PresidentPrimary extends ElementBase {
   constructor() {
     super();
-    this.etag = null;
-    this.timeout = null;
+    this.fetch = new Retriever(this.load);
   }
 
   static get boundMethods() {
@@ -19,22 +19,12 @@ class PresidentPrimary extends ElementBase {
   attributeChangedCallback(attr, old, value) {
     switch (attr) {
       case "src":
-        this.load(value);
+        this.fetch.watch(value, this.getAttribute("refresh") || 15);
         break;
     }
   }
 
-  async load(src = this.getAttribute("src")) {
-    if (this.hasAttribute("live")) this.scheduleRefresh();
-    var response = await fetch(src, {
-      headers: {
-        "If-None-Match": this.etag
-      }
-    });
-    if (response.status >= 400) return (this.innerHTML = "No data");
-    if (response.status == 304) return console.log(`No change for ${src}`);
-    this.etag = response.headers.get("etag");
-    var data = await response.json();
+  load(data) {
     var { races } = data;
     // filter on party
     if (this.hasAttribute("party")) {
@@ -76,14 +66,6 @@ class PresidentPrimary extends ElementBase {
     } else {
       children.forEach(c => c.removeAttribute("test"));
     }
-  }
-
-  scheduleRefresh() {
-    if (this.timeout) clearTimeout(this.clearTimeout);
-    var interval = this.hasAttribute("refresh")
-      ? this.getAttribute("refresh") * 1
-      : 15;
-    this.timeout = setTimeout(this.load, interval * 1000);
   }
 }
 

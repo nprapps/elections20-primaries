@@ -1,4 +1,5 @@
 var ElementBase = require("../elementBase");
+var Retriever = require("../retriever");
 require("./delegate-total.less");
 var dot = require("../../lib/dot");
 var template = dot.compile(require("./_template.html"));
@@ -10,8 +11,7 @@ var defaultRefresh = 60;
 class DelegateTotal extends ElementBase {
   constructor() {
     super();
-    this.timeout = null;
-    this.etag = null;
+    this.fetch = new Retriever(this.load);
   }
 
   static get boundMethods() {
@@ -19,30 +19,26 @@ class DelegateTotal extends ElementBase {
   }
 
   connectedCallback() {
-    this.load();
+    this.fetch.start();
   }
 
   disconnectedCallback() {
-    if (this.timeout) clearTimeout(this.timeout);
+    this.fetch.stop();
   }
 
-  scheduleRefresh() {
-    if (this.timeout) clearTimeout(this.timeout);
-    this.timeout = setTimeout(this.load, 60 * 1000);
+  static get observedAttributes() {
+    return ["src"]
   }
 
-  async load(src = this.getAttribute("src")) {
-    this.scheduleRefresh();
-    var response = await fetch(src, {
-      headers: {
-        "If-None-Match": this.etag
-      }
-    });
+  attributeChangedCallback(attr, was, value) {
+    switch (attr) {
+      case "src":
+        this.fetch.watch(value, 60);
+        break;
+    }
+  }
 
-    if (response.status >= 400) this.innerHTML = template({ error: "Couldn't load report" });
-    if (response.status == 304) return console.log("Delegate file is unchanged");
-
-    var data = await response.json();
+  load(data) {
     var { needed, candidates } = data.sum.parties.Dem;
     var timestamp = new Date(data.sum.updated);
     var updated = `As of ${formatTime(timestamp)} on ${formatAPDate(timestamp)}`;

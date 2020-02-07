@@ -12,6 +12,7 @@ require("./iowa-widget.less");
 var { formatAPDate, formatTime } = require("../utils");
 
 var ElementBase = require("../elementBase");
+var Retriever = require("../retriever");
 
 var defaultRefresh = 15;
 
@@ -21,9 +22,7 @@ var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 class IowaWidget extends ElementBase {
   constructor() {
     super();
-    this.timeout = null;
-    this.lastUpdated = null;
-    this.etag = "";
+    this.fetch = new Retriever(this.load);
   }
 
   static get boundMethods() {
@@ -45,7 +44,7 @@ class IowaWidget extends ElementBase {
     if (was == value) return;
     switch (attr) {
       case "src":
-        this.load(value);
+        this.fetch.watch(value, this.getAttribute("live") || 15);
         break;
 
       case "href":
@@ -55,12 +54,11 @@ class IowaWidget extends ElementBase {
   }
 
   connectedCallback() {
-    if (!this.timeout) this.load();
+    this.fetch.start();
   }
 
   disconnectedCallback() {
-    if (this.timeout) clearTimeout(this.timeout);
-    this.timeout = null;
+    this.fetch.stop();
   }
 
   static get template() {
@@ -85,23 +83,7 @@ class IowaWidget extends ElementBase {
     return ["src", "href", "expanded"];
   }
 
-  async load(src = this.getAttribute("src")) {
-    //schedule now in case the fetch fails
-    if (this.hasAttribute("live")) this.scheduleRefresh();
-
-    if (!src) return;
-
-    var response = await fetch(src, {
-      headers: {
-        "If-None-Match": this.etag
-      }
-    });
-    this.etag = response.headers.get("etag");
-    if (response.status >= 400)
-      return (this.innerHTML = "No data for this race");
-    if (response.status == 304)
-      return; // No change since last request
-    var data = await response.json();
+  load(data) {
     var { test, closing, chatter, footnote } = data;
     this.toggleAttribute("test", !!test);
 
@@ -199,14 +181,6 @@ ${reportingPercentage}% of precincts reporting
 
       elements.moreButton.dataset.numCandidates = candidates.length;
     }
-  }
-
-  scheduleRefresh() {
-    if (this.timeout) clearTimeout(this.timeout);
-    var interval = this.hasAttribute("refresh")
-      ? this.getAttribute("refresh")
-      : defaultRefresh;
-    this.timeout = setTimeout(this.load, interval * 1000);
   }
 }
 
