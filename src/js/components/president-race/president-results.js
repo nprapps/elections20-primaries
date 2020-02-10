@@ -58,7 +58,7 @@ class PresidentResults extends ElementBase {
 
     // filter small candidates into others
     var others = candidates.filter(c => c.last == "Other").pop();
-    if (hasVotes) {
+    // if (hasVotes) {
       if (!others) {
         others = {
           last: "Other",
@@ -75,10 +75,10 @@ class PresidentResults extends ElementBase {
         return true;
       });
       candidates.push(others);
-    }
+    // }
 
     // decide if we need overflow
-    if (candidates.length > fold.length + 1) {
+    if (candidates.length > fold.length) {
       this.setAttribute("overflow", "");
     } else {
       this.removeAttribute("overflow");
