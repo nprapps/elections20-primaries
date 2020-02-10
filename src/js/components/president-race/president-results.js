@@ -40,7 +40,8 @@ class PresidentResults extends ElementBase {
     // check for existing votes
     candidates.sort((a, b) => b.percentage - a.percentage);
     // resort if no votes are cast
-    if (!candidates[0].percentage) {
+    var hasVotes = !!candidates[0].percentage;
+    if (!hasVotes) {
       // sort by default view, then by name
       candidates.sort(function(a, b) {
         var aValue = (defaultFold.indexOf(a.last) + 1) || (a.last == "Other" ? 101 : 100);
@@ -57,22 +58,24 @@ class PresidentResults extends ElementBase {
 
     // filter small candidates into others
     var others = candidates.filter(c => c.last == "Other").pop();
-    if (!others) {
-      others = {
-        last: "Other",
-        votes: 0,
-        percentage: 0
-      };
+    if (hasVotes) {
+      if (!others) {
+        others = {
+          last: "Other",
+          votes: 0,
+          percentage: 0
+        };
+      }
+      candidates = candidates.filter(function(c) {
+        if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
+          others.percentage += c.percentage;
+          others.votes += c.votes;
+          return false;
+        }
+        return true;
+      });
       candidates.push(others);
     }
-    candidates = candidates.filter(function(c) {
-      if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
-        others.percentage += c.percentage;
-        others.votes += c.votes;
-        return false;
-      }
-      return true;
-    });
 
     // decide if we need overflow
     if (candidates.length > fold.length + 1) {

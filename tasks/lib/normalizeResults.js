@@ -34,7 +34,7 @@ module.exports = function(resultArray, overrides) {
         id,
         date,
         test,
-        state: null, // will be filled in later based on state RU, it's weird
+        state: race.statePostal, // will be overridden later based on state RU, it's weird
         eevp,
         party,
         type,
