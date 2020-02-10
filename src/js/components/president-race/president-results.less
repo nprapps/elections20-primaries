@@ -218,8 +218,9 @@ president-results {
     }
 
     .footnote {
-      display: block;
-      margin-top: 5px;
+      border-left: 1px solid #ccc;
+      padding-left: 5px;
+      margin-left: 5px;
     }
   }
 
@@ -302,7 +303,7 @@ president-results {
     .full-results {
       display: block;
     }
-    
+
     .show-more {
       display: none;
     }
@@ -329,7 +330,17 @@ body.social {
     .board .percentage { padding-right: .9em; }
     .board .thead .tr.duplicate { display: none; }
     .metadata-row .show-more { display: none; }
-    .metadata-row .footnote { display: none; }
-    .fold-4 { display: none !important; }
+    .foldable,
+    .row-wrapper.shown:nth-child(5),
+    .row-wrapper.shown:nth-child(6) {
+      display: none !important;
+    }
   }
+
+  president-primary {
+    .footnote { display: none; }
+  }
+
+  hr,
+  delegate-total { display: none; }
 }
