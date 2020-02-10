@@ -168,8 +168,11 @@ president-results {
       flex: 1;
       text-align: left;
 
-      @media @tablet {
+      @media @desktop {
         .first { display: none; }
+      }
+      @media @tablet {
+        .first { display: inline; }
       }
       @media @mobile {
         .first { display: inline; }
@@ -215,12 +218,6 @@ president-results {
 
         &:hover, &:active { opacity: 0.7; }
       }
-    }
-
-    .footnote {
-      border-left: 1px solid #ccc;
-      padding-left: 5px;
-      margin-left: 5px;
     }
   }
 
