@@ -1,7 +1,7 @@
 @import "../../../css/values.less";
 
 delegate-total {
-  min-width: 175px;
+  min-width: 200px;
   font-size: var(--font-size);
 
   .title {
@@ -14,8 +14,11 @@ delegate-total {
     h3 {
       margin: 0;
       text-transform: uppercase;
-      .knockout();
+      .gotham();
       color: inherit;
+      font-size: 1em;
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
     span {
@@ -26,17 +29,19 @@ delegate-total {
 
 
   .key {
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     display: flex;
     justify-content: space-between;
 
+    @media @mobile {
+      display: none;
+    }
+
     span {
-      .knockout();
+      .knockout-header();
       font-size: .85em;
       color: var(--secondary);
-      text-transform: uppercase;
       text-align: left;
-      font-weight: normal;
     }
   }
 
@@ -48,6 +53,12 @@ delegate-total {
     .gotham();
     font-size: .85em;
 
+    @media @tablet {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
     li {
       display: flex;
       justify-content: space-between;
@@ -57,18 +68,38 @@ delegate-total {
       margin-bottom: 4px;
       align-items: center;
       height: 4em;
+
+      @media @tablet {
+        display: block;
+        width: 33%;
+
+        span {
+          display: block;
+          text-align: center;
+        }
+      }
     }
 
     .count {
       text-align: right;
+
+      @media @tablet {
+        text-align: center;
+        margin-top: 3px;
+      }
     }
   }
 
   .full-report {
     display: block;
-    .knockout();
-    text-transform: uppercase;
+    .knockout-header();
+    color: var(--link);
     text-decoration: none;
-    margin-top: 8px;
+    margin-top: 10px;
+
+    &:hover, &:active {
+      cursor: pointer;
+      opacity: 0.7;
+    }
   }
 }
