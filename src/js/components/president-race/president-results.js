@@ -26,6 +26,9 @@ class PresidentResults extends ElementBase {
 
   set race(data) {
     var elements = this.illuminate();
+
+    elements.resultsLink.href = this.getAttribute("href");
+
     elements.headline.innerHTML = `${data.party == "GOP" ? "GOP" : "Democratic"} primary results`;
     var result = data.results[0]; // only one for president
     var { candidates, precincts, reporting, reportingPercentage, updated } = result;
