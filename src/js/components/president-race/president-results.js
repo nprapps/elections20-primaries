@@ -27,9 +27,8 @@ class PresidentResults extends ElementBase {
   set race(data) {
     var elements = this.illuminate();
 
-    elements.resultsLink.href = this.getAttribute("href");
-
     elements.headline.innerHTML = `${data.party == "GOP" ? "GOP" : "Democratic"} primary results`;
+
     var result = data.results[0]; // only one for president
     var { candidates, precincts, reporting, reportingPercentage, updated } = result;
     if (updated == this.updated) return;
@@ -105,8 +104,8 @@ class PresidentResults extends ElementBase {
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
     elements.reporting.innerHTML = reportingString;
-    // elements.chatter.innerHTML = chatter; 
-    // elements.footnote.innerHTML = footnote;
+    elements.resultsLink.href = this.getAttribute("href");
+
   }
 
   static get template() {
