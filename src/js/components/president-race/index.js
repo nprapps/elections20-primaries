@@ -13,7 +13,7 @@ class PresidentPrimary extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["src"];
+    return ["src", "href"];
   }
 
   attributeChangedCallback(attr, old, value) {
@@ -56,6 +56,7 @@ class PresidentPrimary extends ElementBase {
       var child = document.createElement("president-results");
       this.appendChild(child);
       child.dataset.race = r.id;
+      if (this.hasAttribute("href")) child.setAttribute("href", this.getAttribute("href"));
       if (this.hasAttribute("max")) child.setAttribute("max", this.getAttribute("max"));
       child.race = r;
       children.push(child);

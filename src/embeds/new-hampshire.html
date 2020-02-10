@@ -18,6 +18,12 @@
       <hr>
       <delegate-total src="../data/delegates.json" live></delegate-total>
     </div>
+    <script>
+      var widget = document.querySelector("president-primary");
+      if (here.searchParams.get("link")) {
+        widget.setAttribute("href", here.searchParams.get("link"));
+      }
+    </script>
 
     <script src="../embed.js" async></script>
     <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>

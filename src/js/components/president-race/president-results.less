@@ -239,6 +239,7 @@ president-results {
   }
 
   &[expanded] {
+
   }
 
   &[overflow] {
@@ -266,6 +267,12 @@ president-results {
       .foldable {
         display: none !important;
       }
+
+      @media @mobile {
+        .shown:nth-child(n + 5) {
+          display: none !important;
+        }
+      }
     }
   }
 
@@ -284,6 +291,10 @@ president-results {
   &[href] {
     .full-results {
       display: block;
+    }
+    
+    .show-more {
+      display: none;
     }
   }
 }
