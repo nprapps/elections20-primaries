@@ -34,13 +34,23 @@ class PresidentPrimary extends ElementBase {
           this.fetch.start(this.getAttribute("refresh") || 15);
         }
         break;
+
+      default:
+        this.render();
     }
   }
 
   load(data) {
+    this.cache = data;
+    this.render();
+
+  }
+
+  render() {
     var elements = this.illuminate();
 
-    var { races, chatter, footnote } = data;
+    if (!this.cache) return;
+    var { races, chatter, footnote } = this.cache;
 
     elements.chatter.innerHTML = chatter;
     elements.footnote.innerHTML = footnote;
@@ -62,9 +72,14 @@ class PresidentPrimary extends ElementBase {
         return true;
       });
 
+      var href = this.getAttribute("href");
+      var max = this.getAttribute("max");
+
       // either set results or remove the child
       if (matched) {
-        child.race = matched;
+        if (href) child.setAttribute("href", href);
+        if (max) child.setAttribute("max", max);
+        child.render(matched);
       } else {
         elements.results.removeChild(child);
       }
@@ -74,13 +89,13 @@ class PresidentPrimary extends ElementBase {
       var child = document.createElement("president-results");
       elements.results.appendChild(child);
       child.dataset.race = r.id;
-      if (this.hasAttribute("href")) child.setAttribute("href", this.getAttribute("href"));
-      if (this.hasAttribute("max")) child.setAttribute("max", this.getAttribute("max"));
+      if (href) child.setAttribute("href", href);
+      if (max) child.setAttribute("max", max);
       child.render(r);
       children.push(child);
     });
     // set the test flag
-    if (data.test) {
+    if (this.cache.test) {
       children.forEach(c => c.setAttribute("test", ""));
     } else {
       children.forEach(c => c.removeAttribute("test"));
