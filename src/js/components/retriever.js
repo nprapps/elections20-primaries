@@ -13,7 +13,7 @@ class Retriever {
   constructor(callback) {
     this.ondata = callback;
     this.timeout = null;
-    this.interval = null;
+    this.interval = 15;
     this.etag = null;
     this.url = null;
     this.tick = this.tick.bind(this);
@@ -24,6 +24,11 @@ class Retriever {
     if (interval) {
       this.start(interval);
     }
+    this.url = url;
+    this.fetch();
+  }
+
+  once(url) {
     this.url = url;
     this.fetch();
   }

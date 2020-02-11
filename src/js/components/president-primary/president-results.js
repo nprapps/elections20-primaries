@@ -24,7 +24,7 @@ class PresidentResults extends ElementBase {
     return elements;
   }
 
-  set race(data) {
+  render(data) {
     var elements = this.illuminate();
 
     elements.headline.innerHTML = `${data.party == "GOP" ? "GOP" : "Democratic"} primary results`;
@@ -55,9 +55,6 @@ class PresidentResults extends ElementBase {
       });
     }
 
-    var max = this.getAttribute("max") || defaultMax;
-    var fold = candidates.slice(0, max).map(c => c.last);
-
     // filter small candidates into others
     var others = candidates.filter(c => c.last == "Other").pop();
     // if (hasVotes) {
@@ -78,6 +75,9 @@ class PresidentResults extends ElementBase {
       });
       candidates.push(others);
     // }
+
+    var max = this.getAttribute("max") || defaultMax;
+    var fold = candidates.slice(0, max).map(c => c.last);
 
     // decide if we need overflow
     if (candidates.length > fold.length) {

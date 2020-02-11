@@ -13,13 +13,26 @@ class PresidentPrimary extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["src", "href"];
+    return ["src", "href", "live"];
   }
 
   attributeChangedCallback(attr, old, value) {
+
     switch (attr) {
       case "src":
-        this.fetch.watch(value, this.getAttribute("refresh") || 15);
+        if (this.hasAttribute("live")) {
+          this.fetch.watch(value, this.getAttribute("refresh") || 15);
+        } else {
+          this.fetch.once(value);
+        }
+        break;
+
+      case "live":
+        if (typeof value != "string") {
+          this.fetch.stop();
+        } else {
+          this.fetch.start(this.getAttribute("refresh") || 15);
+        }
         break;
     }
   }
@@ -63,7 +76,7 @@ class PresidentPrimary extends ElementBase {
       child.dataset.race = r.id;
       if (this.hasAttribute("href")) child.setAttribute("href", this.getAttribute("href"));
       if (this.hasAttribute("max")) child.setAttribute("max", this.getAttribute("max"));
-      child.race = { ...r, chatter, footnote };
+      child.render(r);
       children.push(child);
     });
     // set the test flag
