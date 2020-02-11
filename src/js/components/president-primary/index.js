@@ -43,7 +43,6 @@ class PresidentPrimary extends ElementBase {
   load(data) {
     this.cache = data;
     this.render();
-
   }
 
   render() {
@@ -54,6 +53,10 @@ class PresidentPrimary extends ElementBase {
 
     elements.chatter.innerHTML = chatter;
     elements.footnote.innerHTML = footnote;
+
+    var href = this.getAttribute("href");
+    var max = this.getAttribute("max");
+      
     // filter on party
     if (this.hasAttribute("party")) {
       var party = this.getAttribute("party");
@@ -71,9 +74,6 @@ class PresidentPrimary extends ElementBase {
         }
         return true;
       });
-
-      var href = this.getAttribute("href");
-      var max = this.getAttribute("max");
 
       // either set results or remove the child
       if (matched) {
