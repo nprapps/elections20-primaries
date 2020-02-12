@@ -64,6 +64,12 @@ module.exports = function(grunt) {
       candidates: grunt.data.json.candidates
     };
 
+    // save some of this data for the build task
+    grunt.data.elex = {
+      schedule,
+      races
+    };
+
     api
       .getResults({ races, overrides, test, offline })
       .then(async function(results) {

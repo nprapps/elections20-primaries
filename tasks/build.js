@@ -53,14 +53,25 @@ module.exports = function(grunt) {
 
   grunt.registerTask("build", "Processes index.html using shared data (if available)", function() {
     var files = grunt.file.expandMapping(["**/*.html", "!**/_*.html", "!js/**/*.html"], "build", { cwd: "src" });
-    var data = Object.create(grunt.data || {});
-    data.t = grunt.template;
     files.forEach(function(file) {
       var src = file.src.shift();
       grunt.verbose.writeln("Processing file: " +  src);
       var input = grunt.file.read(src);
-      var output = process(input, data, src);
+      var output = process(input, null, src);
       grunt.file.write(file.dest, output);
+    });
+
+    //generate state pages
+    var states = [...new Set(grunt.data.json.races.map(r => r.state))].sort();
+    var stateTemplate = grunt.file.read("src/_state.html");
+    states.forEach(function(state) {
+      // create a data object with its specific data
+      var stateData = Object.assign({}, grunt.data, {
+        state,
+        schedule: grunt.data.elex.schedule.filter(r => r.state == state)
+      });
+      var output = process(stateTemplate, stateData, `states/${state}.html`);
+      grunt.file.write(`build/states/${state}.html`, output);
     });
   });
 
