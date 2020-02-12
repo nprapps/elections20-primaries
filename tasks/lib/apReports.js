@@ -20,7 +20,7 @@ var getAPIData = async function(url, ...params) {
 var processSuperReport = function(report) {
   var data = report.delSuper.del;
   var out = {
-    updated: Date.parse(report.timestamp),
+    updated: Date.parse(report.delSuper.timestamp),
     parties: {}
   }
 
@@ -130,8 +130,20 @@ var getDelegates = async function(params = {}) {
     delState: processStateReport
   }
   console.log("Getting reports...");
-  var reports = links.reports.map(async function(link) {
-    var url = link.contentLink;
+  var latest = {};
+  links.reports.forEach(function(link) {
+    var updated = Date.parse(link.updated);
+    var [type, name] = link.title.split(/\s*\/\s*/g);
+    name = name.replace("del", "");
+    var url = link.id;
+    if (latest[name]) {
+      if (latest[name].updated > updated) return;
+    }
+    latest[name] = { updated, url };
+  });
+  var reports = Object.keys(latest).map(async function(name) {
+    var link = latest[name];
+    var { url } = link;
     var report;
     if (reportCache[url]) {
       console.log(`Getting report from cache (${url})`);
@@ -141,20 +153,10 @@ var getDelegates = async function(params = {}) {
       report = reportCache[url] = await getAPIData(url, params)
     }
     for (var k in report) {
-      var name = k.replace(/del/, "").toLowerCase();
+      var prop = k.replace(/del/, "").toLowerCase();
       var processed = normalize[k](report);
-      if (output[name]) {
-        if (output[name].updated > processed.updated) {
-          console.log(`Skipping outdated report for ${name}`)
-          continue;
-        } else {
-          console.log(`Updating information for ${name}`)
-        }
-      } else {
-        console.log(`Setting report for ${name}`)
-      }
-      output[name] = processed;
-    } 
+      output[prop] = processed;
+    }
   });
   await Promise.all(reports);
   return output;
