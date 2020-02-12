@@ -143,6 +143,16 @@ var getDelegates = async function(params = {}) {
     for (var k in report) {
       var name = k.replace(/del/, "").toLowerCase();
       var processed = normalize[k](report);
+      if (output[name]) {
+        if (output[name].updated > processed.updated) {
+          console.log(`Skipping outdated report for ${name}`)
+          continue;
+        } else {
+          console.log(`Updating information for ${name}`)
+        }
+      } else {
+        console.log(`Setting report for ${name}`)
+      }
       output[name] = processed;
     } 
   });
