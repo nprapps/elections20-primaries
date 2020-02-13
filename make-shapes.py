@@ -8,7 +8,7 @@ import os
 
 try: 
 	os.mkdir("output")
-except Error:
+except:
 	pass
 
 with open("FIPS_codes.csv") as f:
@@ -18,6 +18,6 @@ with open("FIPS_codes.csv") as f:
 		fips = row["FIPS code"]
 		lat = row["Lat"]
 		lon = row["Lon"]
-		command	= 'mapshaper cb_2018_us_county_5m.shp -proj +proj=ortho +lat_0=%s +lon_0=%s +x_0=0 +y_0=0 +a=6371000 +b=6371000 +units=m +no_defs -filter "STATEFP == \'%s\'" -o format=svg output/%s.svg' % (lat,lon,fips,state)
+		command	= '''mapshaper cb_2018_us_county_5m.shp -proj +proj=ortho +lat_0=%s +lon_0=%s +x_0=0 +y_0=0 +a=6371000 +b=6371000 +units=m +no_defs -filter "STATEFP == \'%s\'" -each "id = 'fips-' + STATEFP + COUNTYFP" -o format=svg id-field=id output/%s.svg''' % (lat,lon,fips,state)
 		subprocess.call(command, shell = True)
 
