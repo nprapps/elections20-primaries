@@ -1,5 +1,82 @@
-STATE PAGE: <%= state %>
+<%
+  var months = [ "Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec." ];
+%>
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <%= t.include("partials/_head.html", grunt.data.json) %>
+    <link rel="stylesheet" type="text/css" href="state.css">
+  </head>
+  <body class="standalone">
+    <script>
+      var here = new URL(window.location);
+      document.body.classList.add(here.searchParams.get("theme"));
+      if (here.searchParams.has("embedded")) {
+        document.body.classList.add("embedded")
+        document.body.classList.remove("standalone");
+      }
+    </script>
 
-<% schedule.forEach(function(row) { %>
-<pre><%= row.filename %>.json</pre>
-<% }) %>
+    <%= t.include("partials/_nav.html", { prefix: "../" }) %>
+
+    <main>
+
+      <h1><%= json.strings[state] %></h1>
+
+      <%
+var scheduleMenu = schedule.map(function(race) {
+  var date = new Date(race.timestamp);
+  var item = {
+    office: json.strings[race.office],
+    date: [months[date.getMonth()], date.getDate()].join(" ")
+  }
+  if (race.office != "H" && !race.parties) {
+    item.parties = true;
+  }
+  return item;
+});
+      %>
+      <select class="mobile-calendar">
+        <% scheduleMenu.forEach(function(item) { %>
+          <% if (item.parties) { %>
+          <option value="#"><%= item.office %> - Dem. (<%= item.date%>)</option>
+          <option value="#"><%= item.office %> - GOP (<%= item.date%>)</option>
+
+          <% } else { %>
+          <option value="#"><%= item.office %> (<%= item.date%>)</option>
+          <% } %>
+        <% }) %>
+      </select>
+
+      <nav class="race-calendar">
+        <ul>
+          <% scheduleMenu.forEach(function(item) { %>
+          <li>
+            <span class="office"><%= item.office %></span>
+            <% if (item.parties) { %>
+            <span class="parties">
+              <a href="#">Dem.</a> 
+              | 
+              <a href="#">GOP</a>
+            </span>
+            <% } %>
+            <span class="date"><%= item.date %></span>
+          <% }) %>
+        </ul>
+      </nav>
+
+      <p class="chatter">
+        North Carolina is a presidential battleground and has two major statewide races, for governor and U.S. Senate. Democratic Gov. Roy Cooper and Republican Sen. Thom Tillis are each running for reelection. The state has 13 congressional districts. North Carolina holds semi-closed primaries, meaning voters not affiliated with a party can participate in a primary by associating as either a Democrat or Republican.
+      </p>
+
+      <% schedule.forEach(function(row) { %>
+      <pre><%= row.filename %>.json</pre>
+      <% }) %>
+
+    </main>
+
+    <script src="state.js" async></script>
+    <%= t.include("partials/_analytics.html") %>
+  </body>
+</html>
+
