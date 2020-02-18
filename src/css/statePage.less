@@ -11,6 +11,30 @@ main {
   padding: 24px 16px;
 }
 
+header {
+  padding-bottom: 24px;
+
+  svg {
+    float: left;
+    margin-right: 20px;
+  }
+
+  h2 {
+    margin: 0;
+    text-transform: uppercase;
+    .knockout();
+    color: #888;
+    font-size: .8rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: black;
+    font-weight: bold;
+  }
+}
+
 .mobile-calendar {
   display: none;
   padding: 8px 4px;
@@ -21,8 +45,8 @@ main {
 }
 
 nav.race-calendar {
-
   @border-color: #EEE;
+  .knockout();
 
   @media @mobile {
     display: none;

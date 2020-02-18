@@ -21,7 +21,13 @@
 
     <main>
 
-      <h1><%= json.strings[state] %></h1>
+      <header>
+        <svg width="60" height="60" viewBox="0 0 10 10" preserveAspectRatio="none">
+          <circle cx=5 cy=5 r=5 fill="#888" />
+        </svg>
+        <h2>2020 Primaries and Caucuses</h2>
+        <h1><%= json.strings[state] %> Results</h1>
+      </header>
 
       <%
 var scheduleMenu = schedule.map(function(race) {
