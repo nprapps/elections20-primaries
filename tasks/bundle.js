@@ -8,6 +8,7 @@ module.exports = function(grunt) {
   var browserify = require("browserify");
   var exorcist = require("exorcist");
   var fs = require("fs");
+  var path = require("path");
 
   grunt.registerTask("bundle", "Build app.js using browserify", function(mode) {
     //run in dev mode unless otherwise specified
@@ -30,7 +31,7 @@ module.exports = function(grunt) {
       ]});
 
       //make sure build/ exists
-      grunt.file.mkdir("build");
+      grunt.file.mkdir(path.dirname(dest));
       var output = fs.createWriteStream(dest);
 
       b.add(src);

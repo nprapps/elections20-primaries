@@ -11,12 +11,14 @@
   },
   "styles": {
     "src/css/seed.less": "build/style.css",
-    "src/css/embed.less": "build/embed.css"
+    "src/css/embed.less": "build/embed.css",
+    "src/css/statePage.less": "build/states/state.css"
   },
   "scripts": {
     "src/js/main.js": "build/app.js",
     "src/js/embed.js": "build/embed.js",
-    "src/js/loader.js": "build/loader.js"
+    "src/js/loader.js": "build/loader.js",
+    "src/js/statePage.js": "build/states/state.js"
   },
   "title": "2020 Primary Results",
   "description": "",

@@ -1,0 +1,91 @@
+@import "base";
+@import "nav";
+
+:root {
+  font-size: 16px;
+}
+
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 24px 16px;
+}
+
+header {
+  padding-bottom: 24px;
+
+  svg {
+    float: left;
+    margin-right: 20px;
+  }
+
+  h2 {
+    margin: 0;
+    text-transform: uppercase;
+    .knockout();
+    color: #888;
+    font-size: .8rem;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: black;
+    font-weight: bold;
+  }
+}
+
+.mobile-calendar {
+  display: none;
+  padding: 8px 4px;
+
+  @media @mobile {
+    display: block;
+  }
+}
+
+nav.race-calendar {
+  @border-color: #EEE;
+  .knockout();
+
+  @media @mobile {
+    display: none;
+  }
+
+  ul {
+    padding: 0 0 8px;
+    margin: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    border-bottom: 2px solid @border-color;
+  }
+
+  li {
+    display: block;
+    padding: 4px 20px;
+    border-right: 2px solid @border-color;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  .office {
+    display: block;
+    font-weight: bold;
+  }
+
+  .parties {
+    display: block;
+  }
+
+  .date {
+    display: block;
+    color: #888;
+  }
+}
