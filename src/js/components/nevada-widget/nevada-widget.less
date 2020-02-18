@@ -152,7 +152,14 @@ nevada-widget {
     .name {
       flex: 1;
       text-align: left;
+      /*display: inline;*/
 
+      @media @wide {
+        .first { display: none; }
+      }
+      @media @desktop {
+        .first { display: inline; }
+      }
       @media @tablet {
         .first { display: none; }
       }
