@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../embed.css">
     <base target="_blank">
   </head>
-  <body class="nevada">
+  <body>
     <script>
       var here = new URL(window.location);
       document.body.classList.add(here.searchParams.get("theme"));
@@ -17,7 +17,7 @@
       var race = grunt.data.json.races.filter(r => r.filename == "NV_P_2_22_2020").pop();
     %>
 
-    <div class="embed-row">
+    <div class="embed-row extra-data-column">
       <nevada-widget src="../data/NV_P_2_22_2020.json" live headline="<%= race.title %>"></nevada-widget>
       <hr data-theme-exclude="homepage">
       <delegate-total data-theme-exclude="homepage" src="../data/delegates.json" live></delegate-total>
