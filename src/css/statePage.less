@@ -11,6 +11,13 @@ main {
   padding: 24px 16px;
 }
 
+a[disabled] {
+  &, &:hover, &:focus {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
 header {
   padding-bottom: 24px;
 
@@ -47,6 +54,7 @@ header {
 nav.race-calendar {
   @border-color: #EEE;
   .knockout();
+  color: #888;
 
   @media @mobile {
     display: none;
@@ -78,6 +86,7 @@ nav.race-calendar {
   .office {
     display: block;
     font-weight: bold;
+    color: var(--foreground);
   }
 
   .parties {
@@ -86,6 +95,16 @@ nav.race-calendar {
 
   .date {
     display: block;
-    color: #888;
+  }
+}
+
+.module {
+  pre {
+    padding: 30px;
+    background: #EEE;
+  }
+
+  &.hidden {
+    display: none;
   }
 }

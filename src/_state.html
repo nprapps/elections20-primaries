@@ -1,5 +1,5 @@
 <%
-  var months = [ "Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec." ];
+  var months = "Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.".split(" ");
 %>
 <!doctype html>
 <html lang="en-US">
@@ -30,42 +30,68 @@
       </header>
 
       <%
-var scheduleMenu = schedule.map(function(race) {
+var newestFirst = (a, b) => b.timestamp - a.timestamp;
+var oldestFirst = (a, b) => a.timestamp - b.timestamp;
+var displays = schedule.slice().sort(oldestFirst).map(function(race) {
   var date = new Date(race.timestamp);
   var item = {
     office: json.strings[race.office],
-    date: [months[date.getMonth()], date.getDate()].join(" ")
+    date: [months[date.getMonth()], date.getDate()].join(" "),
+    future: race.timestamp > grunt.data.elex.today,
+    race
   }
   if (race.office != "H" && !race.parties) {
     item.parties = true;
   }
   return item;
 });
+
+var hashRace = function(race) {
+  var search = new URLSearchParams();
+  var fields = "date office".split(" ");
+  for (var f of fields) {
+    if (f in race) {
+      search.set(f, race[f]);
+    }
+  }
+  return search.toString();
+}
+var makeOption = (item, suffix = "") => item.future ? `disabled` : `value="#${hashRace(item.race)}${suffix}"`;
+var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashRace(item.race)}${suffix}"`;
+
+var makeTag = function(race, counties = false) {
+  var tags = {
+    P: "president-primary",
+    H: "house-primary",
+    G: "governor-primary",
+    S: "senate-primary"
+  };
+  var tag = race.element || (counties ? "county-results" : tags[race.office]);
+  var isLive = race.timestamp < grunt.data.elex.today && race.timestamp > grunt.data.elex.retroactive;
+  return `
+<${tag}
+  ${isLive ? "live" : "static"}
+  src="../data/${race.filename}${counties ? "_counties" : ""}.json">
+</${tag}>`;
+}
       %>
       <select class="mobile-calendar">
-        <% scheduleMenu.forEach(function(item) { %>
-          <% if (item.parties) { %>
-          <option value="#"><%= item.office %> - Dem. (<%= item.date%>)</option>
-          <option value="#"><%= item.office %> - GOP (<%= item.date%>)</option>
-
-          <% } else { %>
-          <option value="#"><%= item.office %> (<%= item.date%>)</option>
-          <% } %>
+        <% displays.forEach(function(item) { %>
+          <option <%= makeOption(item) %>><%= item.office || "Run-off" %> - Dem. (<%= item.date %>)</option>
+          <option <%= makeOption(item) %>><%= item.office || "Run-off" %> - GOP (<%= item.date %>)</option>
         <% }) %>
       </select>
 
       <nav class="race-calendar">
         <ul>
-          <% scheduleMenu.forEach(function(item) { %>
+          <% displays.forEach(function(item) { %>
           <li>
-            <span class="office"><%= item.office %></span>
-            <% if (item.parties) { %>
+            <a class="office" <%= makeLink(item) %>><%= item.office || "Run-off" %></a>
             <span class="parties">
-              <a href="#">Dem.</a> 
+              <a <%= makeLink(item, "&party=Dem.") %>>Dem.</a> 
               | 
-              <a href="#">GOP</a>
+              <a <%= makeLink(item, "&party=GOP") %>>GOP</a>
             </span>
-            <% } %>
             <span class="date"><%= item.date %></span>
           <% }) %>
         </ul>
@@ -75,8 +101,29 @@ var scheduleMenu = schedule.map(function(race) {
         North Carolina is a presidential battleground and has two major statewide races, for governor and U.S. Senate. Democratic Gov. Roy Cooper and Republican Sen. Thom Tillis are each running for reelection. The state has 13 congressional districts. North Carolina holds semi-closed primaries, meaning voters not affiliated with a party can participate in a primary by associating as either a Democrat or Republican.
       </p>
 
-      <% schedule.forEach(function(row) { %>
-      <pre><%= row.filename %>.json</pre>
+      <%
+      var modules = displays.slice().sort(newestFirst).filter(r => !r.future);
+
+      modules.forEach(function(row, i) { %>
+        <div class="module <%= i ? "hidden" : "" %>"
+          data-office="<%= row.race.office %>"
+          data-date="<%= row.race.date %>"
+        >
+          <pre><%= row.race.filename %>.json</pre>
+          <%= makeTag(row.race) %>
+          <% if (row.race.office != "H") { %>
+          <a <%= makeLink(row, "&counties=true") %>>See county results</a>
+          <% } %>
+        </div>
+        <% if (row.race.office != "H") { %>
+          <div class="module hidden"
+            data-office="<%= row.race.office %>"
+            data-date="<%= row.race.date %>"
+            data-counties="true"
+          >
+            <pre><%= makeTag(row.race, true).replace(/</g, "&lt;") %></pre>
+          </div>
+        <% } %>
       <% }) %>
 
     </main>

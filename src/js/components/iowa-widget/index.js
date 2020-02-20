@@ -71,7 +71,9 @@ class IowaWidget extends ElementBase {
     var elements = super.illuminate();
     elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
     elements.resultsLink.href = this.getAttribute("href");
-    elements.headline = this.getAttribute("headline").trim();
+    if (this.hasAttribute("headline")) {
+      elements.headline = this.getAttribute("headline").trim();
+    }
     return elements;
   }
 

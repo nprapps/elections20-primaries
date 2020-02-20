@@ -67,7 +67,9 @@ module.exports = function(grunt) {
     // save some of this data for the build task
     grunt.data.elex = {
       schedule,
-      races
+      races,
+      today,
+      retroactive
     };
 
     api

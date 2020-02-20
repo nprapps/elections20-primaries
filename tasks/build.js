@@ -63,12 +63,16 @@ module.exports = function(grunt) {
 
     //generate state pages
     var states = [...new Set(grunt.data.json.races.map(r => r.state))].sort();
+    if (grunt.option("state")) {
+      var filter = grunt.option("state");
+      states = states.filter(s => filter instanceof Array ? filter.indexOf(s) > -1 : s == filter);
+    }
     var stateTemplate = grunt.file.read("src/_state.html");
     states.forEach(function(state) {
       // create a data object with its specific data
       var stateData = Object.assign({}, grunt.data, {
         state,
-        schedule: grunt.data.elex.schedule.filter(r => r.state == state)
+        schedule: grunt.data.elex.schedule.filter(r => !r.feedOnly && r.state == state)
       });
       var output = process(stateTemplate, stateData, `states/${state}.html`);
       grunt.file.write(`build/states/${state}.html`, output);
