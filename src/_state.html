@@ -1,5 +1,10 @@
 <%
-  var months = "Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.".split(" ");
+  /*
+Things passed into this page:
+* schedule: all possible races
+* displays: menu items for each race
+* state: which state this is
+  */
 %>
 <!doctype html>
 <html lang="en-US">
@@ -30,21 +35,6 @@
       </header>
 
       <%
-var newestFirst = (a, b) => b.timestamp - a.timestamp;
-var oldestFirst = (a, b) => a.timestamp - b.timestamp;
-var displays = schedule.slice().sort(oldestFirst).map(function(race) {
-  var date = new Date(race.timestamp);
-  var item = {
-    office: json.strings[race.office],
-    date: [months[date.getMonth()], date.getDate()].join(" "),
-    future: race.timestamp > grunt.data.elex.today,
-    race
-  }
-  if (race.office != "H" && !race.parties) {
-    item.parties = true;
-  }
-  return item;
-});
 
 var hashRace = function(race) {
   var search = new URLSearchParams();
@@ -59,21 +49,6 @@ var hashRace = function(race) {
 var makeOption = (item, suffix = "") => item.future ? `disabled` : `value="#${hashRace(item.race)}${suffix}"`;
 var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashRace(item.race)}${suffix}"`;
 
-var makeTag = function(race, counties = false) {
-  var tags = {
-    P: "president-primary",
-    H: "house-primary",
-    G: "governor-primary",
-    S: "senate-primary"
-  };
-  var tag = race.element || (counties ? "county-results" : tags[race.office]);
-  var isLive = race.timestamp < grunt.data.elex.today && race.timestamp > grunt.data.elex.retroactive;
-  return `
-<${tag}
-  ${isLive ? "live" : "static"}
-  src="../data/${race.filename}${counties ? "_counties" : ""}.json">
-</${tag}>`;
-}
       %>
       <select class="mobile-calendar">
         <% displays.forEach(function(item) { %>
@@ -88,7 +63,7 @@ var makeTag = function(race, counties = false) {
           <li>
             <a class="office" <%= makeLink(item) %>><%= item.office || "Run-off" %></a>
             <span class="parties">
-              <a <%= makeLink(item, "&party=Dem.") %>>Dem.</a> 
+              <a <%= makeLink(item, "&party=Dem") %>>Dem.</a> 
               | 
               <a <%= makeLink(item, "&party=GOP") %>>GOP</a>
             </span>
@@ -98,21 +73,19 @@ var makeTag = function(race, counties = false) {
       </nav>
 
       <p class="chatter">
-        North Carolina is a presidential battleground and has two major statewide races, for governor and U.S. Senate. Democratic Gov. Roy Cooper and Republican Sen. Thom Tillis are each running for reelection. The state has 13 congressional districts. North Carolina holds semi-closed primaries, meaning voters not affiliated with a party can participate in a primary by associating as either a Democrat or Republican.
+        <%= grunt.data.json.chatter[state] %>
       </p>
 
       <%
-      var modules = displays.slice().sort(newestFirst).filter(r => !r.future);
 
-      modules.forEach(function(row, i) { %>
+      displays.forEach(function(row, i) { %>
         <div class="module <%= i ? "hidden" : "" %>"
           data-office="<%= row.race.office %>"
           data-date="<%= row.race.date %>"
         >
-          <pre><%= row.race.filename %>.json</pre>
-          <%= makeTag(row.race) %>
+          <%= t.include(`statePartials/_${row.race.element ? "random" : row.race.office}.html`, row.race) %>
           <% if (row.race.office != "H") { %>
-          <a <%= makeLink(row, "&counties=true") %>>See county results</a>
+          <a class="show-counties" <%= makeLink(row, "&counties=true") %>>See county results</a>
           <% } %>
         </div>
         <% if (row.race.office != "H") { %>
@@ -121,7 +94,7 @@ var makeTag = function(race, counties = false) {
             data-date="<%= row.race.date %>"
             data-counties="true"
           >
-            <pre><%= makeTag(row.race, true).replace(/</g, "&lt;") %></pre>
+            <%= t.include("statePartials/_counties.html", row.race) %>
           </div>
         <% } %>
       <% }) %>

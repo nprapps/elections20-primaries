@@ -1,0 +1,7 @@
+<!-- races with non-standard tags (mostly caucuses) -->
+<<%= element %>
+<% if (timestamp < grunt.data.elex.today && timestamp > grunt.data.elex.retroactive) { %>
+  live
+  <% } %>
+  src="../data/<%= filename%>.json"
+></<%= element %>>

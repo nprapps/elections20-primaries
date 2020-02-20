@@ -68,11 +68,33 @@ module.exports = function(grunt) {
       states = states.filter(s => filter instanceof Array ? filter.indexOf(s) > -1 : s == filter);
     }
     var stateTemplate = grunt.file.read("src/_state.html");
+
     states.forEach(function(state) {
       // create a data object with its specific data
+      var newestFirst = (a, b) => b.timestamp - a.timestamp;
+      var oldestFirst = (a, b) => a.timestamp - b.timestamp;
+      var schedule = grunt.data.elex.schedule.filter(r => !r.feedOnly && r.state == state);
+
+      var months = "Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.".split(" ");
+      
+      var displays = schedule.slice().sort(oldestFirst).map(function(race) {
+        var date = new Date(race.timestamp);
+        var item = {
+          office: grunt.data.json.strings[race.office],
+          date: [months[date.getMonth()], date.getDate()].join(" "),
+          future: race.timestamp > grunt.data.elex.today,
+          race
+        }
+        if (race.office != "H" && !race.parties) {
+          item.parties = true;
+        }
+        return item;
+      });
+
       var stateData = Object.assign({}, grunt.data, {
         state,
-        schedule: grunt.data.elex.schedule.filter(r => !r.feedOnly && r.state == state)
+        schedule,
+        displays
       });
       var output = process(stateTemplate, stateData, `states/${state}.html`);
       grunt.file.write(`build/states/${state}.html`, output);

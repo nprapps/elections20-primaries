@@ -36,6 +36,14 @@ var onHashChange = function() {
       if (module.dataset[p] && module.dataset[p] != params[p]) visible = false;
     }
     module.classList.toggle("hidden", !visible);
+    // find things to toggle party
+    $(`[data-control="party"]`).forEach(function(element) {
+      if (params.party) {
+        element.setAttribute("party", params.party);
+      } else {
+        element.removeAttribute("party");
+      }
+    })
   })
 }
 

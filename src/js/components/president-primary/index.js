@@ -13,7 +13,7 @@ class PresidentPrimary extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["src", "href", "live"];
+    return ["src", "href", "live", "party"];
   }
 
   attributeChangedCallback(attr, old, value) {
