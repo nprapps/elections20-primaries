@@ -56,14 +56,22 @@ class PresidentPrimary extends ElementBase {
 
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
-      
-    // filter on party
-    if (this.hasAttribute("party")) {
+    
+    // function to set/update child element
+    var renderChild = (child, data) => {
       var party = this.getAttribute("party");
-      races = races.filter(r => r.party == party);
-    }
-    var children = Array.from(elements.results.children);
+      if (party && data.party != party) {
+        child.setAttribute("hidden", "");
+      } else {
+        child.removeAttribute("hidden");
+      }
+      if (href) child.setAttribute("href", href);
+      if (max) child.setAttribute("max", max);
+      child.render(data);
+    };
+
     // handle existing children
+    var children = Array.from(elements.results.children);
     children.forEach(child => {
       // get a matching race
       var matched = null;
@@ -77,23 +85,21 @@ class PresidentPrimary extends ElementBase {
 
       // either set results or remove the child
       if (matched) {
-        if (href) child.setAttribute("href", href);
-        if (max) child.setAttribute("max", max);
-        child.render(matched);
+        renderChild(child, matched);
       } else {
         elements.results.removeChild(child);
       }
     });
+
     // if there are leftover races, create them
     races.forEach(r => {
       var child = document.createElement("president-results");
       elements.results.appendChild(child);
       child.dataset.race = r.id;
-      if (href) child.setAttribute("href", href);
-      if (max) child.setAttribute("max", max);
-      child.render(r);
+      renderChild(child, r);
       children.push(child);
     });
+
     // set the test flag
     if (this.cache.test) {
       children.forEach(c => c.setAttribute("test", ""));

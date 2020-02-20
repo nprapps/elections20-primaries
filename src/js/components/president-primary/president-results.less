@@ -11,17 +11,21 @@ president-primary {
 }
 
 president-results {
+  display: block;
   @mug-size: 4em;
   @flourish-margin: .6em;
   @bar-height: .6em;
+  .gotham();
+  font-size: var(--font-size);
 
   &[party="GOP"] {
     --accent: var(--gop);
     --accent-fade: var(--gop-fade);
   }
 
-  .gotham();
-  font-size: var(--font-size);
+  & + president-results {
+    margin-top: 1em;
+  }
 
   &[test]::before {
     display: block;
