@@ -13,9 +13,8 @@
       document.body.classList.add(here.searchParams.get("theme"));
     </script>
 
-    <div class="embed-row">
-      <governor-primary party="Dem" live src="../data/NC_G_3_3_2020.json"></governor-primary>
-    </div>
+    <governor-primary src="../data/NC_G_3_3_2020.json"></governor-primary>
+
     <script>
       var widget = document.querySelector("governor-primary");
       if (here.searchParams.get("link")) {

@@ -1,6 +1,7 @@
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
-require("./governor-results");
+require("../results-table");
+require("./governor-primary.less");
 
 class GovernorPrimary extends ElementBase {
   constructor() {
@@ -45,61 +46,79 @@ class GovernorPrimary extends ElementBase {
     this.render();
   }
 
+  matchElements(root, array, createElement) {
+    var children = Array.from(root.children);
+    var binding = new Map();
+    array.forEach(function(item) {
+      var [child] = children.filter(c => c.dataset.key == item.id);
+      if (!child) {
+        // create a node and append it
+        child = createElement(item);
+        child.dataset.key = "item-" + item.id;
+        children.push(child);
+        root.appendChild(child);
+      }
+      binding.set(child, item);
+      binding.set(item, child);
+    });
+    // remove deleted children
+    children.forEach(function(child) {
+      if (!binding.has(child)) {
+        root.removeChild(child);
+      }
+    });
+    // sort to match
+    children = Array.from(root.children);
+    var pairs = array.map(function(item, i) {
+      var child = binding.get(item);
+      var childIndex = children.indexOf(child);
+      if (childIndex != i) {
+        var next = children[i + 1];
+        if (next) {
+          root.insertBefore(child, next);
+        } else {
+          root.appendChild(child);
+        }
+      }
+      return [item, child];
+    });
+    return pairs;
+  }
+
   render() {
     var elements = this.illuminate();
 
     if (!this.cache) return;
     var { races, chatter, footnote } = this.cache;
 
-    elements.chatter.innerHTML = chatter;
-    elements.footnote.innerHTML = footnote;
+    elements.chatter.innerHTML = chatter || "";
+    elements.footnote.innerHTML = footnote || "";
 
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
-      
-    // filter on party
-    if (this.hasAttribute("party")) {
-      var party = this.getAttribute("party");
-      races = races.filter(r => r.party == party);
-    }
-    var children = Array.from(elements.results.children);
-    // handle existing children
-    children.forEach(child => {
-      // get a matching race
-      var matched = null;
-      races = races.filter(r => {
-        if ((child.dataset.race == r.id)) {
-          matched = r;
-          return false;
-        }
-        return true;
-      });
 
-      // either set results or remove the child
-      if (matched) {
-        if (href) child.setAttribute("href", href);
-        if (max) child.setAttribute("max", max);
-        child.render(matched);
+    // assume one race per seat for governor
+    var race = this.cache.races[0];
+    var createResult = () => document.createElement("results-table");
+    // create result tables
+    var pairs = this.matchElements(elements.results, race.results, createResult);
+
+    // render each one
+    var party = this.getAttribute("party");
+    var test = this.cache.test;
+    pairs.forEach(function([data, child]) {
+      if (party && data.party != party) {
+        child.setAttribute("hidden", "");
       } else {
-        elements.results.removeChild(child);
+        child.removeAttribute("hidden");
       }
-    });
-    // if there are leftover races, create them
-    races.forEach(r => {
-      var child = document.createElement("governor-results");
-      elements.results.appendChild(child);
-      child.dataset.race = r.id;
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
-      child.render(r);
-      children.push(child);
+      if (test) {
+        child.setAttribute("test", "");
+      }
+      child.render(data);
     });
-    // set the test flag
-    if (this.cache.test) {
-      children.forEach(c => c.setAttribute("test", ""));
-    } else {
-      children.forEach(c => c.removeAttribute("test"));
-    }
   }
 
   static get template() {

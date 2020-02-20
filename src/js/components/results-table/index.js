@@ -5,63 +5,117 @@ Simple generic results table - used for prototyping the custom element code
 */
 
 var dot = require("../../lib/dot");
-var template = dot.compile(require("./_template.html"));
+var table = dot.compile(require("./_table.html"));
 require("./results-table.less");
 
 var { formatAPDate, formatTime } = require("../utils");
 
 var ElementBase = require("../elementBase");
 
+var mugs = require("../../../../data/mugs.sheet.json");
+var defaultFold = Object.keys(mugs).filter(k => mugs[k].featured).sort();
+
 var defaultRefresh = 15;
+var defaultMax = 4;
 
 class ResultsTable extends ElementBase {
   constructor() {
     super();
-    this.timeout = null;
-    this.lastUpdated = null;
   }
 
-  static get boundMethods() {
-    return ["load"];
+  static get observedAttributes() {
+    return ["href"];
   }
 
   attributeChangedCallback(attr, was, value) {
+    var elements = this.illuminate();
+
     switch (attr) {
-      case "src":
-        this.load(value);
+      case "href":
+        elements.resultsLink.href = value || "";
         break;
     }
   }
 
-  static get observedAttributes() {
-    return ["src"];
-  }
+  render(result) {
+    var elements = this.illuminate();
 
-  static get mirroredProps() {
-    return ["src"];
-  }
-
-  async load(src = this.getAttribute("src")) {
-    var response = await fetch(src);
-    if (response.status >= 300)
-      return (this.innerHTML = "No data for this race");
-    var contests = await response.json();
-    var timestamps = [].concat(...contests.map(d => d.results)).map(r => r.updated);
-    var newest = Math.max(...timestamps);
-    if (!this.lastUpdated || newest != this.lastUpdated) {
-      this.lastUpdated = newest;
-      this.innerHTML = template({ contests, formatAPDate, formatTime });
+    var { candidates, precincts, reporting, reportingPercentage, updated } = result;
+    if (updated == this.updated) return;
+    this.updated = updated;
+    this.setAttribute("party", result.party);
+    // normalize percentages
+    candidates.forEach(function(c) {
+      c.percentage = c.percentage || 0;
+    });
+    // check for existing votes
+    candidates.sort((a, b) => b.percentage - a.percentage);
+    // resort if no votes are cast
+    var hasVotes = !!candidates[0].percentage;
+    if (!hasVotes) {
+      // sort by default view, then by name
+      candidates.sort(function(a, b) {
+        var aValue = (defaultFold.indexOf(a.last) + 1) || (a.last == "Other" ? 101 : 100);
+        var bValue = (defaultFold.indexOf(b.last) + 1) || (b.last == "Other" ? 101 : 100);
+        if (aValue == bValue) {
+          return a.last < b.last ? -1 : 1;
+        }
+        return aValue - bValue;
+      });
     }
-    if (this.hasAttribute("live")) this.scheduleRefresh();
+
+    // filter small candidates into others
+    var others = candidates.filter(c => c.last == "Other").pop();
+    if (!others) {
+      others = {
+        last: "Other",
+        votes: 0,
+        percentage: 0
+      };
+    }
+    candidates = candidates.filter(function(c) {
+      if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
+        others.percentage += c.percentage;
+        others.votes += c.votes;
+        return false;
+      }
+      return true;
+    });
+    candidates.push(others);
+
+    // decide if we need overflow
+    var max = this.getAttribute("max") || defaultMax;
+    var fold = candidates.slice(0, max).map(c => c.last);
+    if (candidates.length > fold.length) {
+      this.setAttribute("overflow", "");
+    } else {
+      this.removeAttribute("overflow");
+    }
+
+    // insert content
+    var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
+    elements.content.innerHTML = table({ candidates, highest, fold });
+
+    // adjust reporting numbers
+    if (reporting > 0 && reportingPercentage < 1) {
+      reportingPercentage = "<1";
+    } else if (reporting < precincts && reportingPercentage == 100) {
+      reportingPercentage = ">99";
+    } else {
+      reportingPercentage = reportingPercentage.toFixed(0);
+    }
+    var updated = new Date(updated);
+    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(updated)}`;
+    elements.updated.innerHTML = updateString;
+
+    var reportingString = `${reportingPercentage}% of precincts reporting`;
+    elements.reporting.innerHTML = reportingString;
+    elements.resultsLink.href = this.getAttribute("href");
   }
 
-  scheduleRefresh() {
-    if (this.timeout) clearTimeout(this.timeout);
-    var interval = this.hasAttribute("refresh")
-      ? this.getAttribute("refresh")
-      : defaultRefresh;
-    this.timeout = setTimeout(this.load, interval * 1000);
+  static get template() {
+    return require("./_template.html");
   }
 }
 
-window.customElements.define("results-table", ResultsTable);
+ResultsTable.define("results-table");

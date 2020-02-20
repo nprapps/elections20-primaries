@@ -1,28 +1,17 @@
-<% data.contests.forEach(function(seat) { %>
-
-  <h1><%= seat.party %> <%= seat.type %></h1>
-
-  <% seat.results.forEach(function(result) { %>
-
-  <div class="metadata">
-    <% var timestamp = new Date(result.updated); %>
-    Updated at <%= data.formatAPDate(timestamp) %> - <%= data.formatTime(timestamp) %>
-  </div>
-
-  <table>
-    <thead>
-      <tr>
-        <td>Name
-        <td class="numeric">Votes
-        <td class="numeric">%
-    <tbody>
-    <% result.candidates.forEach(function(c) { %>
-      <tr>
-        <td><%= c.first || "" %> <%= c.last %> <%= c.winner ? "&bigstar;" : "" %>
-        <td class="numeric"><%= c.votes.toLocaleString() %>
-        <td class="numeric"><%= c.percentage.toFixed(1) %>%
-    <% }); %>
-  </table>
-  <% }); %>
-
-<% }); %>
+<div class="results-header">
+  <h3 data-as="headline"></h3>
+  <span data-as="reporting" class="reporting"></span>
+</div>
+<div class="chatter" data-as="chatter"></div>
+<div data-as="content" class="content"></div>
+<div class="metadata-row">
+  <button data-as="moreButton" class="show-more">
+    Show
+    <span class="more">more</span><span class="fewer">fewer</span>
+    candidates
+  </button>
+  <a data-as="resultsLink" class="full-results">See full results &rsaquo;</a>
+  <div class="text">
+    Source: AP (<span data-as="updated" class="updated"></span>)
+    <span data-as="footnote" class="footnote"></span>
+</div>

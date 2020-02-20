@@ -1,0 +1,30 @@
+<table class="board" role="table">
+  <thead class="thead" role="rowgroup">
+    <tr class="tr" role="row">
+      <th role="columnheader" class="th name">Candidate</th>
+      <th role="columnheader" class="th percentage">Percent</th>
+      <th role="columnheader" class="th votes">Votes</th>
+    </tr>
+  </thead>
+  <tbody class="tbody" role="rowgroup">
+    <% data.candidates.forEach(function(c) { %>
+    <tr class="tr candidate <%= data.fold.indexOf(c.last) > -1 ? "shown" : "foldable" %>" role="row">
+      <td role="cell" class="td name">
+
+        <!-- bar is in the name, but positioned relative to the whole table -->
+        <div class="bar-container">
+          <div class="bar" style="width: <%= data.highest ? c.percentage / data.highest * 75 : 0 %>%"></div>
+        </div>
+
+        <span class="first"><%= c.first || "" %> </span><%= c.last == "Other" ? "Other candidates" : c.last %>
+        <span class="winner-icon" role="img" aria-label="check mark">
+          <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg>
+        </span>
+
+      </td>
+      <td role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</td>
+      <td role="cell" class="td votes"><%= c.votes.toLocaleString() %></td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>
