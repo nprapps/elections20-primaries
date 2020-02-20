@@ -121,7 +121,13 @@ class NevadaWidget extends ElementBase {
         });
       });
       // merge the other candidate
-      var other = merged.Other;
+      var other = merged.Other || {
+        last: "Other",
+        votes: 0,
+        percentage: 0,
+        ccd: 0
+      };
+      if (!merged.Other) merged.Other = other;
       Object.keys(merged).forEach(function(k) {
         if (k == "Other") return;
         var candidate = merged[k];
