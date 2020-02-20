@@ -14,7 +14,7 @@ class GovernorPrimary extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["src", "href", "live"];
+    return ["src", "href", "live", "party"];
   }
 
   attributeChangedCallback(attr, old, value) {
@@ -96,29 +96,34 @@ class GovernorPrimary extends ElementBase {
 
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
-
-    // assume one race per seat for governor
-    var race = this.cache.races[0];
-    var createResult = () => document.createElement("results-table");
-    // create result tables
-    var pairs = this.matchElements(elements.results, race.results, createResult);
-
-    // render each one
     var party = this.getAttribute("party");
-    var test = this.cache.test;
-    pairs.forEach(function([data, child]) {
-      if (party && data.party != party) {
-        child.setAttribute("hidden", "");
+
+    var createRace = () => document.createElement("div");
+    var races = this.matchElements(elements.results, this.cache.races, createRace);
+    races.forEach(([race, element]) => {
+      element.className = "race";
+
+      if (party && race.party != party) {
+        element.setAttribute("hidden", "");
       } else {
-        child.removeAttribute("hidden");
+        element.removeAttribute("hidden");
       }
-      if (href) child.setAttribute("href", href);
-      if (max) child.setAttribute("max", max);
-      if (test) {
-        child.setAttribute("test", "");
-      }
-      child.render(data);
-    });
+      var createResult = () => document.createElement("results-table");
+      // create result tables
+      var pairs = this.matchElements(element, race.results, createResult);
+
+      // render each one
+      var test = this.cache.test;
+      pairs.forEach(function([data, child]) {
+        if (href) child.setAttribute("href", href);
+        if (max) child.setAttribute("max", max);
+        if (test) {
+          child.setAttribute("test", "");
+        }
+        child.render(data);
+      });
+    })
+    
   }
 
   static get template() {
