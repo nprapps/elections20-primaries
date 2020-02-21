@@ -16,11 +16,19 @@ var modules = $(".module");
 var exactParams = "date office".split(" ");
 var booleanParams = "counties".split(" ");
 
+var lazyLoad = function() {
+  var elements = $(".module:not(.hidden) [data-src]");
+  elements.forEach(function(element) {
+    element.src = element.dataset.src;
+    element.removeAttribute("data-src");
+  });
+};
+
 var onHashChange = function(e) {
   // construct a filter object from the hash
   // we do this using the built-in type for parsing URL search params
   var hash = window.location.hash.replace("#", "");
-  if (!hash) return
+  if (!hash) return lazyLoad();
   document.body.classList.add("filtered");
   var search = new URLSearchParams(hash);
   var params = {};
@@ -51,6 +59,7 @@ var onHashChange = function(e) {
   if (e) {
     modules[0].focus();
   }
+  lazyLoad();
 }
 
 window.addEventListener("hashchange", onHashChange);
