@@ -7,5 +7,6 @@ require("./components/iowa-widget");
 require("./components/nevada-widget");
 require("./components/president-primary");
 require("./components/standard-primary");
+require("./components/house-primary");
 require("./components/delegate-total");
 require("./components/liveblog-headlines");

@@ -1,0 +1,27 @@
+@import "../../../css/values.less";
+
+house-primary {
+  display: block;
+  
+  .footnote {
+    font-family: @sans;
+    font-size: 0.85em;
+    font-style: italic;
+    color: var(--secondary);
+    margin-top: 5px;
+  }
+
+  .results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+
+    @media @mobile {
+      display: block;
+
+      .race + .race {
+        margin-top: 20px;
+      }
+    }
+  }
+}
