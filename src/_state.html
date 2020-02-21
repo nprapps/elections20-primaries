@@ -82,19 +82,16 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
         <%= grunt.data.json.chatter[state] %>
       </p>
 
-      <h3 class="latest-results">Latest Results</h3>
+      <!-- <h3 class="latest-results">Most recent results</h3> -->
 
-      <hr>
-
-      <%
-
-      displays.forEach(function(row, i) { %>
+      <% displays.forEach(function(row, i) { %>
 
         <div class="module <%= i ? "hidden" : "" %>"
           data-office="<%= row.race.office %>"
           data-date="<%= row.race.date %>"
           tabindex="-1"
         >
+          <h2><%= row.office %> - <%= row.date %></h2>
           <%= t.include(`statePartials/_${row.race.element ? "random" : row.race.office}.html`, row.race) %>
           <% if (row.race.office != "H") { %>
           <a class="show-counties" <%= makeLink(row, "&counties=true") %>>See county results</a>
@@ -112,7 +109,7 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
         </div>
         <% } %>
 
-      <% }) %>
+      <% }); %>
 
     </main>
 

@@ -27,8 +27,13 @@ var lazyLoad = function() {
 var onHashChange = function(e) {
   // construct a filter object from the hash
   // we do this using the built-in type for parsing URL search params
+  $(".race-calendar .active").forEach(el => el.classList.remove("active"));
   var hash = window.location.hash.replace("#", "");
-  if (!hash) return lazyLoad();
+  if (!hash) {
+    lazyLoad();
+    return;
+  }
+  $(`.race-calendar [href="#${hash}"]`).forEach(el => el.closest("li").classList.add("active"));
   document.body.classList.add("filtered");
   var search = new URLSearchParams(hash);
   var params = {};
@@ -57,7 +62,8 @@ var onHashChange = function(e) {
 
   // send focus to the top-most module if this came from a click
   if (e) {
-    modules[0].focus();
+    var headline = $.one(".module:not(.hidden) h2");
+    if (headline) headline.focus();
   }
   lazyLoad();
 }
