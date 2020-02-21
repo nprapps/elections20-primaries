@@ -13,10 +13,15 @@ var { formatAPDate, formatTime } = require("../utils");
 var ElementBase = require("../elementBase");
 
 var mugs = require("../../../../data/mugs.sheet.json");
-var defaultFold = Object.keys(mugs).filter(k => mugs[k].featured).sort();
+var defaultFold = Object.keys(mugs)
+  .filter(k => mugs[k].featured)
+  .sort();
 
 var defaultRefresh = 15;
 var defaultMax = 4;
+
+var sortIndex = item =>
+  defaultFold.indexOf(item.last) + 1 || (item.last == "Other" ? 101 : 100);
 
 class ResultsTable extends ElementBase {
   constructor() {
@@ -40,7 +45,13 @@ class ResultsTable extends ElementBase {
   render(result) {
     var elements = this.illuminate();
 
-    var { candidates, precincts, reporting, reportingPercentage, updated } = result;
+    var {
+      candidates,
+      precincts,
+      reporting,
+      reportingPercentage,
+      updated
+    } = result;
     if (updated == this.updated) return;
     this.updated = updated;
     this.setAttribute("party", result.party);
@@ -50,13 +61,13 @@ class ResultsTable extends ElementBase {
     });
     // check for existing votes
     candidates.sort((a, b) => b.percentage - a.percentage);
-    // resort if no votes are cast
+    // re-sort if no votes are cast
     var hasVotes = !!candidates[0].percentage;
     if (!hasVotes) {
       // sort by default view, then by name
       candidates.sort(function(a, b) {
-        var aValue = (defaultFold.indexOf(a.last) + 1) || (a.last == "Other" ? 101 : 100);
-        var bValue = (defaultFold.indexOf(b.last) + 1) || (b.last == "Other" ? 101 : 100);
+        var aValue = sortIndex(a);
+        var bValue = sortIndex(b);
         if (aValue == bValue) {
           return a.last < b.last ? -1 : 1;
         }
@@ -75,7 +86,11 @@ class ResultsTable extends ElementBase {
       candidates.push(others);
     }
     candidates = candidates.filter(function(c) {
-      if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
+      if (
+        c.last != "Other" &&
+        c.percentage < 1 &&
+        defaultFold.indexOf(c.last) == -1
+      ) {
         others.percentage += c.percentage;
         others.votes += c.votes;
         return false;

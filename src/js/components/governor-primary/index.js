@@ -18,7 +18,6 @@ class GovernorPrimary extends ElementBase {
   }
 
   attributeChangedCallback(attr, old, value) {
-
     switch (attr) {
       case "src":
         if (this.hasAttribute("live")) {
@@ -48,7 +47,6 @@ class GovernorPrimary extends ElementBase {
 
   // sort of like d3.data but for data -> elements
   mapToElements(root, array, element = "div") {
-
     var children = Array.from(root.children);
     var binding = new Map();
 
@@ -56,7 +54,10 @@ class GovernorPrimary extends ElementBase {
       var [child] = children.filter(c => c.dataset.key == item.id);
       if (!child) {
         // create a node and append it
-        child = typeof element == "function" ? element(item) : document.createElement(element);
+        child =
+          typeof element == "function"
+            ? element(item)
+            : document.createElement(element);
         child.dataset.key = item.id;
         children.push(child);
         root.appendChild(child);
@@ -125,8 +126,7 @@ class GovernorPrimary extends ElementBase {
         }
         child.render(data);
       });
-    })
-    
+    });
   }
 
   static get template() {
@@ -134,7 +134,7 @@ class GovernorPrimary extends ElementBase {
 <div class="chatter" data-as="chatter"></div>
 <div class="results" data-as="results"></div>
 <p class="footnote" data-as="footnote"></p>
-    `
+    `;
   }
 }
 
