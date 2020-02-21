@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 
     var done = this.async();
 
-    var schedule = grunt.data.json.races;
+    var schedule = grunt.data.json.races.filter(r => r.office != "R");
     schedule.forEach(function(r) {
       // assign a timestamp
       var [m, d, y] = r.date.split("/");
