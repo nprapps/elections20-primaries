@@ -142,7 +142,7 @@ module.exports = function(grunt) {
 
         // load delegate report for today
         // only runs if there are active races
-        if (grunt.option("results-only") || !races.length) return;
+        if (grunt.option("results-only")) return;
         var now = new Date();
         var delegateFile = ["delegates", now.getMonth() + 1, now.getDate(), now.getFullYear()].join("_");
         var report = await api.getDelegates();
