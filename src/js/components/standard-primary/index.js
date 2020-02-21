@@ -63,9 +63,7 @@ class StandardPrimary extends ElementBase {
     races.forEach(([race, element]) => {
       element.className = "race";
 
-      if (party) {
-        toggleAttribute(element, "hidden", race.party != party);
-      }
+      toggleAttribute(element, "hidden", party && race.party != party);
       // create result tables
       var pairs = mapToElements(element, race.results, "results-table");
 
