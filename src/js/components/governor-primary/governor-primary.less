@@ -15,5 +15,13 @@ governor-primary {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
+
+    @media @mobile {
+      display: block;
+
+      .race + .race {
+        margin-top: 20px;
+      }
+    }
   }
 }

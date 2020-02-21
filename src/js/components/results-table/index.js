@@ -65,13 +65,14 @@ class ResultsTable extends ElementBase {
     }
 
     // filter small candidates into others
-    var others = candidates.filter(c => c.last == "Other").pop();
+    var [others] = candidates.filter(c => c.last == "Other");
     if (!others) {
       others = {
         last: "Other",
         votes: 0,
         percentage: 0
       };
+      candidates.push(others);
     }
     candidates = candidates.filter(function(c) {
       if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
@@ -81,7 +82,10 @@ class ResultsTable extends ElementBase {
       }
       return true;
     });
-    candidates.push(others);
+    // remove it if empty
+    if (!others.votes) {
+      candidates = candidates.filter(c => c != others);
+    }
 
     // decide if we need overflow
     var max = this.getAttribute("max") || defaultMax;

@@ -46,28 +46,33 @@ class GovernorPrimary extends ElementBase {
     this.render();
   }
 
-  matchElements(root, array, createElement) {
+  // sort of like d3.data but for data -> elements
+  mapToElements(root, array, element = "div") {
+
     var children = Array.from(root.children);
     var binding = new Map();
+
     array.forEach(function(item) {
       var [child] = children.filter(c => c.dataset.key == item.id);
       if (!child) {
         // create a node and append it
-        child = createElement(item);
-        child.dataset.key = "item-" + item.id;
+        child = typeof element == "function" ? element(item) : document.createElement(element);
+        child.dataset.key = item.id;
         children.push(child);
         root.appendChild(child);
       }
       binding.set(child, item);
       binding.set(item, child);
     });
+
     // remove deleted children
     children.forEach(function(child) {
       if (!binding.has(child)) {
         root.removeChild(child);
       }
     });
-    // sort to match
+
+    // sort children to match array order
     children = Array.from(root.children);
     var pairs = array.map(function(item, i) {
       var child = binding.get(item);
@@ -98,8 +103,7 @@ class GovernorPrimary extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
 
-    var createRace = () => document.createElement("div");
-    var races = this.matchElements(elements.results, this.cache.races, createRace);
+    var races = this.mapToElements(elements.results, this.cache.races, "div");
     races.forEach(([race, element]) => {
       element.className = "race";
 
@@ -108,9 +112,8 @@ class GovernorPrimary extends ElementBase {
       } else {
         element.removeAttribute("hidden");
       }
-      var createResult = () => document.createElement("results-table");
       // create result tables
-      var pairs = this.matchElements(element, race.results, createResult);
+      var pairs = this.mapToElements(element, race.results, "results-table");
 
       // render each one
       var test = this.cache.test;

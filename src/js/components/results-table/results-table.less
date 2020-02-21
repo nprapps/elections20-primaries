@@ -93,8 +93,11 @@ results-table {
 
     .th, .td {
       text-align: right;
-      flex: 0 0 5em;
       position: relative;
+
+      &:first-child {
+        padding-left: 8px;
+      }
 
       &:last-child {
         padding-right: 8px;
@@ -109,6 +112,7 @@ results-table {
 
       .td {
         padding-top: @bar-height * 2.4;
+        padding-bottom: @bar-height;
       }
     }
 
