@@ -62,9 +62,7 @@ class PresidentPrimary extends ElementBase {
 
     var pairs = mapToElements(elements.results, races, "president-results");
     pairs.forEach(function([data, child]) {
-      if (party) {
-        toggleAttribute(child, "hidden", data.party != party);
-      }
+      toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);

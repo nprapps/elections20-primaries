@@ -37,7 +37,7 @@ var onHashChange = function() {
     }
     module.classList.toggle("hidden", !visible);
     // find things to toggle party
-    $(`[data-control="party"]`).forEach(function(element) {
+    $(`[data-control="party"]`, module).forEach(function(element) {
       if (params.party) {
         element.setAttribute("party", params.party);
       } else {
