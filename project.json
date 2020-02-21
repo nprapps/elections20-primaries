@@ -18,7 +18,10 @@
     "src/js/main.js": "build/app.js",
     "src/js/embed.js": "build/embed.js",
     "src/js/loader.js": "build/loader.js",
-    "src/js/statePage.js": "build/states/state.js"
+    "src/js/statePage.js": "build/states/state.js",
+    "src/js/embeds/iowa.js": "build/embeds/iowa.js",
+    "src/js/embeds/new-hampshire.js": "build/embeds/new-hampshire.js",
+    "src/js/embeds/nevada.js": "build/embeds/nevada.js"
   },
   "title": "2020 Primary Results",
   "description": "",

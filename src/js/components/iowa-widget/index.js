@@ -1,9 +1,3 @@
-/*
-
-Simple generic results table - used for prototyping the custom element code
-
-*/
-
 var dot = require("../../lib/dot");
 var outerTemplate = require("./_outer.html");
 var innerTemplate = dot.compile(require("./_inner.html"));

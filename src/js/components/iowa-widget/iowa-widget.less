@@ -5,18 +5,26 @@ iowa-widget {
   @flourish-margin: .6em;
   @bar-height: .6em;
 
+  position: relative;
   .gotham();
   font-size: var(--font-size);
 
   &[test]::before {
     display: block;
-    padding: 8px;
+    padding: 8px 16px;
     margin-bottom: 8px;
     text-align: center;
     .knockout();
-    background: red;
+    background: black;
     color: white;
-    content: "TEST DATA"
+    border-radius: 20px;
+    content: "TEST DATA";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: .5;
+    z-index: 9999;
   }
 
   a {
