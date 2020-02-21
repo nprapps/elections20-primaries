@@ -59,7 +59,7 @@ class StandardPrimary extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
 
-    var races = mapToElements(elements.results, this.cache.races, "div");
+    var races = mapToElements(elements.results, this.cache.races);
     races.forEach(([race, element]) => {
       element.className = "race";
 
