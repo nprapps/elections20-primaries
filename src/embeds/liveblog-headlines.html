@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <%= t.include("partials/_webfonts.html") %>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../embed.css">
+    <base target="_blank">
+  </head>
+  <body>
+    <script>
+      var here = new URL(window.location);
+      document.body.classList.add(here.searchParams.get("theme"));
+    </script>
+
+    <!-- <liveblog-headlines src="TKTK" live></liveblog-headlines> -->
+    <liveblog-headlines></liveblog-headlines>
+    <script>
+      var widget = document.querySelector("liveblog-headlines");
+      if (here.searchParams.get("link")) {
+        widget.setAttribute("href", here.searchParams.get("link"));
+      }
+    </script>
+
+    <script src="../embed.js" async></script>
+    <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>
+  </body>
+</html>

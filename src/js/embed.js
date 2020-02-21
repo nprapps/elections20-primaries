@@ -8,3 +8,4 @@ require("./components/nevada-widget");
 require("./components/president-primary");
 require("./components/governor-primary");
 require("./components/delegate-total");
+require("./components/liveblog-headlines");
