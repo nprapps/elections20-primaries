@@ -13,6 +13,10 @@ class PresidentPrimary extends ElementBase {
     return ["load"];
   }
 
+  static get mirroredProps() {
+    return ["src", "href"]
+  }
+
   static get observedAttributes() {
     return ["src", "href", "live", "party"];
   }

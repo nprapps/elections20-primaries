@@ -18,6 +18,10 @@ class StandardPrimary extends ElementBase {
     return ["src", "href", "live", "party"];
   }
 
+  static get mirroredProps() {
+    return ["src", "href"]
+  }
+
   attributeChangedCallback(attr, old, value) {
     switch (attr) {
       case "src":
@@ -59,13 +63,11 @@ class StandardPrimary extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
 
-    var races = mapToElements(elements.results, this.cache.races, "div");
+    var races = mapToElements(elements.results, this.cache.races);
     races.forEach(([race, element]) => {
       element.className = "race";
 
-      if (party) {
-        toggleAttribute(element, "hidden", race.party != party);
-      }
+      toggleAttribute(element, "hidden", party && race.party != party);
       // create result tables
       var pairs = mapToElements(element, race.results, "results-table");
 

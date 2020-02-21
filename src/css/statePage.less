@@ -97,6 +97,21 @@ nav.race-calendar {
     display: block;
     color: #AAA;
   }
+
+  .active {
+    background: #F8F8F8;
+    border-bottom: 2px solid #CCC;
+  }
+}
+
+h3.latest-results {
+  body.filtered & {
+    display: none;
+  }
+}
+
+hr {
+  border: 1px solid #EEE;
 }
 
 .module {
@@ -105,7 +120,16 @@ nav.race-calendar {
     background: #EEE;
   }
 
+  h2 {
+    border-bottom: 2px solid #EEE;
+    padding-bottom: 8px;
+  }
+
   &.hidden {
     display: none;
+  }
+
+  &:focus {
+    outline: none;
   }
 }
