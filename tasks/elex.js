@@ -94,10 +94,10 @@ module.exports = function(grunt) {
           }
 
           var subsetResults = function(geo = "state") {
-            var copyKeys = "id eevp type party".split(" ");
+            var copyKeys = "id eevp type party seat".split(" ");
             return fromAP.map(function(race) {
               var copy = {};
-              for (var k of copyKeys) copy[k] = race[k];
+              for (var k in race) copy[k] = race[k];
               copy.results = race.results[geo];
               return copy;
             });
