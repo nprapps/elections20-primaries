@@ -70,11 +70,10 @@ class HousePrimary extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
 
-    var results = this.cache.races.map(r => r.results[0])
-    var groupedResults = groupBy(results, "seat");
+    var groupedResults = groupBy(this.cache.races, "seat");
     var seats = Object.keys(groupedResults).map(function(id) {
       return {
-        results: groupedResults[id],
+        groupedResults: groupedResults[id],
         id
       }
     })
@@ -89,7 +88,7 @@ class HousePrimary extends ElementBase {
 
       toggleAttribute(element, "hidden", party && race.party != party);
       // create result tables
-      var pairs = mapToElements(seatElements.results, race.results, "results-table");
+      var pairs = mapToElements(seatElements.results, race.groupedResults, "results-table");
 
       // render each one
       var test = !!this.cache.test;
@@ -97,7 +96,7 @@ class HousePrimary extends ElementBase {
         if (href) child.setAttribute("href", href);
         if (max) child.setAttribute("max", max);
         toggleAttribute(child, "test", test);
-        child.render(data);
+        child.render(data.results[0]);
       });
     });
   }
