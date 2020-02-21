@@ -1,7 +1,7 @@
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 require("./president-results");
-var { mapToElements } = require("../utils");
+var { mapToElements, toggleAttribute } = require("../utils");
 
 class PresidentPrimary extends ElementBase {
   constructor() {
@@ -58,20 +58,14 @@ class PresidentPrimary extends ElementBase {
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
-    var isTest = this.cache.test;
+    var isTest = !!this.cache.test;
 
     var pairs = mapToElements(elements.results, races, "president-results");
     pairs.forEach(function([data, child]) {
-      if (party && data.party != party) {
-        child.setAttribute("hidden", "");
-      } else {
-        child.removeAttribute("hidden");
+      if (party) {
+        toggleAttribute(child, "hidden", data.party != party);
       }
-      if (isTest) {
-        child.setAttribute("test", "");
-      } else {
-        child.removeAttribute("test");
-      }
+      toggleAttribute(child, "test", isTest);
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       child.render(data);

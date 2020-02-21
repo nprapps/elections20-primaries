@@ -87,7 +87,17 @@ var mapToElements = function(root, array, element = "div") {
     return [item, child];
   });
   return pairs;
-}
+};
+
+var toggleAttribute = function(element, attribute, force) {
+  var toggle = !element.hasAttribute(attribute);
+  var enable = typeof force == "undefined" ? toggle : force;
+  if (enable) {
+    element.setAttribute(attribute, "");
+  } else {
+    element.removeAttribute(attribute);
+  }
+};
 
 module.exports = {
   apMonths,
@@ -95,5 +105,6 @@ module.exports = {
   formatTime,
   parseNPRDate,
   groupBy,
-  mapToElements
+  mapToElements,
+  toggleAttribute
 }
