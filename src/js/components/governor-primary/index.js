@@ -21,7 +21,7 @@ class GovernorPrimary extends ElementBase {
     switch (attr) {
       case "src":
         if (this.hasAttribute("live")) {
-          this.fetch.watch(value, this.getAttribute("refresh") || 15);
+          this.fetch.watch(value, this.getAttribute("live") || 15);
         } else {
           this.fetch.once(value);
         }
@@ -31,7 +31,7 @@ class GovernorPrimary extends ElementBase {
         if (typeof value != "string") {
           this.fetch.stop();
         } else {
-          this.fetch.start(this.getAttribute("refresh") || 15);
+          this.fetch.start(this.getAttribute("live") || 15);
         }
         break;
 
@@ -43,52 +43,6 @@ class GovernorPrimary extends ElementBase {
   load(data) {
     this.cache = data;
     this.render();
-  }
-
-  // sort of like d3.data but for data -> elements
-  mapToElements(root, array, element = "div") {
-    var children = Array.from(root.children);
-    var binding = new Map();
-
-    array.forEach(function(item) {
-      var [child] = children.filter(c => c.dataset.key == item.id);
-      if (!child) {
-        // create a node and append it
-        child =
-          typeof element == "function"
-            ? element(item)
-            : document.createElement(element);
-        child.dataset.key = item.id;
-        children.push(child);
-        root.appendChild(child);
-      }
-      binding.set(child, item);
-      binding.set(item, child);
-    });
-
-    // remove deleted children
-    children.forEach(function(child) {
-      if (!binding.has(child)) {
-        root.removeChild(child);
-      }
-    });
-
-    // sort children to match array order
-    children = Array.from(root.children);
-    var pairs = array.map(function(item, i) {
-      var child = binding.get(item);
-      var childIndex = children.indexOf(child);
-      if (childIndex != i) {
-        var next = children[i + 1];
-        if (next) {
-          root.insertBefore(child, next);
-        } else {
-          root.appendChild(child);
-        }
-      }
-      return [item, child];
-    });
-    return pairs;
   }
 
   render() {

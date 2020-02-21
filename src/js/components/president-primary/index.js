@@ -51,15 +51,15 @@ class PresidentPrimary extends ElementBase {
     if (!this.cache) return;
     var { races, chatter, footnote } = this.cache;
 
-    elements.chatter.innerHTML = chatter;
-    elements.footnote.innerHTML = footnote;
+    elements.chatter.innerHTML = chatter || "";
+    elements.footnote.innerHTML = footnote || "";
 
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
-    
-    // function to set/update child element
-    var renderChild = (child, data) => {
-      var party = this.getAttribute("party");
+    var party = this.getAttribute("party");
+
+    var pairs = this.mapToElements(elements.results, races, "president-results");
+    pairs.forEach(function([data, child]) {
       if (party && data.party != party) {
         child.setAttribute("hidden", "");
       } else {
@@ -68,36 +68,6 @@ class PresidentPrimary extends ElementBase {
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       child.render(data);
-    };
-
-    // handle existing children
-    var children = Array.from(elements.results.children);
-    children.forEach(child => {
-      // get a matching race
-      var matched = null;
-      races = races.filter(r => {
-        if ((child.dataset.race == r.id)) {
-          matched = r;
-          return false;
-        }
-        return true;
-      });
-
-      // either set results or remove the child
-      if (matched) {
-        renderChild(child, matched);
-      } else {
-        elements.results.removeChild(child);
-      }
-    });
-
-    // if there are leftover races, create them
-    races.forEach(r => {
-      var child = document.createElement("president-results");
-      elements.results.appendChild(child);
-      child.dataset.race = r.id;
-      renderChild(child, r);
-      children.push(child);
     });
 
     // set the test flag

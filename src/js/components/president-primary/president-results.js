@@ -57,24 +57,25 @@ class PresidentResults extends ElementBase {
 
     // filter small candidates into others
     var others = candidates.filter(c => c.last == "Other").pop();
-    // if (hasVotes) {
-      if (!others) {
-        others = {
-          last: "Other",
-          votes: 0,
-          percentage: 0
-        };
-      }
-      candidates = candidates.filter(function(c) {
-        if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
-          others.percentage += c.percentage;
-          others.votes += c.votes;
-          return false;
-        }
-        return true;
-      });
+    if (!others) {
+      others = {
+        last: "Other",
+        votes: 0,
+        percentage: 0
+      };
       candidates.push(others);
-    // }
+    }
+    candidates = candidates.filter(function(c) {
+      if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
+        others.percentage += c.percentage;
+        others.votes += c.votes;
+        return false;
+      }
+      return true;
+    });
+    if (others.votes == 0) {
+      candidates = candidates.filter(c => c != others);
+    }
 
     var max = this.getAttribute("max") || defaultMax;
     var fold = candidates.slice(0, max).map(c => c.last);
