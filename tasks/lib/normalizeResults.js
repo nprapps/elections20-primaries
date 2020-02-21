@@ -29,11 +29,13 @@ module.exports = function(resultArray, overrides) {
       var party = race.party;
       var eevp = race.eevp;
       var type = race.raceType;
+      var seat = race.seatNum;
       // this is the final race output object
       var data = {
         id,
         date,
         test,
+        seat,
         state: race.statePostal, // will be overridden later based on state RU, it's weird
         eevp,
         party,
@@ -77,7 +79,6 @@ module.exports = function(resultArray, overrides) {
           var reportingPercentage = ru.precinctsReportingPct;
 
           var candidates = ru.candidates.map(adjustCandidate);
-          var seat = race.seatNum;
 
           // generate subtotals/percentages
           var winners = candidates.filter(c => c.winner).map(c => c.id) || [];
@@ -89,7 +90,6 @@ module.exports = function(resultArray, overrides) {
           var metadata = {
             id,
             party,
-            seat,
             updated,
             precincts,
             reporting,
@@ -120,7 +120,6 @@ module.exports = function(resultArray, overrides) {
           var metadata = {
             id,
             party,
-            seat,
             updated: call ? Date.now() : Date.parse(race.lastUpdated),
             precincts: 0,
             reporting: 0,
