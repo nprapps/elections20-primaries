@@ -46,14 +46,14 @@ var hashRace = function(race) {
   }
   return search.toString();
 }
-var makeOption = (item, suffix = "") => item.future ? `disabled` : `value="#${hashRace(item.race)}${suffix}"`;
+var makeOption = (item, suffix = "") => item.future ? `disabled` : `value="${hashRace(item.race)}${suffix}"`;
 var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashRace(item.race)}${suffix}"`;
 
       %>
       <select class="mobile-calendar">
         <% displays.forEach(function(item) { %>
-          <option <%= makeOption(item) %>><%= item.office || "Run-off" %> - Dem. (<%= item.date %>)</option>
-          <option <%= makeOption(item) %>><%= item.office || "Run-off" %> - GOP (<%= item.date %>)</option>
+          <option <%= makeOption(item, "&party=Dem") %>><%= item.office %> - Dem. (<%= item.date %>)</option>
+          <option <%= makeOption(item, "&party=GOP") %>><%= item.office %> - GOP (<%= item.date %>)</option>
         <% }) %>
       </select>
 
@@ -76,13 +76,18 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
         <%= grunt.data.json.chatter[state] %>
       </p>
 
+      <h3 class="latest-results">Latest Results</h3>
+
+      <hr>
+
       <%
 
       displays.forEach(function(row, i) { %>
-      
+
         <div class="module <%= i ? "hidden" : "" %>"
           data-office="<%= row.race.office %>"
           data-date="<%= row.race.date %>"
+          tabindex="-1"
         >
           <%= t.include(`statePartials/_${row.race.element ? "random" : row.race.office}.html`, row.race) %>
           <% if (row.race.office != "H") { %>
@@ -95,6 +100,7 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
           data-office="<%= row.race.office %>"
           data-date="<%= row.race.date %>"
           data-counties="true"
+          tabindex="-1"
         >
           <%= t.include("statePartials/_counties.html", row.race) %>
         </div>

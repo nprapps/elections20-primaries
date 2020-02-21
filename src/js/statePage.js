@@ -16,17 +16,17 @@ var modules = $(".module");
 var exactParams = "date office".split(" ");
 var booleanParams = "counties".split(" ");
 
-var onHashChange = function() {
+var onHashChange = function(e) {
   // construct a filter object from the hash
   // we do this using the built-in type for parsing URL search params
   var hash = window.location.hash.replace("#", "");
-  if (!hash) return;
+  if (!hash) return
+  document.body.classList.add("filtered");
   var search = new URLSearchParams(hash);
   var params = {};
   for (var [key, val] of search.entries()) {
     params[key] = val;
   }
-  // console.log(params);
   // now filter visible modules by looking for matching data params
   modules.forEach(function(module) {
     var visible = true;
@@ -45,8 +45,19 @@ var onHashChange = function() {
         element.removeAttribute("party");
       }
     })
-  })
+  });
+
+  // send focus to the top-most module if this came from a click
+  if (e) {
+    modules[0].focus();
+  }
 }
 
 window.addEventListener("hashchange", onHashChange);
 onHashChange();
+
+var selectBox = $.one(".mobile-calendar");
+selectBox.addEventListener("change", function() {
+  var hash = selectBox.value;
+  window.location.hash = hash;
+});

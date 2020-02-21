@@ -99,6 +99,16 @@ nav.race-calendar {
   }
 }
 
+h3.latest-results {
+  body.filtered & {
+    display: none;
+  }
+}
+
+hr {
+  border: 1px solid #EEE;
+}
+
 .module {
   pre {
     padding: 30px;
@@ -107,5 +117,9 @@ nav.race-calendar {
 
   &.hidden {
     display: none;
+  }
+
+  &:focus {
+    outline: none;
   }
 }
