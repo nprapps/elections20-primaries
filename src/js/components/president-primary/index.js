@@ -1,6 +1,7 @@
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 require("./president-results");
+var { mapToElements } = require("../utils");
 
 class PresidentPrimary extends ElementBase {
   constructor() {
@@ -57,25 +58,24 @@ class PresidentPrimary extends ElementBase {
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
+    var isTest = this.cache.test;
 
-    var pairs = this.mapToElements(elements.results, races, "president-results");
+    var pairs = mapToElements(elements.results, races, "president-results");
     pairs.forEach(function([data, child]) {
       if (party && data.party != party) {
         child.setAttribute("hidden", "");
       } else {
         child.removeAttribute("hidden");
       }
+      if (isTest) {
+        child.setAttribute("test", "");
+      } else {
+        child.removeAttribute("test");
+      }
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       child.render(data);
     });
-
-    // set the test flag
-    if (this.cache.test) {
-      children.forEach(c => c.setAttribute("test", ""));
-    } else {
-      children.forEach(c => c.removeAttribute("test"));
-    }
   }
 
   static get template() {

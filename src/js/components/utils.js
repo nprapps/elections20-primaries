@@ -42,10 +42,58 @@ var groupBy = function(list, key) {
   return grouped;
 };
 
+// sort of like d3.data but for data -> elements
+// returns a zipped array of [data, element] pairs
+var mapToElements = function(root, array, element = "div") {
+  var children = Array.from(root.children);
+  var binding = new Map();
+
+  array.forEach(function(item) {
+    var [child] = children.filter(c => c.dataset.key == item.id);
+    if (!child) {
+      // create a node and append it
+      child =
+        typeof element == "function"
+          ? element(item)
+          : document.createElement(element);
+      child.dataset.key = item.id;
+      children.push(child);
+      root.appendChild(child);
+    }
+    binding.set(child, item);
+    binding.set(item, child);
+  });
+
+  // remove deleted children
+  children.forEach(function(child) {
+    if (!binding.has(child)) {
+      root.removeChild(child);
+    }
+  });
+
+  // sort children to match array order
+  children = Array.from(root.children);
+  var pairs = array.map(function(item, i) {
+    var child = binding.get(item);
+    var childIndex = children.indexOf(child);
+    if (childIndex != i) {
+      var next = children[i + 1];
+      if (next) {
+        root.insertBefore(child, next);
+      } else {
+        root.appendChild(child);
+      }
+    }
+    return [item, child];
+  });
+  return pairs;
+}
+
 module.exports = {
   apMonths,
   formatAPDate,
   formatTime,
   parseNPRDate,
-  groupBy
+  groupBy,
+  mapToElements
 }

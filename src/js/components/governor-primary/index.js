@@ -2,6 +2,7 @@ var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 require("../results-table");
 require("./governor-primary.less");
+var { mapToElements } = require("../utils");
 
 class GovernorPrimary extends ElementBase {
   constructor() {
@@ -58,7 +59,7 @@ class GovernorPrimary extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
 
-    var races = this.mapToElements(elements.results, this.cache.races, "div");
+    var races = mapToElements(elements.results, this.cache.races, "div");
     races.forEach(([race, element]) => {
       element.className = "race";
 
@@ -68,7 +69,7 @@ class GovernorPrimary extends ElementBase {
         element.removeAttribute("hidden");
       }
       // create result tables
-      var pairs = this.mapToElements(element, race.results, "results-table");
+      var pairs = mapToElements(element, race.results, "results-table");
 
       // render each one
       var test = this.cache.test;
