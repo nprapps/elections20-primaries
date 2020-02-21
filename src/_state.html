@@ -79,6 +79,7 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
       <%
 
       displays.forEach(function(row, i) { %>
+      
         <div class="module <%= i ? "hidden" : "" %>"
           data-office="<%= row.race.office %>"
           data-date="<%= row.race.date %>"
@@ -88,15 +89,17 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
           <a class="show-counties" <%= makeLink(row, "&counties=true") %>>See county results</a>
           <% } %>
         </div>
+
         <% if (row.race.office != "H") { %>
-          <div class="module hidden"
-            data-office="<%= row.race.office %>"
-            data-date="<%= row.race.date %>"
-            data-counties="true"
-          >
-            <%= t.include("statePartials/_counties.html", row.race) %>
-          </div>
+        <div class="module hidden"
+          data-office="<%= row.race.office %>"
+          data-date="<%= row.race.date %>"
+          data-counties="true"
+        >
+          <%= t.include("statePartials/_counties.html", row.race) %>
+        </div>
         <% } %>
+
       <% }) %>
 
     </main>
