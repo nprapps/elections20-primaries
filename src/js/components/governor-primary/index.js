@@ -64,7 +64,7 @@ class GovernorPrimary extends ElementBase {
       element.className = "race";
 
       if (party) {
-        toggleAttribute(element, hidden, race.party != party);
+        toggleAttribute(element, "hidden", race.party != party);
       }
       // create result tables
       var pairs = mapToElements(element, race.results, "results-table");

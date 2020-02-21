@@ -59,6 +59,7 @@ module.exports = function(resultArray, overrides) {
         } else if (c.winner == "X") {
           candidate.winner = true;
         }
+        if (c.incumbent) candidate.incumbent = true;
         var override = overrides.candidates[candidate.id];
         if (override) {
           Object.assign(candidate, override);
