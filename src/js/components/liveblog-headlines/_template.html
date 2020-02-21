@@ -3,62 +3,18 @@
     return str
       .toLowerCase()
       .replace(/\s+/g, "-")
-      .replace(/[^\w\-]+/g, "")
       .replace(/\-\-+/g, "-")
-      .replace(/^-+/, "")
-      .replace(/-+$/, "");
+      .replace(/^-+|[^\w\-]|-+$/g, "");
   };
-
-  var headlines = [
-    {
-      'headline': 'Goodnight New Hampshire... And Hello Nevada!',
-      'link': 'https://apps.npr.org/liveblogs/20200211-new-hampshire/#goodnight-new-hampshire-104',
-      'date': '12:48 a.m. ET Feb. 12, 2020',
-      'flag': ''
-    }, {
-      'headline': 'Democratic Turnout Surpasses 2008 Record',
-      'link': 'https://apps.npr.org/liveblogs/20200211-new-hampshire/#democratic-turnout-nears-2008-record-105',
-      'date': '12:29 a.m. ET Feb. 12, 2020',
-      'flag': ''
-    }, {
-      'headline': 'Bernie Sanders Projected To Win',
-      'link': 'https://apps.npr.org/liveblogs/20200211-new-hampshire/#hold-sanders-projected-to-win-101',
-      'date': '11:42 p.m. ET Feb. 11, 2020',
-      'flag': 'Major Development'
-    }, {
-      'headline': 'Buttigieg Tells His Supporters: ‘We Are Here To Stay’',
-      'link': 'https://apps.npr.org/liveblogs/20200211-new-hampshire/#buttigieg-addresses-supporters-98',
-      'date': '11:35 p.m. ET Feb. 11, 2020',
-      'flag': ''
-    }, {
-      'headline': 'Patrick To Make Decision On Campaign In Wake Of New Hampshire',
-      'link': 'https://apps.npr.org/liveblogs/20200211-new-hampshire/#patrick-to-make-decision-on-99',
-      'date': '11:35 p.m. ET Feb. 11, 2020',
-      'flag': 'Fact Check'
-    }, {
-      'headline': 'Sanders Still Leading, But Buttigieg Close Second',
-      'link': 'https://apps.npr.org/liveblogs/20200211-new-hampshire/#sanders-still-leading-in-new-94',
-      'date': '10:27 p.m. ET Feb. 11, 2020',
-      'flag': ''
-    }
-  ];
 %>
-
-<div class="title">
-  <h2><a href="" title="See more live coverage"><img src="../assets/logo-2020-e.svg" alt="Election 2020" /> This Just In</a></h2>
-  <div class="more"><a href="" title="See more live coverage">More &rsaquo;</a></div>
-</div>
-
-<ol>
-  <% headlines.forEach(function(h, i) { %>
-  <li>
-    <h3><a href="<%= h.link %>"><%= h.headline %></a></h3>
-    <span class="meta">
-      <%= h.date %>
-      <% if (h.flag) { %>
-        &nbsp;&nbsp;|&nbsp;&nbsp;<span class="flag <%= classify(h.flag) %>"><%= h.flag %></span>
-      <% } %>
-    </span>
-  </li>
-  <% }); %>
-</ol>
+<% data.headlines.forEach(function(h, i) { %>
+<li>
+  <h3><a href="<%= h.link %>"><%= h.headline %></a></h3>
+  <span class="meta">
+    <%= h.relative %>
+    <% if (h.flag) { %>
+      &nbsp;&nbsp;|&nbsp;&nbsp;<span class="flag <%= classify(h.flag) %>"><%= h.flag %></span>
+    <% } %>
+  </span>
+</li>
+<% }); %>
