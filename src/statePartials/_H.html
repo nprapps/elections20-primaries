@@ -1,7 +1,8 @@
+
 <house-primary
-  <% if (timestamp < grunt.data.elex.today && timestamp > grunt.data.elex.retroactive) { %>
+  <% if (row.live) { %>
   live
   <% } %>
   data-control="party"
-  src="../data/<%= filename%>.json"
+  src="<%= makeFilename(row.race) %>.json"
 ></house-primary>

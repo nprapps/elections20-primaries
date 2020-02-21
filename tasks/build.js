@@ -83,6 +83,7 @@ module.exports = function(grunt) {
           office: grunt.data.json.strings[race.office],
           date: [months[date.getMonth()], date.getDate()].join(" "),
           future: race.timestamp > grunt.data.elex.today,
+          live: race.timestamp <= grunt.data.elex.today && race.timestamp > grunt.data.elex.retroactive,
           race
         }
         if (race.office != "H" && !race.parties) {

@@ -49,6 +49,15 @@ var hashRace = function(race) {
 var makeOption = (item, suffix = "") => item.future ? `disabled` : `value="${hashRace(item.race)}${suffix}"`;
 var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashRace(item.race)}${suffix}"`;
 
+var makeFilename = function(race) {
+  if (race.timestamp > grunt.data.elex.retroactive && race.timestamp <= grunt.data.elex.today) {
+    // probably exists locally
+    return `../data/${race.filename}`;
+  } else {
+    return json.project.url + "data/" + race.filename;
+  }
+};
+
       %>
       <select class="mobile-calendar">
         <% displays.forEach(function(item) { %>
@@ -92,7 +101,7 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
           tabindex="-1"
         >
           <h2><%= row.office %> - <%= row.date %></h2>
-          <%= t.include(`statePartials/_${row.race.element ? "random" : row.race.office}.html`, row.race) %>
+          <%= t.include(`statePartials/_${row.race.element ? "random" : row.race.office}.html`, { makeFilename, row }) %>
           <% if (row.race.office != "H") { %>
           <a class="show-counties" <%= makeLink(row, "&counties=true") %>>See county results</a>
           <% } %>
@@ -105,7 +114,7 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
           data-counties="true"
           tabindex="-1"
         >
-          <%= t.include("statePartials/_counties.html", row.race) %>
+          <%= t.include("statePartials/_counties.html", { makeFilename, row }) %>
         </div>
         <% } %>
 
