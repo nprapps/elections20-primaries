@@ -1,1 +1,7 @@
-<pre><%= filename %>.json</pre>
+<standard-primary
+  <% if (timestamp < grunt.data.elex.today && timestamp > grunt.data.elex.retroactive) { %>
+  live
+  <% } %>
+  data-control="party"
+  src="../data/<%= filename%>.json"
+></standard-primary>

@@ -1,10 +1,10 @@
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 require("../results-table");
-require("./governor-primary.less");
+require("./standard-primary.less");
 var { mapToElements, toggleAttribute } = require("../utils");
 
-class GovernorPrimary extends ElementBase {
+class StandardPrimary extends ElementBase {
   constructor() {
     super();
     this.fetch = new Retriever(this.load);
@@ -89,4 +89,4 @@ class GovernorPrimary extends ElementBase {
   }
 }
 
-GovernorPrimary.define("governor-primary");
+StandardPrimary.define("standard-primary");

@@ -13,12 +13,12 @@
       document.body.classList.add(here.searchParams.get("theme"));
     </script>
 
-    <governor-primary live src="../data/NC_G_3_3_2020.json"></governor-primary>
+    <standard-primary live src="../data/TX_S_3_3_2020.json"></standard-primary>
 
     <president-primary live src="../data/NC_G_3_3_2020.json"></president-primary>
 
     <script>
-      var widget = document.querySelector("governor-primary");
+      var widget = document.querySelector("standard-primary");
       if (here.searchParams.get("link")) {
         widget.setAttribute("href", here.searchParams.get("link"));
       }

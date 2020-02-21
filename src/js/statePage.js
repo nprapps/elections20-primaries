@@ -5,6 +5,7 @@ var Sidechain = require("@nprapps/sidechain");
 require("./components/iowa-widget");
 require("./components/nevada-widget");
 require("./components/president-primary");
+require("./components/standard-primary");
 
 var here = new URL(window.location.href);
 if (here.searchParams.has("embedded")) {
