@@ -52,8 +52,12 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
       %>
       <select class="mobile-calendar">
         <% displays.forEach(function(item) { %>
-          <option <%= makeOption(item, "&party=Dem") %>><%= item.office %> - Dem. (<%= item.date %>)</option>
-          <option <%= makeOption(item, "&party=GOP") %>><%= item.office %> - GOP (<%= item.date %>)</option>
+          <% if (item.parties) { %>
+          <option <%= makeOption(item, "&party=Dem&counties=true") %>><%= item.office %> - Dem. (<%= item.date %>)</option>
+          <option <%= makeOption(item, "&party=GOP&counties=true") %>><%= item.office %> - GOP (<%= item.date %>)</option>
+          <% } else { %>
+          <option <%= makeOption(item) %>><%= item.office %> (<%= item.date %>)</option>
+          <% } %>
         <% }) %>
       </select>
 
@@ -61,12 +65,14 @@ var makeLink = (item, suffix = "") => item.future ? `disabled` : `href="#${hashR
         <ul>
           <% displays.forEach(function(item) { %>
           <li>
-            <a class="office" <%= makeLink(item) %>><%= item.office || "Run-off" %></a>
+            <a class="office" <%= makeLink(item) %>><%= item.office %></a>
+            <% if (item.parties) { %>
             <span class="parties">
-              <a <%= makeLink(item, "&party=Dem") %>>Dem.</a> 
+              <a <%= makeLink(item, "&party=Dem&counties=true") %>>Dem.</a> 
               | 
-              <a <%= makeLink(item, "&party=GOP") %>>GOP</a>
+              <a <%= makeLink(item, "&party=GOP&counties=true") %>>GOP</a>
             </span>
+            <% } %>
             <span class="date"><%= item.date %></span>
           <% }) %>
         </ul>
