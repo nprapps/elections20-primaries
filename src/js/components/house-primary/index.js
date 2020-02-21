@@ -2,7 +2,18 @@ var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 require("../results-table");
 require("./house-primary.less");
-var { mapToElements, toggleAttribute } = require("../utils");
+var { mapToElements, toggleAttribute, groupBy } = require("../utils");
+
+class HouseSeat extends ElementBase {
+  static get template() {
+    return `
+      <h4 data-as="seat"></h4>
+      <div data-as="results"></div>
+    `;
+  }
+}
+
+HouseSeat.define("house-seat");
 
 class HousePrimary extends ElementBase {
   constructor() {
@@ -59,20 +70,30 @@ class HousePrimary extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
 
-    var races = mapToElements(elements.results, this.cache.races, "div");
-    races.forEach(([race, element]) => {
-      element.className = "race";
-
-      if (party) {
-        toggleAttribute(element, "hidden", race.party != party);
+    var results = this.cache.races.map(r => r.results[0])
+    var groupedResults = groupBy(results, "seat");
+    var seats = Object.keys(groupedResults).map(function(id) {
+      return {
+        results: groupedResults[id],
+        id
       }
+    })
+
+    var races = mapToElements(elements.results, seats, "house-seat");
+
+    races.forEach(([race, element]) => {
+
+      var seatElements = element.illuminate();
+
+      seatElements.seat.innerHTML = `District ${race.id}`;
+
+      toggleAttribute(element, "hidden", party && race.party != party);
       // create result tables
-      var pairs = mapToElements(element, race.results, "results-table");
+      var pairs = mapToElements(seatElements.results, race.results, "results-table");
 
       // render each one
       var test = !!this.cache.test;
       pairs.forEach(function([data, child]) {
-        console.log(data)
         if (href) child.setAttribute("href", href);
         if (max) child.setAttribute("max", max);
         toggleAttribute(child, "test", test);

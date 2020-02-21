@@ -77,7 +77,7 @@ module.exports = function(resultArray, overrides) {
           var reportingPercentage = ru.precinctsReportingPct;
 
           var candidates = ru.candidates.map(adjustCandidate);
-          var seat = race.seatName;
+          var seat = race.seatNum;
 
           // generate subtotals/percentages
           var winners = candidates.filter(c => c.winner).map(c => c.id) || [];
@@ -85,7 +85,6 @@ module.exports = function(resultArray, overrides) {
           candidates.forEach(
             c => (c.percentage = ((c.votes / total) * 100).toFixed(2) * 1)
           );
-
 
           var metadata = {
             id,

@@ -45,8 +45,6 @@ class ResultsTable extends ElementBase {
   render(result) {
     var elements = this.illuminate();
 
-    if (result.seat) elements.headline.innerHTML = result.seat;
-
     var {
       candidates,
       precincts,
