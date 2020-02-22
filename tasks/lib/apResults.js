@@ -78,7 +78,7 @@ var issueTickets = function(races) {
     for (var d in byDate) {
       var date = apDate(d);
       var list = byDate[d];
-      var states = list.map(r => r.state);
+      var states = [].concat(...list.map(r => r.states));
       var offices = list.map(r => r.office);
       tickets.push({
         date,

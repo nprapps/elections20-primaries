@@ -34,6 +34,8 @@ module.exports = function(grunt) {
       r.timestamp = new Date(y, m - 1, d);
       // split race IDs
       r.ids = r.raceID ? r.raceID.toString().split(/,\s*/g) : [];
+      // split states
+      r.states = r.state.split(/,\s*/g);
     });
 
     var date = grunt.option("date");
@@ -79,15 +81,15 @@ module.exports = function(grunt) {
         var unmatched = [];
 
         races.forEach(function(contest) {
-          var { state, office, date, ids, feedOnly, filename } = contest;
+          var { states, office, date, ids, stateOnly, filename } = contest;
 
           var fromAP = results.filter(function(result) {
             if (ids.length) {
               return ids.indexOf(result.id) > -1;
             }
-            return result.office == contest.office &&
-              result.state == contest.state &&
-              result.date == contest.date;
+            return result.office == office &&
+              states.indexOf(result.state) > -1 &&
+              result.date == date;
           });
           if (!fromAP.length) {
             return unmatched.push(contest);
@@ -114,7 +116,7 @@ module.exports = function(grunt) {
           // console.log(`Generating results: ${filename}.json`)
           grunt.file.write(`build/data/${filename}.json`, serialize(stateResults));
 
-          if (contest.office != "H") {
+          if (office != "H" && !stateOnly) {
             var countyResults = subsetResults("county");
             // add county name from the FIPS table
             countyResults.forEach(function(race) {
