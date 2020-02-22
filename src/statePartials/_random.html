@@ -3,7 +3,7 @@
 <% if (row.live) { %>
   live
   <% } %>
-  src="<%= makeFilename(row.race) %>.json"
+  data-src="../data/<%= row.race.filename %>.json"
 >
   No results
 </<%= row.race.element %>>
