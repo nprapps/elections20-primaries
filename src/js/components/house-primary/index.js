@@ -29,6 +29,10 @@ class HousePrimary extends ElementBase {
     return ["src", "href", "live", "party"];
   }
 
+  static get mirroredProps() {
+    return ["src", "href"]
+  }
+
   attributeChangedCallback(attr, old, value) {
     switch (attr) {
       case "src":
