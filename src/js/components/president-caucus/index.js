@@ -1,9 +1,16 @@
+require("../president-results");
+
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
-require("../president-results");
+
+var defaultRefresh = 15;
+
+var mugs = require("../../../../data/mugs.sheet.json");
+var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 var { mapToElements, toggleAttribute } = require("../utils");
 
-class PresidentPrimary extends ElementBase {
+
+class PresidentCaucus extends ElementBase {
   constructor() {
     super();
     this.fetch = new Retriever(this.load);
@@ -63,14 +70,47 @@ class PresidentPrimary extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
     var isTest = !!this.cache.test;
+    var caucusLabel = this.getAttribute("caucus") || "";
 
-    var pairs = mapToElements(elements.results, races, "president-results");
+    // merge races
+    var merged = {};
+    for (var r of races) {
+      if (!merged[r.party]) {
+        merged[r.party] = {};
+      }
+      var merging = merged[r.party];
+      var result = r.results[0];
+      result.candidates.forEach(function(c) {
+        var candidate = merging[c.last] || {
+          last: c.last,
+          first: c.first,
+          mugshot: mugs[c.last] ? mugs[c.last].src : ""
+        };
+        if (r.type == "Caucus") {
+          // assign votes
+          candidate.caucus = c.votes;
+          candidate.percentage = c.percentage || 0;
+          candidate.winner = c.winner;
+        } else {
+          // assign winner, percentage, and caucus delegates
+          candidate.votes = c.votes;
+        }
+        merging[c.last] = candidate;
+      });
+    }
+
+    var caucuses = races.filter(r => r.type == "Caucus");
+
+    var pairs = mapToElements(elements.results, caucuses, "president-results");
     pairs.forEach(function([data, child]) {
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
-      child.render(data);
+      var candidates = Object.keys(merged[data.party]).map(k => merged[data.party][k]);
+      var replacedResults = Object.assign({}, data.results[0], { candidates });
+      var mergedData = Object.assign({}, data, { caucus: caucusLabel, results: [replacedResults] });
+      child.render(mergedData);
     });
   }
 
@@ -83,4 +123,4 @@ class PresidentPrimary extends ElementBase {
   }
 }
 
-PresidentPrimary.define("president-primary");
+PresidentCaucus.define("president-caucus");

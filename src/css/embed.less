@@ -11,7 +11,7 @@
       margin: 22px 0;
     }
 
-    .extra-data-column& {
+    .extra-data-column & {
       @media @desktop {
         margin: 22px 0;
       }
@@ -33,5 +33,33 @@ body.homepage,
 body.social {
   [data-theme-exclude="homepage"] {
     display: none !important;
+  }
+
+}
+
+body.social {
+
+  president-results {
+    .results-header h3 { display: none; }
+    .board .tbody,
+    .board .thead {
+      columns: 1;
+    }
+    .board .sde,
+    .board .votes {
+      display: none;
+    }
+    .board .percentage { padding-right: .9em; }
+    .board .thead .tr.duplicate { display: none; }
+    .metadata-row .show-more { display: none; }
+    .foldable,
+    .row-wrapper.shown:nth-child(5),
+    .row-wrapper.shown:nth-child(6) {
+      display: none !important;
+    }
+  }
+
+  president-primary {
+    .footnote { display: none; }
   }
 }

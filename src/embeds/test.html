@@ -13,16 +13,7 @@
       document.body.classList.add(here.searchParams.get("theme"));
     </script>
 
-    <standard-primary live src="../data/TX_S_3_3_2020.json"></standard-primary>
-
-    <president-primary live src="../data/NC_G_3_3_2020.json"></president-primary>
-
-    <script>
-      var widget = document.querySelector("standard-primary");
-      if (here.searchParams.get("link")) {
-        widget.setAttribute("href", here.searchParams.get("link"));
-      }
-    </script>
+    <president-caucus live src="../data/IA_P_2_3_2020.json"></president-caucus>
 
     <script src="../embed.js" async></script>
     <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>

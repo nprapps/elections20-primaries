@@ -1,15 +1,5 @@
 @import "../../../css/values.less";
 
-president-primary {
-  .footnote {
-    font-family: @sans;
-    font-size: 0.85em;
-    font-style: italic;
-    color: var(--secondary);
-    margin-top: 5px;
-  }
-}
-
 president-results {
   display: block;
   @mug-size: 4em;
@@ -317,39 +307,4 @@ president-results {
       display: none;
     }
   }
-}
-
-// SOCIAL-SPECIFIC VERSION
-body.social {
-  width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 50px;
-
-  president-results {
-    .results-header h3 { display: none; }
-    .board .tbody,
-    .board .thead {
-      columns: 1;
-    }
-    .board .sde,
-    .board .votes {
-      display: none;
-    }
-    .board .percentage { padding-right: .9em; }
-    .board .thead .tr.duplicate { display: none; }
-    .metadata-row .show-more { display: none; }
-    .foldable,
-    .row-wrapper.shown:nth-child(5),
-    .row-wrapper.shown:nth-child(6) {
-      display: none !important;
-    }
-  }
-
-  president-primary {
-    .footnote { display: none; }
-  }
-
-  hr,
-  delegate-total { display: none; }
 }

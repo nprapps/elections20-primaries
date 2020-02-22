@@ -30,6 +30,7 @@ class PresidentResults extends ElementBase {
     elements.headline.innerHTML = `${data.party == "GOP" ? "GOP" : "Democratic"} primary results`;
 
     var result = data.results[0]; // only one for president
+    var { caucus } = data;
     var { candidates, precincts, reporting, reportingPercentage, updated } = result;
     if (updated == this.updated) return;
     this.updated = updated;
@@ -63,17 +64,21 @@ class PresidentResults extends ElementBase {
         votes: 0,
         percentage: 0
       };
+      if (caucus) {
+        others.caucus = 0;
+      }
       candidates.push(others);
     }
     candidates = candidates.filter(function(c) {
       if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
         others.percentage += c.percentage;
         others.votes += c.votes;
+        others.caucus += c.caucus;
         return false;
       }
       return true;
     });
-    if (others.votes == 0) {
+    if (hasVotes && others.votes == 0) {
       candidates = candidates.filter(c => c != others);
     }
 
@@ -89,7 +94,7 @@ class PresidentResults extends ElementBase {
 
     // insert content
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
-    elements.content.innerHTML = tableTemplate({ candidates, highest, fold });
+    elements.content.innerHTML = tableTemplate({ candidates, highest, fold, caucus });
 
     // adjust reporting numbers
     if (reporting > 0 && reportingPercentage < 1) {
@@ -110,7 +115,7 @@ class PresidentResults extends ElementBase {
   }
 
   static get template() {
-    return require("./_shell.html");
+    return require("./_template.html");
   }
 
 }
