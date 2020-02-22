@@ -29,7 +29,7 @@ class ResultsTable extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["href"];
+    return ["href", "headline"];
   }
 
   attributeChangedCallback(attr, was, value) {
@@ -38,6 +38,10 @@ class ResultsTable extends ElementBase {
     switch (attr) {
       case "href":
         elements.resultsLink.href = value || "";
+        break;
+
+      case "headline":
+        elements.headline.innerHTML = value.trim();
         break;
     }
   }
@@ -87,6 +91,7 @@ class ResultsTable extends ElementBase {
     }
     candidates = candidates.filter(function(c) {
       if (
+        hasVotes &&
         c.last != "Other" &&
         c.percentage < 1 &&
         defaultFold.indexOf(c.last) == -1
