@@ -44,6 +44,14 @@ class IowaWidget extends ElementBase {
       case "href":
         resultsLink.href = value;
         break;
+
+      case "live":
+        if (typeof value == "string") {
+          this.fetch.start(value || 15);
+        } else {
+          this.fetch.stop();
+        }
+        break;
     }
   }
 
@@ -72,7 +80,7 @@ class IowaWidget extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["src", "href", "expanded"];
+    return ["src", "href", "expanded", "live"];
   }
 
   static get mirroredProps() {
