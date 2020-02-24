@@ -11,6 +11,10 @@ var mugs = require("../../../../data/mugs.sheet.json");
 
 class PresidentResultsMultiple extends ElementBase {
 
+  connectedCallback() {
+    this.illuminate();
+  }
+
   /*
 
   constructor() {
@@ -115,11 +119,11 @@ class PresidentResultsMultiple extends ElementBase {
     var reportingString = `${reportingPercentage}% of precincts reporting`;
     elements.reporting.innerHTML = reportingString;
   }
+  */
 
   static get template() {
     return require("./_template.html");
   }
-  */
 
 }
 
