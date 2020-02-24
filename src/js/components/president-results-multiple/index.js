@@ -1,15 +1,17 @@
 var ElementBase = require("../elementBase");
-require("./president-results.less");
+require("./president-results-multiple.less");
 var dot = require("../../lib/dot");
 var tableTemplate = dot.compile(require("./_table.html"));
 
 var { formatTime, formatAPDate } = require("../utils");
 
 var mugs = require("../../../../data/mugs.sheet.json");
-var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
-var defaultMax = 6;
+// var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
+// var defaultMax = 6;
 
-class PresidentResults extends ElementBase {
+class PresidentResultsMultiple extends ElementBase {
+
+  /*
 
   constructor() {
     super();
@@ -20,12 +22,13 @@ class PresidentResults extends ElementBase {
   //this should still only happen once
   illuminate() {
     var elements = super.illuminate();
-    elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
+    // elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
     return elements;
   }
 
   render(data) {
     var elements = this.illuminate();
+
 
     elements.headline.innerHTML = `${data.party == "GOP" ? "GOP" : "Democratic"} primary results`;
 
@@ -94,7 +97,8 @@ class PresidentResults extends ElementBase {
 
     // insert content
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
-    elements.content.innerHTML = tableTemplate({ candidates, highest, fold, caucus });
+    // elements.content.innerHTML = tableTemplate({ candidates, highest, fold, caucus });
+    elements.content.innerHTML = tableTemplate({ });
 
     // adjust reporting numbers
     if (reporting > 0 && reportingPercentage < 1) {
@@ -110,14 +114,13 @@ class PresidentResults extends ElementBase {
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
     elements.reporting.innerHTML = reportingString;
-    elements.resultsLink.href = this.getAttribute("href");
-
   }
 
   static get template() {
     return require("./_template.html");
   }
+  */
 
 }
 
-PresidentResults.define("president-results");
+PresidentResultsMultiple.define("president-results-multiple");

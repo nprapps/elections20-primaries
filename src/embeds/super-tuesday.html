@@ -18,12 +18,6 @@
       <hr data-theme-exclude="homepage">
       <delegate-total data-theme-exclude="homepage" src="../data/delegates.json" live></delegate-total>
     </div>
-    <script>
-      var widget = document.querySelector("president-results-multiple");
-      if (here.searchParams.get("link")) {
-        widget.setAttribute("href", here.searchParams.get("link"));
-      }
-    </script>
 
     <script src="super-tuesday.js" async></script>
     <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>
