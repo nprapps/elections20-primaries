@@ -1,5 +1,157 @@
 @import "../../../css/values.less";
 
+@candidate-width: 130px;
+@mug-size: 30px;
+
+president-results-multiple {
+  .gotham();
+  display: block;
+  width: 100%;
+  font-size: var(--font-size);
+
+  &[party="GOP"] {
+    --accent: var(--gop);
+    --accent-fade: var(--gop-fade);
+  }
+
+  &[test]::before {
+    display: block;
+    padding: 8px 16px;
+    margin-bottom: 8px;
+    text-align: center;
+    .knockout();
+    background: black;
+    color: white;
+    border-radius: 20px;
+    content: "TEST DATA";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: .5;
+    z-index: 9999;
+  }
+
+  .board-multiple {
+    color: #333;
+    display: flex;
+    flex-wrap: nowrap;
+    font-size: 0.85em;
+
+    // candidates column
+    .candidates {
+      width: @candidate-width;
+
+      .polls,
+      .state,
+      .dels,
+      .reporting {
+        .knockout-header();
+        color: var(--secondary);
+      }
+
+      .cand {
+        display: flex;
+        align-items: center;
+
+        .mugshot {
+          width: @mug-size;
+          height: @mug-size;
+          display: inline-block;
+          border-radius: 100%;
+          background: var(--shaded);
+          background-size: cover;
+          background-position: center;
+          margin-right: 1em;
+        }
+      }
+    }
+
+    // the "frame" for the results; constricts what's visible
+    .results-wrapper {
+      width: calc(100% - @candidate-width);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    // the actual results, as wide as they need to be
+    .results {
+      display: flex;
+      flex-wrap: nowrap;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .primary {
+      width: 65px;
+      float: left;
+      text-align: center;
+
+      > div {
+        border-left: 1px solid var(--shaded);
+      }
+
+      &.new-zone {
+        > div { border-left-color: #999; }
+        .polls { padding-left: 5px; }
+      }
+    }
+
+    .state {
+      height: 32px;
+      padding: 11px 0 0 0;
+      text-transform: uppercase;
+
+      a {
+        font-weight: bold;
+
+        &:link, &:visited { text-decoration: none; }
+      }
+    }
+
+    // row-specific styling
+    .cand {
+      line-height: calc(@mug-size);
+      border-top: 1px solid var(--shaded);
+
+      &.winner {
+        background-color: var(--accent);
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+
+    .polls {
+      background-color: var(--shaded);
+      color: var(--secondary);
+      font-size: 1em;
+      line-height: 2em;
+    }
+    .results .polls {
+      text-align: left;
+    }
+
+    .dels {
+      height: 22px;
+    }
+    .results .dels {
+      color: var(--secondary);
+      font-size: 0.9em;
+    }
+
+    .reporting {
+      border-top: 1px solid var(--shaded);
+      color: var(--secondary);
+      line-height: 3em;
+    }
+    .results .reporting {
+      font-size: 0.9em;
+      font-style: italic;
+    }
+  }
+}
+
 president-results {
   display: block;
   @mug-size: 4em;
