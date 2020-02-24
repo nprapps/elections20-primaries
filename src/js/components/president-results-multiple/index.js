@@ -11,8 +11,14 @@ var mugs = require("../../../../data/mugs.sheet.json");
 
 class PresidentResultsMultiple extends ElementBase {
 
+  shiftResultsNext(evt) {
+    console.log(evt);
+  }
+
   connectedCallback() {
     this.illuminate();
+
+    this.nextButton.addEventListener("click", shiftResultsNext);
   }
 
   /*
@@ -120,6 +126,9 @@ class PresidentResultsMultiple extends ElementBase {
     elements.reporting.innerHTML = reportingString;
   }
   */
+
+
+
 
   static get template() {
     return require("./_template.html");
