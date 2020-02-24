@@ -114,7 +114,8 @@ class PresidentCaucus extends ElementBase {
       toggleAttribute(child, "test", isTest);
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
-      child.setAttribute("headline", `${data.party == "Dem" ? "Democratic" : "GOP"} caucus results`);
+      var readableParty = data.party == "Dem" ? "Democratic" : data.party;
+      child.setAttribute("headline", `${readableParty} ${data.caucus ? "caucus" : ""} results`);
       child.render(data);
     });
   }
