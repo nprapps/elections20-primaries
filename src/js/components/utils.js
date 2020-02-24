@@ -44,19 +44,19 @@ var groupBy = function(list, key) {
 
 // sort of like d3.data but for data -> elements
 // returns a zipped array of [data, element] pairs
-var mapToElements = function(root, array, element = "div") {
+var mapToElements = function(root, array, element = "div", keyField = "id") {
   var children = Array.from(root.children);
   var binding = new Map();
 
   array.forEach(function(item) {
-    var [child] = children.filter(c => c.dataset.key == item.id);
+    var [child] = children.filter(c => c.dataset.key == item[keyField]);
     if (!child) {
       // create a node and append it
       child =
         typeof element == "function"
           ? element(item)
           : document.createElement(element);
-      child.dataset.key = item.id;
+      child.dataset.key = item[keyField];
       children.push(child);
       root.appendChild(child);
     }
