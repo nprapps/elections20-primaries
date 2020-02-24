@@ -1,7 +1,5 @@
 <president-primary
-  <% if (row.live) { %>
-  live
-  <% } %>
+  data-live-timestamp="<%= row.race.timestamp %>"
   data-control="party"
   data-src="../data/<%= row.race.filename %>.json"
   expanded

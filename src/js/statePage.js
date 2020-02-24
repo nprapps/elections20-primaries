@@ -8,10 +8,37 @@ require("./components/president-primary");
 require("./components/standard-primary");
 require("./components/house-primary");
 
+var now = Date.now();
 var here = new URL(window.location.href);
 if (here.searchParams.has("embedded")) {
   var guest = Sidechain.registerGuest();
 }
+
+// disable future navigation items
+if (!here.searchParams.has("eternal")) {
+  $("[data-timestamp]").forEach(function(element) {
+    var timestamp = element.dataset.timestamp * 1;
+    if (timestamp > Date.now()) {
+      element.setAttribute("disabled", "");
+    }
+  });
+  document.body.addEventListener("click", function(e) {
+    var disabled = e.target.closest("[disabled]");
+    if (disabled) {
+      e.preventDefault();
+    }
+  });
+}
+
+// set recent displays to be live
+$("[data-live-timestamp]").forEach(function(element) {
+  var timestamp = element.dataset.liveTimestamp * 1;
+  // three day window
+  var recently = timestamp + (1000 * 60 * 60 * 24 * 3);
+  if (now < recently && now > timestamp) {
+    element.setAttribute("live", "");
+  }
+});
 
 var modules = $(".module");
 var exactParams = "date office".split(" ");

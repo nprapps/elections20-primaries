@@ -33,10 +33,10 @@ class StandardPrimary extends ElementBase {
         break;
 
       case "live":
-        if (typeof value != "string") {
-          this.fetch.stop();
+        if (typeof value == "string") {
+          this.fetch.start(value || 15);
         } else {
-          this.fetch.start(this.getAttribute("live") || 15);
+          this.fetch.stop();
         }
         break;
 
