@@ -70,7 +70,7 @@ class PresidentCaucus extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
     var isTest = !!this.cache.test;
-    var caucusLabel = this.getAttribute("caucus") || "";
+    var caucusLabel = this.getAttribute("caucus") || this.cache.caucus;
 
     // merge races
     var byParty = groupBy(races, "party");

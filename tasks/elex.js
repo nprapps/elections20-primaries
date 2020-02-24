@@ -107,6 +107,7 @@ module.exports = function(grunt) {
 
           var stateResults = {
             test,
+            caucus: contest.caucus,
             closing: contest.closing,
             chatter: contest.chatter,
             footnote: contest.footnote,
