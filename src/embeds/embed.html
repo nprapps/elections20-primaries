@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <%= t.include("partials/_webfonts.html") %>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../embed.css">
+    <base target="_blank">
+  </head>
+  <body>
+    <script>
+      var here = new URL(window.location);
+      document.body.classList.add(here.searchParams.get("theme"));
+    </script>
+
+    <div class="embed-row">
+      <div class="placeholder"></div>
+      <hr data-theme-exclude="homepage">
+      <delegate-total data-theme-exclude="homepage" src="../data/delegates.json" live></delegate-total>
+    </div>
+
+    <script src="custom.js" async></script>
+    <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>
+  </body>
+</html>
