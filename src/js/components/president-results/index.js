@@ -24,10 +24,22 @@ class PresidentResults extends ElementBase {
     return elements;
   }
 
-  render(data) {
+  static get observedAttributes() {
+    return ["headline"];
+  }
+
+  attributeChangedCallback(attr, was, value) {
     var elements = this.illuminate();
 
-    elements.headline.innerHTML = `${data.party == "GOP" ? "GOP" : "Democratic"} primary results`;
+    switch (attr) {
+      case "headline":
+        elements.headline.innerHTML = value ? value.trim() : "";
+        break;
+    }
+  }
+
+  render(data) {
+    var elements = this.illuminate();
 
     var result = data.results[0]; // only one for president
     var { caucus } = data;

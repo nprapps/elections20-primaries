@@ -102,7 +102,9 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
           tabindex="-1"
         >
           <h2><%= row.office %> - <%= row.date %></h2>
-          <%= t.include(`statePartials/_${row.race.element ? "random" : row.race.office}.html`, { row }) %>
+          <% var partial = row.race.caucus ? "caucus" : row.race.element ? "random" : row.race.office; %>
+          <%= t.include(`statePartials/_${partial}.html`, { row }) %>
+
           <% if (row.race.office != "H") { %>
           <a class="show-counties" <%= makeLink(row, "&counties=true") %>>See county results</a>
           <% } %>

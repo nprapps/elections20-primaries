@@ -5,6 +5,7 @@ var Sidechain = require("@nprapps/sidechain");
 require("./components/iowa-widget");
 require("./components/nevada-widget");
 require("./components/president-primary");
+require("./components/president-caucus");
 require("./components/standard-primary");
 require("./components/house-primary");
 

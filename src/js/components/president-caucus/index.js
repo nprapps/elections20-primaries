@@ -7,7 +7,7 @@ var defaultRefresh = 15;
 
 var mugs = require("../../../../data/mugs.sheet.json");
 var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
-var { mapToElements, toggleAttribute } = require("../utils");
+var { mapToElements, toggleAttribute, groupBy } = require("../utils");
 
 
 class PresidentCaucus extends ElementBase {
@@ -73,33 +73,40 @@ class PresidentCaucus extends ElementBase {
     var caucusLabel = this.getAttribute("caucus") || "";
 
     // merge races
-    var merged = {};
-    for (var r of races) {
-      if (!merged[r.party]) {
-        merged[r.party] = {};
-      }
-      var merging = merged[r.party];
-      var result = r.results[0];
-      result.candidates.forEach(function(c) {
-        var candidate = merging[c.last] || {
-          last: c.last,
-          first: c.first,
-          mugshot: mugs[c.last] ? mugs[c.last].src : ""
-        };
-        if (r.type == "Caucus") {
-          // assign votes
-          candidate.caucus = c.votes;
-          candidate.percentage = c.percentage || 0;
-          candidate.winner = c.winner;
-        } else {
-          // assign winner, percentage, and caucus delegates
-          candidate.votes = c.votes;
-        }
-        merging[c.last] = candidate;
-      });
-    }
+    var byParty = groupBy(races, "party");
 
     var caucuses = races.filter(r => r.type == "Caucus");
+
+    for (var p in byParty) {
+      if (byParty[p].length == 1) continue;
+      var partyRaces = races.filter(r => r.party == p);
+      var merging = {};
+      for (var r of partyRaces) {
+        var result = r.results[0];
+        result.candidates.forEach(function(c) {
+          var candidate = merging[c.last] || {
+            last: c.last,
+            first: c.first,
+            mugshot: mugs[c.last] ? mugs[c.last].src : ""
+          };
+          if (r.type == "Caucus") {
+            // assign votes
+            candidate.caucus = c.votes;
+            candidate.percentage = c.percentage || 0;
+            candidate.winner = c.winner;
+          } else {
+            // assign winner, percentage, and caucus delegates
+            candidate.votes = c.votes;
+          }
+          merging[c.last] = candidate;
+        });
+      }
+      // replace candidates
+      var [caucus] = caucuses.filter(r => r.party == p);
+      var replacement = Object.keys(merging).map(k => merging[k]);
+      caucus.results[0].candidates = replacement;
+      caucus.caucus = caucusLabel;
+    }
 
     var pairs = mapToElements(elements.results, caucuses, "president-results");
     pairs.forEach(function([data, child]) {
@@ -107,10 +114,8 @@ class PresidentCaucus extends ElementBase {
       toggleAttribute(child, "test", isTest);
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
-      var candidates = Object.keys(merged[data.party]).map(k => merged[data.party][k]);
-      var replacedResults = Object.assign({}, data.results[0], { candidates });
-      var mergedData = Object.assign({}, data, { caucus: caucusLabel, results: [replacedResults] });
-      child.render(mergedData);
+      child.setAttribute("headline", `${data.party == "Dem" ? "Democratic" : "GOP"} caucus results`);
+      child.render(data);
     });
   }
 

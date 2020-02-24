@@ -4,7 +4,7 @@
     <div class="tr <%= header %>" role="row" aria-hidden="<%= (header == "duplicate").toString() %>">
       <div role="columnheader" class="th name" colspan=2>Candidate</div>
       <div role="columnheader" class="th percentage">Percent</div>
-      <% if ("caucus" in data) { %>
+      <% if (data.caucus) { %>
       <div role="columnheader" class="th caucus"><%= data.caucus || "Caucus" %></div>
       <% } %>
       <div role="columnheader" class="th votes">Votes</div>
@@ -33,7 +33,7 @@
         <% if (c.caucus) { %>
         <div role="cell" class="td caucus"><%= c.caucus.toLocaleString() %></div>
         <% } %>
-        <div role="cell" class="td votes"><%= c.votes.toLocaleString() %></div>
+        <div role="cell" class="td votes"><%= c.votes ? c.votes.toLocaleString() : "-" %></div>
       </div>
     </div>
   <% }); %>
