@@ -38,6 +38,10 @@ if (!elementMap[race]) {
     tag.setAttribute("href", search.get("link"));
   }
 
+  if (search.has("party")) {
+    tag.setAttribute("party", search.get("party"));
+  }
+
   var row = placeholder.parentElement;
   if (search.has("delegates") && (race == "P" || race == "C")) {
     placeholder.parentElement.replaceChild(tag, placeholder);
