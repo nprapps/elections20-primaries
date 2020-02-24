@@ -1,6 +1,7 @@
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 require("../president-results");
+require("./president-primary.less");
 var { mapToElements, toggleAttribute } = require("../utils");
 
 class PresidentPrimary extends ElementBase {

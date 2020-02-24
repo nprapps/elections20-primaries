@@ -1,4 +1,5 @@
 require("../president-results");
+require("./president-caucus.less");
 
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
