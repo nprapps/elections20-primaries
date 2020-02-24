@@ -14,18 +14,18 @@
     </script>
 
     <div class="embed-row">
-      <results-multiple-condensed party="Dem" live src="../data/super_tuesday.json"></results-multiple-condensed>
+      <president-results-multiple party="Dem" live src="../data/super_tuesday.json"></president-results-multiple>
       <hr data-theme-exclude="homepage">
       <delegate-total data-theme-exclude="homepage" src="../data/delegates.json" live></delegate-total>
     </div>
     <script>
-      var widget = document.querySelector("results-multiple-condensed");
+      var widget = document.querySelector("president-results-multiple");
       if (here.searchParams.get("link")) {
         widget.setAttribute("href", here.searchParams.get("link"));
       }
     </script>
 
-    <script src="new-hampshire.js" async></script>
+    <script src="super-tuesday.js" async></script>
     <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>
   </body>
 </html>
