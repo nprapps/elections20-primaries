@@ -11,7 +11,7 @@ pup.watch(this.getAttribute("src"), 15);
 
 class Retriever {
   constructor(callback) {
-    this.ondata = callback;
+    this.ondata = callback || function() {};
     this.timeout = null;
     this.interval = 15;
     this.etag = null;
@@ -35,11 +35,27 @@ class Retriever {
 
   async fetch() {
     if (!this.url) return;
-    var response = await fetch(this.url, {
-      headers: {
-        "If-None-Match": this.etag
-      }
-    });
+    // cancel current requests
+    if (this.controller) {
+      this.controller.abort();
+      this.controller = null;
+    }
+    // create a new controller for fetch
+    var signal;
+    if ("AbortController" in window) {
+      this.controller = new AbortController();
+      signal = this.controller.signal;
+    }
+    try {
+      var response = await fetch(this.url, {
+        headers: {
+          "If-None-Match": this.etag
+        },
+        signal
+      });
+    } catch (err) {
+      return console.log(`Request for ${this.url} was cancelled`);
+    }
     if (response.status >= 400) {
       return console.log(`Request for ${this.url} failed with ${response.statusText}`);
     }
@@ -52,17 +68,21 @@ class Retriever {
   }
 
   async tick() {
-    await this.fetch();
     this.start();
+    await this.fetch();
   }
 
   start(interval = this.interval) {
-    this.stop();
+    this.stop(true);
     this.interval = interval;
     this.timeout = setTimeout(this.tick, interval * 1000);
   }
 
-  stop() {
+  stop(timerOnly = false) {
+    if (!timerOnly && this.controller) {
+      this.controller.abort();
+      this.controller = null;
+    }
     if (this.timeout) clearTimeout(this.timeout);
   }
 

@@ -39,7 +39,7 @@ if (!elementMap[race]) {
   }
 
   var row = placeholder.parentElement;
-  if (race == "P" || race == "C") {
+  if (search.has("delegates") && (race == "P" || race == "C")) {
     placeholder.parentElement.replaceChild(tag, placeholder);
   } else {
     row.innerHTML = "";
