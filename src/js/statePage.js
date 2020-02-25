@@ -70,6 +70,9 @@ var onHashChange = function(e) {
   for (var [key, val] of search.entries()) {
     params[key] = val;
   }
+  // set CSS hooks on the body
+  exactParams.forEach(p => document.body.dataset[p] = params[p]);
+  booleanParams.forEach(p => document.body.classList.toggle(p, p in params));
   // now filter visible modules by looking for matching data params
   modules.forEach(function(module) {
     var visible = true;

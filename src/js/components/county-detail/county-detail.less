@@ -1,6 +1,10 @@
 @import "../../../css/base.less";
 
 county-detail {
+  .controls {
+    text-align: right;
+  }
+
   .counties {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -9,5 +13,11 @@ county-detail {
     @media @mobile {
       display: block;
     }
+  }
+
+  results-table:not([party]) {
+    padding: 20px;
+    background: var(--shaded);
+    text-align: center;
   }
 }
