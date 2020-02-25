@@ -71,8 +71,13 @@ module.exports = function(grunt) {
 
     states.forEach(function(state) {
       // create a data object with its specific data
+      var officeOrder = ["P", "G", "S", "H"];
       var newestFirst = (a, b) => b.timestamp - a.timestamp;
-      var oldestFirst = (a, b) => a.timestamp - b.timestamp;
+      var oldestFirst = (a, b) => {
+        var diff = a.timestamp - b.timestamp
+        if (diff) return diff;
+        return officeOrder.indexOf(a.office) - officeOrder.indexOf(b.office);
+      };
       var schedule = grunt.data.elex.schedule.filter(r => !r.feedOnly && r.state == state);
 
       var months = "Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.".split(" ");

@@ -60,6 +60,14 @@ var onHashChange = function(e) {
   $(".race-calendar .active").forEach(el => el.classList.remove("active"));
   var hash = window.location.hash.replace("#", "");
   if (!hash) {
+    // show the latest items
+    var [first] = modules;
+    var date = first.dataset.date;
+    modules.forEach(function(module) {
+      if (module.dataset.date == date && !module.dataset.counties) {
+        module.classList.remove("hidden");
+      }
+    })
     lazyLoad();
     return;
   }
