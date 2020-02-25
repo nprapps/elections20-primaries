@@ -48,28 +48,33 @@ var makeOption = (item, suffix = "") => `value="${hashRace(item.race)}${suffix}"
 var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
       %>
-      <select class="mobile-calendar">
-        <% displays.forEach(function(item) { %>
-          <% if (item.parties) { %>
-          <option 
-            value="<%= hashRace(item.race) %>&party=Dem&counties=true"
-            data-timestamp="<%= item.race.timestamp %>">
-            <%= item.office %> - Dem. (<%= item.date %>)
-          </option>
-          <option
-            value="<%= hashRace(item.race) %>&party=GOP&counties=true"
-            data-timestamp="<%= item.race.timestamp %>">
-            <%= item.office %> - GOP (<%= item.date %>)
-          </option>
-          <% } else { %>
-          <option
-            value="<%= hashRace(item.race) %>"
-            data-timestamp="<%= item.race.timestamp %>">
-            <%= item.office %> (<%= item.date %>)
-          </option>
-          <% } %>
-        <% }) %>
-      </select>
+      <div class="mobile-calendar-wrapper">
+        <div class="select-label">SELECT A CONTEST</div>
+        <div class="outer-mobile-calendar">
+          <select class="mobile-calendar">
+            <% displays.forEach(function(item) { %>
+              <% if (item.parties) { %>
+              <option 
+                value="<%= hashRace(item.race) %>&party=Dem&counties=true"
+                data-timestamp="<%= item.race.timestamp %>">
+                <%= item.office %> - Dem. (<%= item.date %>)
+              </option>
+              <option
+                value="<%= hashRace(item.race) %>&party=GOP&counties=true"
+                data-timestamp="<%= item.race.timestamp %>">
+                <%= item.office %> - GOP (<%= item.date %>)
+              </option>
+              <% } else { %>
+              <option
+                value="<%= hashRace(item.race) %>"
+                data-timestamp="<%= item.race.timestamp %>">
+                <%= item.office %> (<%= item.date %>)
+              </option>
+              <% } %>
+            <% }) %>
+          </select>
+        </div>
+      </div>
 
       <nav class="race-calendar">
         <ul>

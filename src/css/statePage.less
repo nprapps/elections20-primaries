@@ -20,7 +20,11 @@ main {
 }
 
 header {
-  padding-bottom: 24px;
+  padding-bottom: 20px;
+
+  @media @mobile {
+    padding-bottom: 16px;
+  }
 
   .state-icon {
     float: left;
@@ -51,13 +55,35 @@ header {
   }
 }
 
-.mobile-calendar {
+.mobile-calendar-wrapper{
   display: none;
-  padding: 8px 4px;
 
   @media @mobile {
     display: block;
   }
+}
+
+.select-label {
+  .knockout();
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+  margin-right: 6px;
+  display: inline-block;
+}
+
+.outer-mobile-calendar {
+  padding: 6px 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.mobile-calendar {
+  border: none;
+  font-size: 12px;
+  font-family: @gotham;
+  background: transparent;
+  width: 100%;
 }
 
 nav.race-calendar {
