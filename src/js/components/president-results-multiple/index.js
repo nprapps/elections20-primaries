@@ -7,7 +7,7 @@ var candidateListTemplate = dot.compile(require("./_candidate_list.html"));
 var resultTemplate = dot.compile(require("./_result.html"));
 var headerTemplate = dot.compile(require("./_resultHeader.html"));
 
-var { formatTime, formatAPDate, groupBy } = require("../utils");
+var { formatTime, formatAPDate, groupBy, toggleAttribute } = require("../utils");
 
 var mugs = require("../../../../data/mugs.sheet.json");
 
@@ -60,44 +60,30 @@ class PresidentResultsMultiple extends ElementBase {
   static get boundMethods() {
     return [
       "load",
-      "shiftResultsNext",
-      "shiftResultsPrevious",
       "checkIfOverflow"
     ]
   }
 
-  shiftResultsNext(e) {
+  // direction is -1 for right, 1 for left
+  shiftResults(direction = 1) {
     // console.log("next", e);
     var elements = this.illuminate();
     var resultLeft = elements.results.offsetLeft;
     var resultWidth = elements.results.offsetWidth;
     var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
-    var shiftIncrement = resultWrapperWidth - 50;
+    var shiftIncrement = resultWrapperWidth * .7 * direction;
+
+    var appliedShift = resultLeft + shiftIncrement;
+    var remaining = resultWidth + appliedShift;
 
     // shift only if there's still something to see on the next "page"
-    if ((resultWidth + resultLeft - shiftIncrement) > 10) {
-      elements.results.style.left = (resultLeft - shiftIncrement) + 'px';
-    } else {
-      return;
+    if (remaining < resultWrapperWidth) {
+      appliedShift = resultWrapperWidth - 50 - resultWidth;
     }
-  }
-
-  shiftResultsPrevious(e) {
-    // console.log("previous", e);
-    var elements = this.illuminate();
-    var resultLeft = elements.results.offsetLeft;
-    var resultWidth = elements.results.offsetWidth;
-    var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
-    var shiftIncrement = resultWrapperWidth - 50;
-
-    // shift only if there's still something to see on the previous "page"
-    if (resultLeft == 0) {
-      return;
-    } else if ((resultLeft + shiftIncrement) < 0) {
-      elements.results.style.left = (resultLeft + shiftIncrement) + 'px';
-    } else {
-      elements.results.style.left = '0px';
+    if (appliedShift > 0) {
+      appliedShift = 0;
     }
+    elements.results.style.left = appliedShift + 'px';
   }
 
   checkIfOverflow() {
@@ -106,13 +92,7 @@ class PresidentResultsMultiple extends ElementBase {
     var table = elements.resultsWrapper.querySelector(".results");
     var resultWidth = table.offsetWidth;
     var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
-    if (resultWrapperWidth < resultWidth) {
-      this.setAttribute("overflow", "");
-      console.log("overflow");
-    } else {
-      this.removeAttribute("overflow");
-      console.log("no overflow");
-    }
+    toggleAttribute(this, "overflow", resultWrapperWidth < resultWidth);
   }
 
   connectedCallback() {
@@ -140,8 +120,8 @@ class PresidentResultsMultiple extends ElementBase {
     // call the inherited illuminate function
     var elements = super.illuminate();
     // add event listeners (this will only run once)
-    elements.nextButton.addEventListener("click", this.shiftResultsNext);
-    elements.backButton.addEventListener("click", this.shiftResultsPrevious);
+    elements.nextButton.addEventListener("click", () => this.shiftResults(-1));
+    elements.backButton.addEventListener("click", () => this.shiftResults(1));
     window.addEventListener("resize", this.checkIfOverflow);
     return elements;
   }
