@@ -106,7 +106,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
           data-date="<%= row.race.date %>"
           tabindex="-1"
         >
-          <h2><%= row.office %> - <%= row.date %></h2>
+          <h2><%= row.office %></h2>
 
           <% if (row.race.office != "H") { %>
           <div class="show-counties">
