@@ -13,18 +13,14 @@ main {
 
 [disabled] a {
   &, &:hover, &:focus {
-    color: #666;
+    color: var(--secondary) !important;
     text-decoration: none;
     cursor: default;
   }
 }
 
 header {
-  padding-bottom: 20px;
-
-  @media @mobile {
-    padding-bottom: 16px;
-  }
+  padding-bottom: 16px;
 
   .state-icon {
     float: left;
@@ -109,8 +105,9 @@ nav.race-calendar {
 
   li {
     display: block;
-    padding: 4px 20px;
+    padding: 10px 20px;
     border-right: 2px solid @border-color;
+    border-top: 2px solid transparent;
     line-height: 1.5em;
 
     &:last-child {
@@ -121,7 +118,7 @@ nav.race-calendar {
   .office {
     display: block;
     font-weight: bold;
-    color: var(--foreground);
+    /*color: var(--foreground);*/
   }
 
   .parties {
@@ -135,8 +132,7 @@ nav.race-calendar {
   }
 
   .active {
-    background: #F8F8F8;
-    border-bottom: 2px solid #CCC;
+    border-top: 2px solid #CCC;
   }
 }
 
