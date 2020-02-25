@@ -69,7 +69,7 @@ var onHashChange = function(e) {
     if (!latest) return lazyLoad();
     var date = latest.dataset.date;
     modules.forEach(function(module) {
-      module.classList.toggle("hidden", module.dataset.date != date && module.dataset.counties);
+      module.classList.toggle("hidden", !!(module.dataset.date != date || module.dataset.counties));
     })
     lazyLoad();
     return;
