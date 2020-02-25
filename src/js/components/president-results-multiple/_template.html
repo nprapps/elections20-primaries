@@ -7,7 +7,7 @@
 <div data-as="content" class="content">
 
   <div class="board-multiple">
-    <div class="candidates"> <!-- not for screenreader? -->
+    <div class="candidates" aria-hidden="true">
       <div class="polls">Final polls close</div>
       <div class="state">State</div>
       <div class="dels">Delegates</div>
@@ -18,106 +18,14 @@
     </div>
 
     <div class="results-wrapper" data-as="resultsWrapper">
-      <div class="results" data-as="results">
-        <div class="primary vt new-zone" data-as="VT">
-          <div class="polls"><span class="sr-only">Final polls close at</span> 7 p.m. ET</div>
-          <div class="state"><a href="../states/VT.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Vt.</a></div>
-          <div class="dels">16 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
+      <!-- this table actually rotates 90deg in display order, it's a little weird -->
+      <table class="results-table" role="table">
+        <thead class="sr-only" role="rowgroup" data-as="resultsHeader">
+        </thead>
 
-        <div class="primary va" data-as="VA">
-          <div class="polls">&nbsp;</div>
-          <div class="state"><a href="../states/VA.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Va.</a></div>
-          <div class="dels">99 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
+        <tbody class="results" role="rowgroup" data-as="results"></tbody>
 
-        <div class="primary nc new-zone" data-as="NC">
-          <div class="polls"><span class="sr-only">Final polls close at</span> 7:30</div>
-          <div class="state"><a href="../states/NC.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">N.C.</a></div>
-          <div class="dels">110 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary al new-zone" data-as="AL">
-          <div class="polls"><span class="sr-only">Final polls close at</span> 8:00</div>
-          <div class="state"><a href="../states/AL.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Ala.</a></div>
-          <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary me" data-as="ME">
-          <div class="polls">&nbsp;</div>
-          <div class="state"><a href="../states/ME.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Maine</a></div>
-          <div class="dels">24 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary ma" data-as="MA">
-          <div class="polls">&nbsp;</div>
-          <div class="state"><a href="../states/MA.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Mass.</a></div>
-          <div class="dels">91 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary ok" data-as="OK">
-          <div class="polls">&nbsp;</div>
-          <div class="state"><a href="../states/OK.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Okla.</a></div>
-          <div class="dels">37 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary tn" data-as="TN">
-          <div class="polls">&nbsp;</div>
-          <div class="state"><a href="../states/TN.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Tenn.</a></div>
-          <div class="dels">64 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary ar new-zone" data-as="AR">
-          <div class="polls"><span class="sr-only">Final polls close at</span> 8:30</div>
-          <div class="state"><a href="../states/AR.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Ark.</a></div>
-          <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary co new-zone" data-as="CO">
-          <div class="polls"><span class="sr-only">Final polls close at</span> 9:00</div>
-          <div class="state"><a href="../states/CO.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Colo.</a></div>
-          <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary mn" data-as="MN">
-          <div class="polls">&nbsp;</div>
-          <div class="state"><a href="../states/MN.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Minn.</a></div>
-          <div class="dels">64 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary tx" data-as="TX">
-          <div class="polls">&nbsp;</div>
-          <div class="state"><a href="../states/TX.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Texas</a></div>
-          <div class="dels">64 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary ut new-zone" data-as="UT">
-          <div class="polls"><span class="sr-only">Final polls close at</span> 10:00</div>
-          <div class="state"><a href="../states/UT.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Utah</a></div>
-          <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-        <div class="primary ca new-zone" data-as="CA">
-          <div class="polls"><span class="sr-only">Final polls close at</span> 11:00</div>
-          <div class="state"><a href="../states/CA.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Calif.</a></div>
-          <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="result-info"></div>
-        </div>
-
-      </div>
+      </table>
     </div>
   </div>
 

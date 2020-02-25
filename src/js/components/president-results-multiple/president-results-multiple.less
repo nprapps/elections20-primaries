@@ -64,6 +64,7 @@ president-results-multiple {
       .cand {
         display: flex;
         align-items: center;
+        line-height: calc(@mug-size);
 
         .mugshot {
           width: @mug-size;
@@ -85,6 +86,16 @@ president-results-multiple {
       position: relative;
     }
 
+    // override table semantics/styles
+    .results-table {
+      display: block;
+
+      tr, th, td {
+        display: block;
+        padding: 0;
+      }
+    }
+
     // the actual results, as wide as they need to be
     .results {
       display: flex;
@@ -97,24 +108,23 @@ president-results-multiple {
 
     .primary {
       width: @primary-width;
-      float: left;
       text-align: center;
 
       @media @mobile-above {
         width: @primary-width-desktop;
       }
 
-      > div {
+      > td {
         border-left: 1px solid var(--divider-minor);
       }
 
       &.new-zone {
-        > div {
+        > td {
           border-left-color: var(--divider);
         }
 
         &:first-child {
-          > div { border-left: none; }
+          > td { border-left: none; }
         }
 
         .polls { padding-left: 5px; }
@@ -139,7 +149,7 @@ president-results-multiple {
     // row-specific styling
     .cand {
       line-height: calc(@mug-size);
-      padding: 1px 0;
+      padding: 1px 0 !important;
 
       + .cand {
         border-top: 1px solid var(--divider-minor);
@@ -159,7 +169,7 @@ president-results-multiple {
       line-height: 2em;
     }
     .results .polls { text-align: left; }
-    .results :not(.new-zone) .polls { border-left: none; }
+    .results .primary:not(.new-zone) .polls { border-left: none; }
 
     .dels {
       height: 22px;

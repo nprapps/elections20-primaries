@@ -6,42 +6,47 @@
       .replace(/\-\-+/g, "-")
       .replace(/^-+|[^\w\-]|-+$/g, "");
   };
+
+  var { activeMugs, schedule, stateRaces } = data;
 %>
 
-<%
-  var reportingPercentage = data.results.reportingPercentage;
-  if (data.results.reporting > 0 && data.results.reportingPercentage < 1) {
-    reportingPercentage = "<1";
-  } else if (data.results.reporting < data.results.precincts && data.results.reportingPercentage > 99) {
-    reportingPercentage = ">99";
-  } else {
-    reportingPercentage = data.results.reportingPercentage.toFixed(0);
-  }
+<% Object.keys(schedule).forEach(function(closing) { %>
+  <% 
+  var races = schedule[closing];
+  races.forEach(function(r, i) { 
+    var race = stateRaces[r.state];
+  %>
+  <!-- one "row" per state -->
+  <tr class="primary <%= classify(r.state) %> <%= i ? "same-zone" : "new-zone" %>" role="row">
+    <td role="cell" class="header">
+      <div class="polls" aria-hidden="true">
+        <% if (!i) { %>
+        <%= closing %>
+        <% }  else { %>
+        &nbsp;
+        <% } %>
+      </div>
+      <div class="state">
+        <a
+          href="../states/<%= r.state %>.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true"
+          aria-label="See full results for <%= r.state %>">
+          <%= r.ap %>    
+        </a>
+      </div>
+      <div class="dels"><%= r.delegates %> <span class="sr-only">delegates</span></div>
+    </td>
 
-  for (c in data.activeMugs) {
-    var winner = false;
-    var votePct = "-";
+    <% Object.keys(activeMugs).forEach(function(name) { %>
+    <% var candidate = race.results.byName[name]; %>
+    <td role="cell" class="cand <%= classify(name) %> <% if (candidate.winner) { %> winner <% } %>">
+      <span class="value"><%= candidate.percentage.toFixed(1) %>%</span>
+    </td>
+    <% }); %>
 
-    data.results.candidates.forEach(function(result) {
-      if (result.last == c) {
-        if (data.results.total == 0) {
-          votePct == "-";
-        } else {
-          votePct = result.percentage;
-        }
-        if (typeof result.winner != "undefined") {
-          winner = result.winner;
-        }
-      }
-    });
-%>
-  <div class="cand <%= classify(c) %> <% if (winner) { %> winner <% } %>">
-    <span class="sr-only"><%= c %>:</span>
-    <span class="value"><%= votePct.toFixed(1) %>%</span>
-  </div>
-<% } %>
-
-<div class="reporting">
-  <span class="value"><%= reportingPercentage %>%</span>
-  <span class="sr-only">of precincts reporting</span>
-</div>
+    <td class="reporting" role="cell">
+      <span class="value"><%= race.results.reportingPercentage %>%</span>
+      <span class="sr-only">of precincts reporting</span>
+    </td>
+  </tr>
+  <% }); %>
+<% }); %>

@@ -5,10 +5,45 @@ require("./president-results-multiple.less");
 var dot = require("../../lib/dot");
 var candidateListTemplate = dot.compile(require("./_candidate_list.html"));
 var resultTemplate = dot.compile(require("./_result.html"));
+var headerTemplate = dot.compile(require("./_resultHeader.html"));
 
-var { formatTime, formatAPDate } = require("../utils");
+var { formatTime, formatAPDate, groupBy } = require("../utils");
 
 var mugs = require("../../../../data/mugs.sheet.json");
+
+// return a fresh object each time so we can mutate it
+var getSchedule = function() {
+  return {
+    "7 p.m. ET": [
+      { state: "VT", ap: "Vt.", delegates: 16 },
+      { state: "VA", ap: "Va.", delegates: 99 }
+    ],
+    "7:30": [
+      { state: "NC", ap: "N.C.", delegates: 110 }
+    ],
+    "8:00": [
+      { state: "AL", ap: "Ala.", delegates: 52 },
+      { state: "MN", ap: "Maine", delegates: 24 },
+      { state: "MA", ap: "Mass.", delegates: 91 },
+      { state: "OK", ap: "Okla.", delegates: 37 },
+      { state: "TN", ap: "Tenn.", delegates: 64 }
+    ],
+    "8:30": [
+      { state: "AR", ap: "Ark.", delegates: 52 }
+    ],
+    "9:00": [
+      { state: "CO", ap: "Colo.", delegates: 52 },
+      { state: "MN", ap: "Minn.", delegates: 64 },
+      { state: "TX", ap: "Texas", delegates: 64 }
+    ],
+    "10:00": [
+      { state: "UT", ap: "Utah", delegates: 52 }
+    ],
+    "11:00": [
+      { state: "CA", ap: "Calif.", delegates: 52 }
+    ]
+  };
+};
 
 class PresidentResultsMultiple extends ElementBase {
 
@@ -68,7 +103,9 @@ class PresidentResultsMultiple extends ElementBase {
   checkIfOverflow() {
     // show/hide pagination if necessary
     var elements = this.illuminate();
-    var resultWidth = elements.results.offsetWidth;
+    var table = elements.resultsWrapper.querySelector(".results");
+    var resultWidth = table.offsetWidth;
+    console.log(table, table.offsetWidth);
     var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
     if (resultWrapperWidth < resultWidth) {
       this.setAttribute("overflow", "");
@@ -111,41 +148,64 @@ class PresidentResultsMultiple extends ElementBase {
   }
 
   load(data) {
+    
+    var elements = this.illuminate();
+
     this.toggleAttribute("test", !!data.test);
 
+    var { races } = data;
+    // filter to democratic races only
     var party = this.getAttribute("party");
+    races = races.filter(d => d.party == party);
+    // lookup table for races by state
+    var stateRaces = {};
+    // preprocess races for various metrics
+    races.forEach(function(r) {
+      // only one reporting unit, so simplify the structure
+      r.results = r.results[0];
+      var { reporting, reportingPercentage, precincts } = r.results;
+      if (reporting > 0 && reportingPercentage < 1) {
+        reportingPercentage = "<1";
+      } else if (reporting < precincts && reportingPercentage > 99) {
+        reportingPercentage = ">99";
+      } else {
+        reportingPercentage = reportingPercentage.toFixed(0);
+      }
+      r.results.reportingPercentage = reportingPercentage;
+      var byName = {};
+      r.results.candidates.forEach(c => byName[c.last] = c);
+      r.results.byName = byName;
+      stateRaces[r.state] = r;
+    });
+
+    var latest = new Date(Math.max(...races.map(r => r.results.updated)));
+
+    var updateString = `${formatAPDate(latest)} at ${formatTime(latest)}`;
+    elements.updated.innerHTML = updateString;
 
     // filter mugs to active candidates from the active party
-    var activeMugs = [];
+    var activeMugs = {};
     for (const cand in mugs) {
       if (mugs[cand].party == party && mugs[cand].active) {
         activeMugs[cand] = mugs[cand];
       }
     }
 
-    // filter to democratic races only
-    var racesShown = data.races.filter(function(d) {
-      return d.party == party;
-    });
-
-    // now we can run templating here, as well as update static elements from illuminate
-    var elements = this.illuminate();
-    console.log(elements);
-
-    elements.updated.innerHTML = "UPDATED"; // TODO: FIGURE OUT MOST RECENT UPDATE TIME FROM THIS BATCH OF RESULTS
-
     elements.candidateList.innerHTML = candidateListTemplate({
       activeMugs
     });
-    racesShown.forEach(function(race) {
-      var s = race.state;
-      var results = race.results[0];
 
-      elements[s].querySelector(".result-info").innerHTML = resultTemplate({
-        activeMugs,
-        results
-      })
-    })
+    var schedule = getSchedule();
+
+    // template!
+    elements.resultsHeader.innerHTML = headerTemplate({ activeMugs });
+    elements.results.innerHTML = resultTemplate({
+      activeMugs,
+      schedule,
+      stateRaces
+    });
+
+    this.checkIfOverflow();
 
   }
 
