@@ -13,7 +13,7 @@ main {
 
 [disabled] a {
   &, &:hover, &:focus {
-    color: inherit;
+    color: #666;
     text-decoration: none;
     cursor: default;
   }
@@ -34,15 +34,20 @@ header {
     margin: 0;
     text-transform: uppercase;
     .knockout();
-    color: #888;
+    color: var(--secondary);
     font-size: .8rem;
+    letter-spacing: 0.05em;
   }
 
   h1 {
     margin: 0;
     font-size: 2rem;
-    color: black;
+    color: #333;
     font-weight: bold;
+
+    @media @mobile {
+      font-size: 1.8rem;
+    }
   }
 }
 
@@ -57,11 +62,14 @@ header {
 
 nav.race-calendar {
   @border-color: #EEE;
-  .knockout();
-  color: #888;
+  .gotham();
 
   @media @mobile {
     display: none;
+  }
+
+  a {
+    text-decoration: none;
   }
 
   ul {
@@ -77,10 +85,7 @@ nav.race-calendar {
     display: block;
     padding: 4px 20px;
     border-right: 2px solid @border-color;
-
-    &:first-child {
-      padding-left: 0;
-    }
+    line-height: 1.5em;
 
     &:last-child {
       border-right: none;
@@ -100,12 +105,19 @@ nav.race-calendar {
   .date {
     display: block;
     color: #AAA;
+    font-size: 12px;
   }
 
   .active {
     background: #F8F8F8;
     border-bottom: 2px solid #CCC;
   }
+}
+
+.chatter {
+  font-family: @serif;
+  font-size: 16px;
+  line-height: 1.5em;
 }
 
 h3.latest-results {
@@ -127,6 +139,7 @@ hr {
   h2 {
     border-bottom: 2px solid #EEE;
     padding-bottom: 8px;
+    font-family: @gotham;
   }
 
   &.hidden {
