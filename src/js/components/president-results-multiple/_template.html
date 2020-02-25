@@ -3,256 +3,132 @@
   <span data-as="reporting" class="reporting"></span>
 </div>
 <div class="chatter" data-as="chatter"></div>
+
 <div data-as="content" class="content">
 
-<!-- MOVE THIS TO _TABLE.HTML WHEN READY -->
   <div class="board-multiple">
     <div class="candidates"> <!-- not for screenreader? -->
       <div class="polls">Final polls close</div>
       <div class="state">State</div>
       <div class="dels">Delegates</div>
-      <div class="cand biden">
-        <div class="mugshot" style="background-image: url(https://apps.npr.org/dailygraphics/graphics/prez-candidates-jan-list-20190116/assets/joe_biden.png);"></div>
-        <span class="name">Biden</span>
-      </div>
-      <div class="cand bloomberg">
-        <div class="mugshot" style="background-image: url(https://apps.npr.org/dailygraphics/graphics/prez-candidates-jan-list-20190116/assets/michael_bloomberg.png);"></div>
-        <span class="name">Bloomberg</span>
-      </div>
-      <div class="cand buttigieg">[ img ] Buttigieg</div>
-      <div class="cand gabbard">[ img ] Gabbard</div>
-      <div class="cand klobuchar">[ img ] Klobuchar</div>
-      <div class="cand sanders">[ img ] Sanders</div>
-      <div class="cand steyer">[ img ] Steyer</div>
-      <div class="cand warren">[ img ] Warren</div>
+
+      <div class="candidate-list" data-as="candidateList"></div>
+
       <div class="reporting">% reporting</div>
     </div>
 
     <div class="results-wrapper" data-as="resultsWrapper">
       <div class="results" data-as="results">
-        <div class="primary vt new-zone">
+        <div class="primary vt new-zone" data-as="VT">
           <div class="polls"><span class="sr-only">Final polls close at</span> 7 p.m. ET</div>
-          <div class="state"><a href="link-to-state-page">Vt.</a></div>
+          <div class="state"><a href="../states/VT.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Vt.</a></div>
           <div class="dels">16 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders winner"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary va">
+        <div class="primary va" data-as="VA">
           <div class="polls">&nbsp;</div>
-          <div class="state"><a href="link-to-state-page">Va.</a></div>
+          <div class="state"><a href="../states/VA.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Va.</a></div>
           <div class="dels">99 <span class="sr-only">delegates</span></div>
-          <div class="cand biden winner"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary nc new-zone">
+        <div class="primary nc new-zone" data-as="NC">
           <div class="polls"><span class="sr-only">Final polls close at</span> 7:30</div>
-          <div class="state"><a href="link-to-state-page">N.C.</a></div>
+          <div class="state"><a href="../states/NC.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">N.C.</a></div>
           <div class="dels">110 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary ala new-zone">
+        <div class="primary al new-zone" data-as="AL">
           <div class="polls"><span class="sr-only">Final polls close at</span> 8:00</div>
-          <div class="state"><a href="link-to-state-page">Ala.</a></div>
+          <div class="state"><a href="../states/AL.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Ala.</a></div>
           <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary maine">
+        <div class="primary me" data-as="ME">
           <div class="polls">&nbsp;</div>
-          <div class="state"><a href="link-to-state-page">Maine</a></div>
+          <div class="state"><a href="../states/ME.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Maine</a></div>
           <div class="dels">24 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary mass">
+        <div class="primary ma" data-as="MA">
           <div class="polls">&nbsp;</div>
-          <div class="state"><a href="link-to-state-page">Mass.</a></div>
+          <div class="state"><a href="../states/MA.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Mass.</a></div>
           <div class="dels">91 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary okla">
+        <div class="primary ok" data-as="OK">
           <div class="polls">&nbsp;</div>
-          <div class="state"><a href="link-to-state-page">Okla.</a></div>
+          <div class="state"><a href="../states/OK.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Okla.</a></div>
           <div class="dels">37 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary tenn">
+        <div class="primary tn" data-as="TN">
           <div class="polls">&nbsp;</div>
-          <div class="state"><a href="link-to-state-page">Tenn.</a></div>
+          <div class="state"><a href="../states/TN.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Tenn.</a></div>
           <div class="dels">64 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary ark new-zone">
+        <div class="primary ar new-zone" data-as="AR">
           <div class="polls"><span class="sr-only">Final polls close at</span> 8:30</div>
-          <div class="state"><a href="link-to-state-page">Ark.</a></div>
+          <div class="state"><a href="../states/AR.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Ark.</a></div>
           <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> -</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> -</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> -</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> -</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> -</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> -</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> -</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> -</div>
-          <div class="reporting">0% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary colo new-zone">
+        <div class="primary co new-zone" data-as="CO">
           <div class="polls"><span class="sr-only">Final polls close at</span> 9:00</div>
-          <div class="state"><a href="link-to-state-page">Colo.</a></div>
+          <div class="state"><a href="../states/CO.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Colo.</a></div>
           <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> -</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> -</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> -</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> -</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> -</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> -</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> -</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> -</div>
-          <div class="reporting">0% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary minn">
+        <div class="primary mn" data-as="MN">
           <div class="polls">&nbsp;</div>
-          <div class="state"><a href="link-to-state-page">Minn.</a></div>
+          <div class="state"><a href="../states/MN.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Minn.</a></div>
           <div class="dels">64 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> -</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> -</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> -</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> -</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> -</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> -</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> -</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> -</div>
-          <div class="reporting">0% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary texas">
+        <div class="primary tx" data-as="TX">
           <div class="polls">&nbsp;</div>
-          <div class="state"><a href="link-to-state-page">Texas</a></div>
+          <div class="state"><a href="../states/TX.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Texas</a></div>
           <div class="dels">64 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> 10%</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> 10%</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> 10%</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> 10%</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> 10%</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> 10%</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> 10%</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> 10%</div>
-          <div class="reporting">10% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary utah new-zone">
+        <div class="primary ut new-zone" data-as="UT">
           <div class="polls"><span class="sr-only">Final polls close at</span> 10:00</div>
-          <div class="state"><a href="link-to-state-page">Utah</a></div>
+          <div class="state"><a href="../states/UT.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Utah</a></div>
           <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> -</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> -</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> -</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> -</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> -</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> -</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> -</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> -</div>
-          <div class="reporting">0% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
-        <div class="primary calif new-zone">
+        <div class="primary ca new-zone" data-as="CA">
           <div class="polls"><span class="sr-only">Final polls close at</span> 11:00</div>
-          <div class="state"><a href="link-to-state-page">Calif.</a></div>
+          <div class="state"><a href="../states/CA.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true" title="See detailed results">Calif.</a></div>
           <div class="dels">52 <span class="sr-only">delegates</span></div>
-          <div class="cand biden"><span class="sr-only">Biden:</span> -</div>
-          <div class="cand bloomberg"><span class="sr-only">Bloomberg:</span> -</div>
-          <div class="cand buttigieg"><span class="sr-only">Buttigieg:</span> -</div>
-          <div class="cand gabbard"><span class="sr-only">Gabbard:</span> -</div>
-          <div class="cand klobuchar"><span class="sr-only">Klobuchar:</span> -</div>
-          <div class="cand sanders"><span class="sr-only">Sanders:</span> -</div>
-          <div class="cand steyer"><span class="sr-only">Steyer:</span> -</div>
-          <div class="cand warren"><span class="sr-only">Warren:</span> -</div>
-          <div class="reporting">0% <span class="sr-only">of precincts reporting</span></div>
+          <div class="result-info"></div>
         </div>
 
       </div>
     </div>
   </div>
 
-  <div class="more-results" data-as="overflowButtons">
-    <button data-as="backButton">&lsaquo; Back</button>
-    <span class="prompt">More Results</span>
-    <button data-as="nextButton">Next &rsaquo;</button>
-  </div>
-<!-- END MOVE TO _TABLE.HTML -->
-
-
 </div>
+
+<div class="more-results" data-as="overflowButtons">
+  <button data-as="backButton">&lsaquo; Back</button>
+  <span class="prompt">More Results</span>
+  <button data-as="nextButton">Next &rsaquo;</button>
+</div>
+
 <div class="metadata-row">
   <div class="text">
     Source: AP (<span data-as="updated" class="updated"></span>)

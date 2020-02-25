@@ -3,7 +3,8 @@ var Retriever = require("../retriever");
 require("./president-results-multiple.less");
 
 var dot = require("../../lib/dot");
-var tableTemplate = dot.compile(require("./_table.html"));
+var candidateListTemplate = dot.compile(require("./_candidate_list.html"));
+var resultTemplate = dot.compile(require("./_result.html"));
 
 var { formatTime, formatAPDate } = require("../utils");
 
@@ -39,7 +40,7 @@ class PresidentResultsMultiple extends ElementBase {
     var shiftIncrement = resultWrapperWidth - 50;
 
     // shift only if there's still something to see on the next "page"
-    if ((resultWidth + resultLeft - shiftIncrement) > 5) {
+    if ((resultWidth + resultLeft - shiftIncrement) > 10) {
       elements.results.style.left = (resultLeft - shiftIncrement) + 'px';
     } else {
       return;
@@ -65,18 +66,16 @@ class PresidentResultsMultiple extends ElementBase {
   }
 
   checkIfOverflow() {
-    console.log("checkIfOverflow");
-
     // show/hide pagination if necessary
     var elements = this.illuminate();
     var resultWidth = elements.results.offsetWidth;
     var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
     if (resultWrapperWidth < resultWidth) {
-      elements.resultsWrapper.classList.add("overflow");
-      elements.overflowButtons.classList.add("overflow");
+      this.setAttribute("overflow", "");
+      console.log("overflow");
     } else {
-      elements.resultsWrapper.classList.remove("overflow");
-      elements.overflowButtons.classList.remove("overflow");
+      this.removeAttribute("overflow");
+      console.log("no overflow");
     }
   }
 
@@ -84,11 +83,13 @@ class PresidentResultsMultiple extends ElementBase {
     // we can illuminate in connected to template
     // but we'll more likely call it when we get data in load();
     this.illuminate();
+
+    this.checkIfOverflow();
   }
 
   // attributes will only trigger the callback if they're observed
   static get observedAttributes() {
-    return ["src"];
+    return [ "src", "party" ];
   }
 
   attributeChangedCallback(attr, was, value) {
@@ -105,23 +106,47 @@ class PresidentResultsMultiple extends ElementBase {
     // add event listeners (this will only run once)
     elements.nextButton.addEventListener("click", this.shiftResultsNext);
     elements.backButton.addEventListener("click", this.shiftResultsPrevious);
-
     window.addEventListener("resize", this.checkIfOverflow);
-    // checkIfOverflow(); <-- TODO: how can i run this onload?
-
     return elements;
   }
 
   load(data) {
+    this.toggleAttribute("test", !!data.test);
+
+    var party = this.getAttribute("party");
+
+    // filter mugs to active candidates from the active party
+    var activeMugs = [];
+    for (const cand in mugs) {
+      if (mugs[cand].party == party && mugs[cand].active) {
+        activeMugs[cand] = mugs[cand];
+      }
+    }
+
     // filter to democratic races only
-    var dataDemRaces = data.races.filter(function(d,i) {
-      return d.party == "Dem";
+    var racesShown = data.races.filter(function(d) {
+      return d.party == party;
     });
 
     // now we can run templating here, as well as update static elements from illuminate
     var elements = this.illuminate();
     console.log(elements);
-    elements.updated.innerHTML = "UPDATED";
+
+    elements.updated.innerHTML = "UPDATED"; // TODO: FIGURE OUT MOST RECENT UPDATE TIME FROM THIS BATCH OF RESULTS
+
+    elements.candidateList.innerHTML = candidateListTemplate({
+      activeMugs
+    });
+    racesShown.forEach(function(race) {
+      var s = race.state;
+      var results = race.results[0];
+
+      elements[s].querySelector(".result-info").innerHTML = resultTemplate({
+        activeMugs,
+        results
+      })
+    })
+
   }
 
   static get template() {

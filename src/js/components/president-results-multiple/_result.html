@@ -1,0 +1,47 @@
+<%
+  var classify = function(str) {
+    return str
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+|[^\w\-]|-+$/g, "");
+  };
+%>
+
+<%
+  var reportingPercentage = data.results.reportingPercentage;
+  if (data.results.reporting > 0 && data.results.reportingPercentage < 1) {
+    reportingPercentage = "<1";
+  } else if (data.results.reporting < data.results.precincts && data.results.reportingPercentage > 99) {
+    reportingPercentage = ">99";
+  } else {
+    reportingPercentage = data.results.reportingPercentage.toFixed(0);
+  }
+
+  for (c in data.activeMugs) {
+    var winner = false;
+    var votePct = "-";
+
+    data.results.candidates.forEach(function(result) {
+      if (result.last == c) {
+        if (data.results.total == 0) {
+          votePct == "-";
+        } else {
+          votePct = result.percentage;
+        }
+        if (typeof result.winner != "undefined") {
+          winner = result.winner;
+        }
+      }
+    });
+%>
+  <div class="cand <%= classify(c) %> <% if (winner) { %> winner <% } %>">
+    <span class="sr-only"><%= c %>:</span>
+    <span class="value"><%= votePct.toFixed(1) %>%</span>
+  </div>
+<% } %>
+
+<div class="reporting">
+  <span class="value"><%= reportingPercentage %>%</span>
+  <span class="sr-only">of precincts reporting</span>
+</div>

@@ -6,6 +6,7 @@ body {
 
 @candidate-width: 130px;
 @primary-width: 60px;
+@primary-width-desktop: 75px;
 @mug-size: 30px;
 
 president-results-multiple {
@@ -13,6 +14,7 @@ president-results-multiple {
   display: block;
   width: 100%;
   font-size: var(--font-size);
+  position: relative;
 
   &[party="GOP"] {
     --accent: var(--gop);
@@ -20,11 +22,11 @@ president-results-multiple {
   }
 
   &[test]::before {
+    .knockout();
     display: block;
     padding: 8px 16px;
     margin-bottom: 8px;
     text-align: center;
-    .knockout();
     background: black;
     color: white;
     border-radius: 20px;
@@ -81,20 +83,6 @@ president-results-multiple {
       width: calc(100% - @candidate-width);
       overflow: hidden;
       position: relative;
-
-      &.overflow {
-        &::after {
-          content: '';
-          display: block;
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          right: 0;
-          background-color: var(--background);
-          background: linear-gradient(90deg, var(--background-faded) 0%, var(--background) 60%);
-          width: calc(@primary-width * .75);
-        }
-      }
     }
 
     // the actual results, as wide as they need to be
@@ -111,6 +99,10 @@ president-results-multiple {
       width: @primary-width;
       float: left;
       text-align: center;
+
+      @media @mobile-above {
+        width: @primary-width-desktop;
+      }
 
       > div {
         border-left: 1px solid var(--divider-minor);
@@ -148,12 +140,14 @@ president-results-multiple {
     .cand {
       line-height: calc(@mug-size);
       padding: 1px 0;
-      border-top: 1px solid var(--divider-minor);
+
+      + .cand {
+        border-top: 1px solid var(--divider-minor);
+      }
 
       &.winner {
         background-color: var(--accent);
         color: #fff;
-        font-weight: bold;
       }
     }
 
@@ -169,6 +163,7 @@ president-results-multiple {
 
     .dels {
       height: 22px;
+      border-bottom: 1px solid var(--divider);
     }
     .results .dels {
       color: var(--secondary);
@@ -187,13 +182,11 @@ president-results-multiple {
   }
 
   .more-results {
-    margin: 15px 0;
+    margin: 11px auto 22px auto;
     justify-content: space-between;
+    align-items: center;
+    max-width: 350px;
     display: none;
-
-    &.overflow {
-      display: flex;
-    }
 
     button {
       .gotham();
@@ -206,7 +199,7 @@ president-results-multiple {
       letter-spacing: 0.05em;
       line-height: 22px;
       text-transform: uppercase;
-      min-width: 100px;
+      width: 100px;
 
       &:hover, &:active {
         cursor: pointer;
@@ -221,6 +214,53 @@ president-results-multiple {
       display: inline-block;
       line-height: 22px;
       margin: 0 22px;
+    }
+  }
+
+  // for when we need to scroll the results contents
+  &[overflow] {
+    .board-multiple .results-wrapper::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background-color: var(--background);
+      background: linear-gradient(90deg, var(--background-faded) 0%, var(--background) 80%);
+      width: 20px;
+    }
+
+    .more-results {
+      display: flex;
+    }
+  }
+
+  .metadata-row {
+    margin-top: 6px;
+
+    .text {
+      font-family: @sans;
+      font-size: 0.85em;
+      font-style: italic;
+      color: var(--secondary);
+      margin-top: 15px;
+
+      @media @mobile {
+        display: block;
+        margin-top: 11px;
+      }
+
+      a {
+        color: var(--link);
+
+        &:hover, &:active { opacity: 0.7; }
+      }
+    }
+
+    .footnote {
+      display: block;
+      margin-top: 5px;
     }
   }
 }
