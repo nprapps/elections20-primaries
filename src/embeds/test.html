@@ -13,7 +13,7 @@
       document.body.classList.add(here.searchParams.get("theme"));
     </script>
 
-    <president-caucus live src="../data/IA_P_2_3_2020.json"></president-caucus>
+    <county-detail party="Dem" live src="../data/NC_P_3_3_2020_counties.json"></county-detail>
 
     <script src="../embed.js" async></script>
     <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>

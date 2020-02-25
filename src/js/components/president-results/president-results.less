@@ -9,6 +9,11 @@ president-results {
   font-size: var(--font-size);
   position: relative;
 
+  &[party="Dem"] {
+    --accent: var(--dem);
+    --accent-fade: var(--dem-fade);
+  }
+
   &[party="GOP"] {
     --accent: var(--gop);
     --accent-fade: var(--gop-fade);

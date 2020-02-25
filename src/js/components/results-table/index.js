@@ -46,6 +46,12 @@ class ResultsTable extends ElementBase {
     }
   }
 
+  illuminate() {
+    var elements = super.illuminate();
+    elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
+    return elements;
+  }
+
   render(result) {
     var elements = this.illuminate();
 

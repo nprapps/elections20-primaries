@@ -1,1 +1,5 @@
-<pre>COUNTY RESULTS: <%= row.race.filename %>_counties.json</pre>
+<county-detail
+  data-live-timestamp="<%= row.race.timestamp %>"
+  data-control="party"
+  data-src="../data/<%= row.race.filename %>_counties.json"
+></county-detail>

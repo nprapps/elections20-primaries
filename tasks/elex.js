@@ -87,6 +87,8 @@ module.exports = function(grunt) {
             if (ids.length) {
               return ids.indexOf(result.id) > -1;
             }
+            // filter out third-parties
+            if (result.party && !result.party.match(/Dem|GOP/)) return false;
             return result.office == office &&
               states.indexOf(result.state) > -1 &&
               result.date == date;
@@ -118,9 +120,15 @@ module.exports = function(grunt) {
           grunt.file.write(`build/data/${filename}.json`, serialize(stateResults));
 
           if (office != "H" && !stateOnly) {
-            var countyResults = subsetResults("county");
+            var countyResults = {
+              test,
+              closing: contest.closing,
+              chatter: contest.chatter,
+              footnote: contest.footnote,
+              races: subsetResults("county")
+            };
             // add county name from the FIPS table
-            countyResults.forEach(function(race) {
+            countyResults.races.forEach(function(race) {
               race.results.forEach(function(result) {
                 var county = grunt.data.json.fips[result.fips];
                 if (county && county.name) {

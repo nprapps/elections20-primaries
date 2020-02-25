@@ -7,8 +7,7 @@ var etags = {};
 var resultsURL = "https://api.ap.org/v2/elections/";
 var resultsParams = {
   apikey: process.env.AP_API_KEY,
-  format: "json",
-  party: "GOP,Dem"
+  format: "json"
 };
 
 var apDate = function(d) {

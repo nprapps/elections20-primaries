@@ -8,6 +8,7 @@ require("./components/president-primary");
 require("./components/president-caucus");
 require("./components/standard-primary");
 require("./components/house-primary");
+require("./components/county-detail");
 
 var now = Date.now();
 var here = new URL(window.location.href);
