@@ -5,7 +5,7 @@ body {
 }
 
 @candidate-width: 130px;
-@primary-width: 70px;
+@primary-width: 60px;
 @mug-size: 30px;
 
 president-results-multiple {
@@ -47,6 +47,10 @@ president-results-multiple {
     .candidates {
       width: @candidate-width;
 
+      > div {
+        border-right: 1px solid var(--divider);
+      }
+
       .polls,
       .state,
       .dels,
@@ -75,7 +79,7 @@ president-results-multiple {
     // the "frame" for the results; constricts what's visible
     .results-wrapper {
       width: calc(100% - @candidate-width);
-      overflow-x: hidden;
+      overflow: hidden;
       position: relative;
 
       &.overflow {
@@ -88,7 +92,7 @@ president-results-multiple {
           right: 0;
           background-color: var(--background);
           background: linear-gradient(90deg, var(--background-faded) 0%, var(--background) 60%);
-          width: @primary-width;
+          width: calc(@primary-width * .75);
         }
       }
     }
@@ -100,7 +104,7 @@ president-results-multiple {
       position: absolute;
       top: 0;
       left: 0;
-      transition: left 1s;
+      transition: left .5s;
     }
 
     .primary {
@@ -113,7 +117,14 @@ president-results-multiple {
       }
 
       &.new-zone {
-        > div { border-left-color: var(--divider); }
+        > div {
+          border-left-color: var(--divider);
+        }
+
+        &:first-child {
+          > div { border-left: none; }
+        }
+
         .polls { padding-left: 5px; }
       }
     }

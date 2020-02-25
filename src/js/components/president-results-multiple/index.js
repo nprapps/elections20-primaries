@@ -8,8 +8,6 @@ var tableTemplate = dot.compile(require("./_table.html"));
 var { formatTime, formatAPDate } = require("../utils");
 
 var mugs = require("../../../../data/mugs.sheet.json");
-// var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
-// var defaultMax = 6;
 
 class PresidentResultsMultiple extends ElementBase {
 
@@ -27,16 +25,59 @@ class PresidentResultsMultiple extends ElementBase {
     return [
       "load",
       "shiftResultsNext",
-      "shiftResultsPrevious"
+      "shiftResultsPrevious",
+      "checkIfOverflow"
     ]
   }
 
   shiftResultsNext(e) {
-    console.log("next", e);
+    // console.log("next", e);
+    var elements = this.illuminate();
+    var resultLeft = elements.results.offsetLeft;
+    var resultWidth = elements.results.offsetWidth;
+    var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
+    var shiftIncrement = resultWrapperWidth - 50;
+
+    // shift only if there's still something to see on the next "page"
+    if ((resultWidth + resultLeft - shiftIncrement) > 5) {
+      elements.results.style.left = (resultLeft - shiftIncrement) + 'px';
+    } else {
+      return;
+    }
   }
 
   shiftResultsPrevious(e) {
-    console.log("previous", e);
+    // console.log("previous", e);
+    var elements = this.illuminate();
+    var resultLeft = elements.results.offsetLeft;
+    var resultWidth = elements.results.offsetWidth;
+    var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
+    var shiftIncrement = resultWrapperWidth - 50;
+
+    // shift only if there's still something to see on the previous "page"
+    if (resultLeft == 0) {
+      return;
+    } else if ((resultLeft + shiftIncrement) < 0) {
+      elements.results.style.left = (resultLeft + shiftIncrement) + 'px';
+    } else {
+      elements.results.style.left = '0px';
+    }
+  }
+
+  checkIfOverflow() {
+    console.log("checkIfOverflow");
+
+    // show/hide pagination if necessary
+    var elements = this.illuminate();
+    var resultWidth = elements.results.offsetWidth;
+    var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
+    if (resultWrapperWidth < resultWidth) {
+      elements.resultsWrapper.classList.add("overflow");
+      elements.overflowButtons.classList.add("overflow");
+    } else {
+      elements.resultsWrapper.classList.remove("overflow");
+      elements.overflowButtons.classList.remove("overflow");
+    }
   }
 
   connectedCallback() {
@@ -64,11 +105,19 @@ class PresidentResultsMultiple extends ElementBase {
     // add event listeners (this will only run once)
     elements.nextButton.addEventListener("click", this.shiftResultsNext);
     elements.backButton.addEventListener("click", this.shiftResultsPrevious);
+
+    window.addEventListener("resize", this.checkIfOverflow);
+    // checkIfOverflow(); <-- TODO: how can i run this onload?
+
     return elements;
   }
 
   load(data) {
-    console.log(data);
+    // filter to democratic races only
+    var dataDemRaces = data.races.filter(function(d,i) {
+      return d.party == "Dem";
+    });
+
     // now we can run templating here, as well as update static elements from illuminate
     var elements = this.illuminate();
     console.log(elements);
