@@ -10,7 +10,7 @@ require("./components/standard-primary");
 require("./components/house-primary");
 require("./components/county-detail");
 
-var now = Date.now();
+var now = new Date();
 var here = new URL(window.location.href);
 if (here.searchParams.has("embedded")) {
   var guest = Sidechain.registerGuest();
@@ -61,12 +61,15 @@ var onHashChange = function(e) {
   var hash = window.location.hash.replace("#", "");
   if (!hash) {
     // show the latest items
-    var [first] = modules;
-    var date = first.dataset.date;
+    var latest = modules.filter(function(m) {
+      var [m, d, y] = m.dataset.date.split("/").map(Number);
+      var date = new Date(y, m - 1, d);
+      return date < now;
+    }).pop();
+    if (!latest) return lazyLoad();
+    var date = latest.dataset.date;
     modules.forEach(function(module) {
-      if (module.dataset.date == date && !module.dataset.counties) {
-        module.classList.remove("hidden");
-      }
+      module.classList.toggle("hidden", module.dataset.date != date && module.dataset.counties);
     })
     lazyLoad();
     return;
