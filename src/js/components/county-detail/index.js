@@ -8,21 +8,12 @@ var { formatAPDate, formatTime, groupBy, mapToElements, toggleAttribute } = requ
 
 var fips = require("../../../../data/fips.sheet.json");
 
-class CountyBlock extends ElementBase {
-  static get template() {
-    return `
-<h4 data-as="county"></h4>
-<div data-as="results"></div>
-    `
-  }
-}
-CountyBlock.define("county-block");
-
 class CountyDetail extends ElementBase {
 
   constructor() {
     super();
     this.fetch = new Retriever(this.load);
+    this.palette = {};
   }
 
   static get boundMethods() {
@@ -40,7 +31,7 @@ class CountyDetail extends ElementBase {
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
-        this.fetch.watch(value, this.getAttribute("live") || 60);
+        this.fetch.watch(value, this.getAttribute("live") || 10);
         break;
 
       case "party":
@@ -72,13 +63,27 @@ class CountyDetail extends ElementBase {
     var results = [].concat(...races.map(r => r.results));
     var counties = {};
     var fips = {};
+    var totals = {}; // by candidate ID
     results.forEach(function(r) {
+      r.candidates.forEach(function(candidate) {
+        if (!totals[candidate.id]) totals[candidate.id] = {
+          first: candidate.first,
+          last: candidate.last,
+          id: candidate.id,
+          votes: 0
+        };
+        totals[candidate.id].votes += candidate.votes;
+      });
       counties[r.county] = r.fips;
       fips[r.fips] = r.county;
     });
 
+    // for future map use: determine the palette by statewide total position
+    var statewide = Object.values(totals);
+    statewide.sort((a, b) => b.votes - a.votes);
+
     counties = Object.keys(counties).map(county => ({ county, id: counties[county] }));
-    counties.unshift({ county: "All counties", id: 0 });
+    counties.unshift({ county: "--", id: 0 });
     mapToElements(elements.countySelect, counties, function(data) {
       var option = document.createElement("option");
       option.innerHTML = data.county;
@@ -86,28 +91,24 @@ class CountyDetail extends ElementBase {
       return option;
     });
 
-    var groupedResults = groupBy(results, "fips");
-    var countyResults = Object.keys(groupedResults).map(function(g) {
-      return {
-        id: g,
-        results: groupedResults[g]
-      }
-    });
+    var value = elements.countySelect.value;
+    this.updateTable(value);
+  }
 
-    var countyBlocks = mapToElements(elements.counties, countyResults, "county-block");
-    countyBlocks.forEach(function([data, block]) {
-      var { results, id } = data;
-      var blockElements = block.illuminate();
-      blockElements.county.innerHTML = fips[id];
-      
-      var pairs = mapToElements(blockElements.results, results, "results-table", "party");
-      pairs.forEach(function([data, child]) {
-        toggleAttribute(child, "hidden", party && party != data.party);
-        child.setAttribute("max", 6);
-        child.render(data);
-      });
-    });
+  updateTable(fips) {
+    if (fips == 0) return;
+    var elements = this.illuminate();
+    var { resultsTable } = elements;
+    var data = this.cache;
+    var party = this.getAttribute("party");
+    if (!data || !party) return;
 
+    var { races } = data;
+    var [ race ] = races.filter(r => r.party == party);
+    var [ result ] = race.results.filter(r => r.fips == fips);
+
+    resultsTable.setAttribute("headline", result.county);
+    if (result) resultsTable.render(result);
   }
 
   static get template() {
@@ -117,14 +118,7 @@ class CountyDetail extends ElementBase {
   onSelectCounty() {
     var elements = this.illuminate();
     var fips = elements.countySelect.value;
-    var blocks = $(`county-block`, this);
-    blocks.forEach(function(block) {
-      if (fips == 0) {
-        block.removeAttribute("hidden");
-      } else {
-        toggleAttribute(block, "hidden", block.dataset.key != fips);
-      }
-    });
+    this.updateTable(fips);
   }
 
   illuminate() {

@@ -62,8 +62,7 @@ class ResultsTable extends ElementBase {
       reportingPercentage,
       updated
     } = result;
-    if (updated == this.updated) return;
-    this.updated = updated;
+    
     this.setAttribute("party", result.party);
     // normalize percentages
     candidates.forEach(function(c) {
