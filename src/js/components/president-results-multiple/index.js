@@ -105,7 +105,6 @@ class PresidentResultsMultiple extends ElementBase {
     var elements = this.illuminate();
     var table = elements.resultsWrapper.querySelector(".results");
     var resultWidth = table.offsetWidth;
-    console.log(table, table.offsetWidth);
     var resultWrapperWidth = elements.resultsWrapper.offsetWidth;
     if (resultWrapperWidth < resultWidth) {
       this.setAttribute("overflow", "");
