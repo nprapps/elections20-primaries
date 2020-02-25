@@ -1,0 +1,276 @@
+@import "../../../css/values.less";
+
+body {
+  background-color: var(--background);
+}
+
+@candidate-width: 130px;
+@primary-width: 60px;
+@primary-width-desktop: 75px;
+@mug-size: 30px;
+
+president-results-multiple {
+  .gotham();
+  display: block;
+  width: 100%;
+  font-size: var(--font-size);
+  position: relative;
+
+  &[party="GOP"] {
+    --accent: var(--gop);
+    --accent-fade: var(--gop-fade);
+  }
+
+  &[test]::before {
+    .knockout();
+    display: block;
+    padding: 8px 16px;
+    margin-bottom: 8px;
+    text-align: center;
+    background: black;
+    color: white;
+    border-radius: 20px;
+    content: "TEST DATA";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: .5;
+    z-index: 9999;
+  }
+
+  .board-multiple {
+    color: var(--foreground);
+    display: flex;
+    flex-wrap: nowrap;
+    font-size: 0.85em;
+
+    // candidates column
+    .candidates {
+      width: @candidate-width;
+
+      > div {
+        border-right: 1px solid var(--divider);
+      }
+
+      .polls,
+      .state,
+      .dels,
+      .reporting {
+        .knockout-header();
+        color: var(--secondary);
+      }
+
+      .cand {
+        display: flex;
+        align-items: center;
+        line-height: calc(@mug-size);
+
+        .mugshot {
+          width: @mug-size;
+          height: @mug-size;
+          display: inline-block;
+          border-radius: 100%;
+          background: var(--shaded);
+          background-size: cover;
+          background-position: center;
+          margin-right: 1em;
+        }
+      }
+    }
+
+    // the "frame" for the results; constricts what's visible
+    .results-wrapper {
+      width: calc(100% - @candidate-width);
+      overflow: hidden;
+      position: relative;
+    }
+
+    // override table semantics/styles
+    .results-table {
+      display: block;
+
+      tr, th, td {
+        display: block;
+        padding: 0;
+      }
+    }
+
+    // the actual results, as wide as they need to be
+    .results {
+      display: flex;
+      flex-wrap: nowrap;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: left .5s;
+    }
+
+    .primary {
+      width: @primary-width;
+      text-align: center;
+
+      @media @mobile-above {
+        width: @primary-width-desktop;
+      }
+
+      > td {
+        border-left: 1px solid var(--divider-minor);
+      }
+
+      &.new-zone {
+        > td {
+          border-left-color: var(--divider);
+        }
+
+        &:first-child {
+          > td { border-left: none; }
+        }
+
+        .polls { padding-left: 5px; }
+      }
+    }
+
+    .state {
+      height: 32px;
+      padding: 11px 0 0 0;
+      text-transform: uppercase;
+
+      a, a:link, a:visited {
+        font-weight: bold;
+        color: var(--link);
+        text-decoration: none;
+      }
+      a:hover, a:active {
+        opacity: 0.7;
+      }
+    }
+
+    // row-specific styling
+    .cand {
+      line-height: calc(@mug-size);
+      padding: 1px 0 !important;
+
+      + .cand {
+        border-top: 1px solid var(--divider-minor);
+      }
+
+      &.winner {
+        background-color: var(--accent);
+        color: #fff;
+      }
+    }
+
+    .polls {
+      .knockout-header();
+      background-color: var(--shaded);
+      color: var(--secondary);
+      font-size: 1em;
+      line-height: 2em;
+    }
+    .results .polls { text-align: left; }
+    .results .primary:not(.new-zone) .polls { border-left: none; }
+
+    .dels {
+      height: 22px;
+      border-bottom: 1px solid var(--divider);
+    }
+    .results .dels {
+      color: var(--secondary);
+      font-size: 0.9em;
+    }
+
+    .reporting {
+      border-top: 1px solid var(--divider);
+      color: var(--secondary);
+      line-height: 3em;
+    }
+    .results .reporting {
+      font-size: 0.9em;
+      font-style: italic;
+    }
+  }
+
+  .more-results {
+    margin: 11px auto 22px auto;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 350px;
+    display: none;
+
+    button {
+      .gotham();
+      background-color: var(--shaded);
+      border: none;
+      border-radius: 4px;
+      color: var(--link);
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      line-height: 22px;
+      text-transform: uppercase;
+      width: 100px;
+
+      &:hover, &:active {
+        cursor: pointer;
+        opacity: 0.7;
+      }
+    }
+    .prompt {
+      .knockout-header();
+      color: var(--secondary);
+      font-size: 12px;
+      text-align: center;
+      display: inline-block;
+      line-height: 22px;
+      margin: 0 22px;
+    }
+  }
+
+  // for when we need to scroll the results contents
+  &[overflow] {
+    .board-multiple .results-wrapper::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      background-color: var(--background);
+      background: linear-gradient(90deg, var(--background-faded) 0%, var(--background) 80%);
+      width: 20px;
+    }
+
+    .more-results {
+      display: flex;
+    }
+  }
+
+  .metadata-row {
+    margin-top: 6px;
+
+    .text {
+      font-family: @sans;
+      font-size: 0.85em;
+      font-style: italic;
+      color: var(--secondary);
+      margin-top: 15px;
+
+      @media @mobile {
+        display: block;
+        margin-top: 11px;
+      }
+
+      a {
+        color: var(--link);
+
+        &:hover, &:active { opacity: 0.7; }
+      }
+    }
+
+    .footnote {
+      display: block;
+      margin-top: 5px;
+    }
+  }
+}

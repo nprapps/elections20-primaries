@@ -23,6 +23,7 @@
     "src/js/embeds/new-hampshire.js": "build/embeds/new-hampshire.js",
     "src/js/embeds/nevada.js": "build/embeds/nevada.js",
     "src/js/embeds/custom.js": "build/embeds/custom.js"
+    "src/js/embeds/custom.js": "build/embeds/super-tuesday.js"
   },
   "title": "2020 Primary Results",
   "description": "",

@@ -1,0 +1,52 @@
+<%
+  var classify = function(str) {
+    return str
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+|[^\w\-]|-+$/g, "");
+  };
+
+  var { activeMugs, schedule, stateRaces } = data;
+%>
+
+<% Object.keys(schedule).forEach(function(closing) { %>
+  <% 
+  var races = schedule[closing];
+  races.forEach(function(r, i) { 
+    var race = stateRaces[r.state];
+  %>
+  <!-- one "row" per state -->
+  <tr class="primary <%= classify(r.state) %> <%= i ? "same-zone" : "new-zone" %>" role="row">
+    <td role="cell" class="header">
+      <div class="polls" aria-hidden="true">
+        <% if (!i) { %>
+        <%= closing %>
+        <% }  else { %>
+        &nbsp;
+        <% } %>
+      </div>
+      <div class="state">
+        <a
+          href="../states/<%= r.state %>.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true"
+          aria-label="See full results for <%= r.state %>">
+          <%= r.ap %>    
+        </a>
+      </div>
+      <div class="dels"><%= r.delegates %> <span class="sr-only">delegates</span></div>
+    </td>
+
+    <% Object.keys(activeMugs).forEach(function(name) { %>
+    <% var candidate = race.results.byName[name]; %>
+    <td role="cell" class="cand <%= classify(name) %> <% if (candidate.winner) { %> winner <% } %>">
+      <span class="value"><%= candidate.percentage.toFixed(1) %>%</span>
+    </td>
+    <% }); %>
+
+    <td class="reporting" role="cell">
+      <span class="value"><%= race.results.reportingPercentage %>%</span>
+      <span class="sr-only">of precincts reporting</span>
+    </td>
+  </tr>
+  <% }); %>
+<% }); %>

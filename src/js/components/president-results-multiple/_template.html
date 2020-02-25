@@ -1,0 +1,44 @@
+<div class="results-header">
+  <h3 data-as="headline"></h3>
+  <span data-as="reporting" class="reporting"></span>
+</div>
+<div class="chatter" data-as="chatter"></div>
+
+<div data-as="content" class="content">
+
+  <div class="board-multiple">
+    <div class="candidates" aria-hidden="true">
+      <div class="polls">Final polls close</div>
+      <div class="state">State</div>
+      <div class="dels">Delegates</div>
+
+      <div class="candidate-list" data-as="candidateList"></div>
+
+      <div class="reporting">% reporting</div>
+    </div>
+
+    <div class="results-wrapper" data-as="resultsWrapper">
+      <!-- this table actually rotates 90deg in display order, it's a little weird -->
+      <table class="results-table" role="table">
+        <thead class="sr-only" role="rowgroup" data-as="resultsHeader">
+        </thead>
+
+        <tbody class="results" role="rowgroup" data-as="results"></tbody>
+
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<div class="more-results" data-as="overflowButtons" aria-hidden="true">
+  <button data-as="backButton">&lsaquo; Back</button>
+  <span class="prompt">More Results</span>
+  <button data-as="nextButton">Next &rsaquo;</button>
+</div>
+
+<div class="metadata-row">
+  <div class="text">
+    Source: AP (<span data-as="updated" class="updated"></span>)
+    <span data-as="footnote" class="footnote"></span>
+</div>

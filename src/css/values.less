@@ -60,3 +60,14 @@
   width: 1px;
   height: 1px;
 }
+
+.clearfix() {
+    &:before,
+    &:after {
+        content: " ";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}

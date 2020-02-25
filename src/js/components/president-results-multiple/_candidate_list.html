@@ -1,0 +1,16 @@
+<%
+  var classify = function(str) {
+    return str
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+|[^\w\-]|-+$/g, "");
+  };
+%>
+
+<% for (c in data.activeMugs) { %>
+  <div class="cand <%= classify(data.activeMugs[c].key) %>">
+    <div class="mugshot" style="background-image: url(<%= data.activeMugs[c].src %>);"></div>
+    <span class="name"><%= data.activeMugs[c].key %></span>
+  </div>
+<% } %>
