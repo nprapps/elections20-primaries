@@ -82,8 +82,8 @@ class CountyDetail extends ElementBase {
     var statewide = Object.values(totals);
     statewide.sort((a, b) => b.votes - a.votes);
 
-    counties = Object.keys(counties).map(county => ({ county, id: counties[county] }));
-    counties.unshift({ county: "--", id: 0 });
+    counties = Object.keys(counties).sort().map(county => ({ county, id: counties[county] }));
+    // counties.unshift({ county: "--", id: 0 });
     mapToElements(elements.countySelect, counties, function(data) {
       var option = document.createElement("option");
       option.innerHTML = data.county;
