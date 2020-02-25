@@ -2,11 +2,14 @@ var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 var $ = require("../../lib/qsa");
 require("../results-table");
+require("../county-map");
 require("./county-detail.less");
 
 var { formatAPDate, formatTime, groupBy, mapToElements, toggleAttribute } = require("../utils");
 
 var fips = require("../../../../data/fips.sheet.json");
+
+var colors = ["purple", "magenta", "yellow", "green", "orange"];
 
 class CountyDetail extends ElementBase {
 
@@ -21,7 +24,7 @@ class CountyDetail extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["src", "party", "live"];
+    return ["src", "party", "live", "map"];
   }
 
   static get mirroredProps() {
@@ -31,7 +34,7 @@ class CountyDetail extends ElementBase {
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
-        this.fetch.watch(value, this.getAttribute("live") || 10);
+        this.fetch.watch(value, this.getAttribute("live") || 60);
         break;
 
       case "party":
@@ -44,6 +47,12 @@ class CountyDetail extends ElementBase {
         } else {
           this.fetch.stop();
         }
+        break;
+
+      case "map":
+        var elements = this.illuminate();
+        elements.map.src = value;
+        break;
     }
   }
 
@@ -60,30 +69,15 @@ class CountyDetail extends ElementBase {
 
     var party = this.getAttribute("party");
 
-    var results = [].concat(...races.map(r => r.results));
+    var results = [].concat(...races.filter(r => r.party == party).map(r => r.results));
     var counties = {};
     var fips = {};
-    var totals = {}; // by candidate ID
     results.forEach(function(r) {
-      r.candidates.forEach(function(candidate) {
-        if (!totals[candidate.id]) totals[candidate.id] = {
-          first: candidate.first,
-          last: candidate.last,
-          id: candidate.id,
-          votes: 0
-        };
-        totals[candidate.id].votes += candidate.votes;
-      });
       counties[r.county] = r.fips;
       fips[r.fips] = r.county;
     });
 
-    // for future map use: determine the palette by statewide total position
-    var statewide = Object.values(totals);
-    statewide.sort((a, b) => b.votes - a.votes);
-
     counties = Object.keys(counties).map(county => ({ county, id: counties[county] }));
-    counties.unshift({ county: "--", id: 0 });
     mapToElements(elements.countySelect, counties, function(data) {
       var option = document.createElement("option");
       option.innerHTML = data.county;
@@ -93,6 +87,7 @@ class CountyDetail extends ElementBase {
 
     var value = elements.countySelect.value;
     this.updateTable(value);
+
   }
 
   updateTable(fips) {
@@ -105,7 +100,34 @@ class CountyDetail extends ElementBase {
 
     var { races } = data;
     var [ race ] = races.filter(r => r.party == party);
-    var [ result ] = race.results.filter(r => r.fips == fips);
+
+    var totals = {};
+    var [ result ] = race.results.filter(function(r) {
+      r.candidates.forEach(function(candidate) {
+        if (!totals[candidate.id]) totals[candidate.id] = {
+          first: candidate.first,
+          last: candidate.last,
+          id: candidate.id,
+          votes: 0
+        };
+        totals[candidate.id].votes += candidate.votes;
+      });
+      return r.fips == fips;
+    });
+
+    var statewide = Object.values(totals);
+    statewide.sort((a, b) => b.votes - a.votes);
+
+    var palette = {};
+    statewide.slice(0, colors.length).forEach(function(s, i) {
+      palette[s.id] = {
+        id: s.id,
+        first: s.first,
+        last: s.last,
+        color: colors[i]
+      };
+    });
+    elements.map.render(palette, race.results);
 
     resultsTable.setAttribute("headline", result.county);
     if (result) resultsTable.render(result);
