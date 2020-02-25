@@ -31,7 +31,7 @@ class CountyDetail extends ElementBase {
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
-        this.fetch.watch(value, this.getAttribute("live") || 10);
+        this.fetch.watch(value, this.getAttribute("live") || 60);
         break;
 
       case "party":
