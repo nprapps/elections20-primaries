@@ -1,5 +1,7 @@
 var ElementBase = require("../elementBase");
+var Retriever = require("../retriever");
 require("./president-results-multiple.less");
+
 var dot = require("../../lib/dot");
 var tableTemplate = dot.compile(require("./_table.html"));
 
@@ -11,124 +13,67 @@ var mugs = require("../../../../data/mugs.sheet.json");
 
 class PresidentResultsMultiple extends ElementBase {
 
-  shiftResultsNext(evt) {
-    console.log(evt);
+  constructor() {
+    super();
+    // this is a place to keep local state
+    // for example, we might make a variable for pagination
+    this.page = 0;
+    // we will also create a retriever for data
+    this.fetch = new Retriever(this.load);
+  }
+
+  // bound methods will always have the correct `this` value
+  static get boundMethods() {
+    return [
+      "load",
+      "shiftResultsNext",
+      "shiftResultsPrevious"
+    ]
+  }
+
+  shiftResultsNext(e) {
+    console.log("next", e);
+  }
+
+  shiftResultsPrevious(e) {
+    console.log("previous", e);
   }
 
   connectedCallback() {
+    // we can illuminate in connected to template
+    // but we'll more likely call it when we get data in load();
     this.illuminate();
-
-    this.nextButton.addEventListener("click", shiftResultsNext);
   }
 
-  /*
-
-  constructor() {
-    super();
-    this.updated = null;
+  // attributes will only trigger the callback if they're observed
+  static get observedAttributes() {
+    return ["src"];
   }
 
-  //override illuminate to add the button listener
-  //this should still only happen once
+  attributeChangedCallback(attr, was, value) {
+    switch (attr) {
+      case "src":
+        this.fetch.watch(value);
+        break;
+    }
+  }
+
   illuminate() {
+    // call the inherited illuminate function
     var elements = super.illuminate();
-    // elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
+    // add event listeners (this will only run once)
+    elements.nextButton.addEventListener("click", this.shiftResultsNext);
+    elements.backButton.addEventListener("click", this.shiftResultsPrevious);
     return elements;
   }
 
-  render(data) {
+  load(data) {
+    console.log(data);
+    // now we can run templating here, as well as update static elements from illuminate
     var elements = this.illuminate();
-
-
-    elements.headline.innerHTML = `${data.party == "GOP" ? "GOP" : "Democratic"} primary results`;
-
-    var result = data.results[0]; // only one for president
-    var { caucus } = data;
-    var { candidates, precincts, reporting, reportingPercentage, updated } = result;
-    if (updated == this.updated) return;
-    this.updated = updated;
-    this.setAttribute("party", data.party);
-    // assign mugs and normalize percentages
-    candidates.forEach(function(c) {
-      c.mugshot = mugs[c.last] ? mugs[c.last].src : "";
-      c.percentage = c.percentage || 0;
-    });
-    // check for existing votes
-    candidates.sort((a, b) => b.percentage - a.percentage);
-    // resort if no votes are cast
-    var hasVotes = !!candidates[0].percentage;
-    if (!hasVotes) {
-      // sort by default view, then by name
-      candidates.sort(function(a, b) {
-        var aValue = (defaultFold.indexOf(a.last) + 1) || (a.last == "Other" ? 101 : 100);
-        var bValue = (defaultFold.indexOf(b.last) + 1) || (b.last == "Other" ? 101 : 100);
-        if (aValue == bValue) {
-          return a.last < b.last ? -1 : 1;
-        }
-        return aValue - bValue;
-      });
-    }
-
-    // filter small candidates into others
-    var others = candidates.filter(c => c.last == "Other").pop();
-    if (!others) {
-      others = {
-        last: "Other",
-        votes: 0,
-        percentage: 0
-      };
-      if (caucus) {
-        others.caucus = 0;
-      }
-      candidates.push(others);
-    }
-    candidates = candidates.filter(function(c) {
-      if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
-        others.percentage += c.percentage;
-        others.votes += c.votes;
-        others.caucus += c.caucus;
-        return false;
-      }
-      return true;
-    });
-    if (hasVotes && others.votes == 0) {
-      candidates = candidates.filter(c => c != others);
-    }
-
-    var max = this.getAttribute("max") || defaultMax;
-    var fold = candidates.slice(0, max).map(c => c.last);
-
-    // decide if we need overflow
-    if (candidates.length > fold.length) {
-      this.setAttribute("overflow", "");
-    } else {
-      this.removeAttribute("overflow");
-    }
-
-    // insert content
-    var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
-    // elements.content.innerHTML = tableTemplate({ candidates, highest, fold, caucus });
-    elements.content.innerHTML = tableTemplate({ });
-
-    // adjust reporting numbers
-    if (reporting > 0 && reportingPercentage < 1) {
-      reportingPercentage = "<1";
-    } else if (reporting < precincts && reportingPercentage == 100) {
-      reportingPercentage = ">99";
-    } else {
-      reportingPercentage = reportingPercentage.toFixed(0);
-    }
-    var updated = new Date(updated);
-    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(updated)}`;
-    elements.updated.innerHTML = updateString;
-
-    var reportingString = `${reportingPercentage}% of precincts reporting`;
-    elements.reporting.innerHTML = reportingString;
+    console.log(elements);
+    elements.updated.innerHTML = "UPDATED";
   }
-  */
-
-
-
 
   static get template() {
     return require("./_template.html");
