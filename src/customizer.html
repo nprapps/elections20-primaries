@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <%= t.include("partials/_head.html", grunt.data.json) %>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <script>
+      document.body.classList.add(new URL(window.location).searchParams.get("theme"));
+    </script>
+
+    <%= t.include("partials/_nav.html") %>
+
+    <main class="customizer">
+
+      <h2>Customize your embed</h2>
+      <form class="custom">
+        <div class="row">
+          <label>State:</label>
+          <select class="state"></select>
+        </div>
+
+        <div class="row">
+          <label>Race:</label>
+          <select name="race">
+            <option>Select a state</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label>Party:</label>
+          <select name="party">
+            <option value="">Both</option>
+            <option value="Dem">Democrats-only</option>
+            <option value="GOP">GOP-only</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="live">Live updates?</label>
+          <input type="checkbox" id="live" name="live">
+        </div>
+
+        <div class="row">
+          <label for="delegates">Include delegates (presidential only)?</label>
+          <input type="checkbox" id="delegates" name="delegates">
+        </div>
+
+      </form>
+
+      <h2>Preview</h2>
+
+      <side-chain></side-chain>
+
+      <h2>Embed</h2>
+
+      <pre></pre>
+
+    </main>
+
+    <script src="customizer.js"></script>
+  </body>
+</html>

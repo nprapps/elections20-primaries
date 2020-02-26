@@ -15,7 +15,7 @@
     "src/css/statePage.less": "build/states/state.css"
   },
   "scripts": {
-    "src/js/loader.js": "build/loader.js",
+    "src/js/customizer.js": "build/customizer.js",
     "src/js/statePage.js": "build/states/state.js",
     "src/js/embeds/legacy-embeds.js": "build/embeds/legacy.js",
     "src/js/embeds/super-tuesday.js": "build/embeds/super-tuesday.js",
