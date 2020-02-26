@@ -152,7 +152,10 @@ class PresidentResultsMultiple extends ElementBase {
       }
       r.results.reportingPercentage = reportingPercentage;
       var byName = {};
-      r.results.candidates.forEach(c => byName[c.last] = c);
+      r.results.candidates.forEach(function(c) {
+        byName[c.last] = c;
+        c.percentage = c.percentage || 0;
+      });
       r.results.byName = byName;
       stateRaces[r.state] = r;
     });
