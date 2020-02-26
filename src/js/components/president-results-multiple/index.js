@@ -127,7 +127,7 @@ class PresidentResultsMultiple extends ElementBase {
   }
 
   load(data) {
-    
+
     var elements = this.illuminate();
 
     this.toggleAttribute("test", !!data.test);
@@ -162,7 +162,7 @@ class PresidentResultsMultiple extends ElementBase {
 
     var latest = new Date(Math.max(...races.map(r => r.results.updated)));
 
-    var updateString = `${formatAPDate(latest)} at ${formatTime(latest)}`;
+    var updateString = `as of ${formatAPDate(latest)} at ${formatTime(latest)}`;
     elements.updated.innerHTML = updateString;
 
     // filter mugs to active candidates from the active party

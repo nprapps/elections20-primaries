@@ -1,9 +1,5 @@
 @import "../../../css/values.less";
 
-body {
-  background-color: var(--background);
-}
-
 @candidate-width: 130px;
 @primary-width: 60px;
 @primary-width-desktop: 75px;
@@ -116,15 +112,25 @@ president-results-multiple {
 
       > td {
         border-left: 1px solid var(--divider-minor);
+
+        &.header {
+          border-left: none;
+
+          > div {
+            border-left: 1px solid var(--divider-minor);
+          }
+        }
       }
 
       &.new-zone {
-        > td {
+        > td,
+        > td.header > div {
           border-left-color: var(--divider);
         }
 
         &:first-child {
-          > td { border-left: none; }
+          > td,
+          > td.header > div { border-left: none; }
         }
 
         .polls { padding-left: 5px; }
@@ -169,7 +175,9 @@ president-results-multiple {
       line-height: 2em;
     }
     .results .polls { text-align: left; }
-    .results .primary:not(.new-zone) .polls { border-left: none; }
+    .results .primary:not(.new-zone) .polls {
+      border-left: none;
+    }
 
     .dels {
       height: 22px;
