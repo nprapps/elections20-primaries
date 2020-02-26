@@ -36,11 +36,15 @@ var onFormChange = function() {
   form.dataset.type = formData.type;
   if (formData.type == "page") {
     url = new URL(`https://apps.npr.org/elections20-primaries/states/${stateSelect.value}.html?embedded=true`);
-    var hash = new URLSearchParams("counties=true");
-    hash.set("date", date);
-    hash.set("office", race == "C" ? "P" : race);
+    var hash = new URLSearchParams("");
+    if (date) hash.set("date", date);
+    if (race) {
+      hash.set("office", race == "C" ? "P" : race);
+      hash.set("counties", "true");
+    }
     url.hash = hash.toString();
   } else {
+    if (!race || !file) return;
     url = new URL("https://apps.npr.org/elections20-primaries/embeds/?live");
     url.searchParams.set("race", race);
     url.searchParams.set("data", file);
@@ -69,6 +73,10 @@ $("select[name], input[name]").forEach(el => el.addEventListener("change", onFor
 var onStateChange = function() {
   raceSelect.innerHTML = "";
   var filtered = races.filter(r => r.state == stateSelect.value);
+  var recent = document.createElement("option");
+  recent.value = "";
+  recent.innerHTML = "Most recent results (state page only)";
+  raceSelect.appendChild(recent);
   filtered.forEach(function(r) {
     var option = document.createElement("option");
     option.value = `${r.caucus ? "C" : r.office}:${r.filename}:${r.date}`;
