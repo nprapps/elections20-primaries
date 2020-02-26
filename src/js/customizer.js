@@ -44,7 +44,10 @@ var onFormChange = function() {
     }
     url.hash = hash.toString();
   } else {
-    if (!race || !file) return;
+    if (!race || !file) {
+      preview.setAttribute("src", "");
+      return;
+    }
     url = new URL("https://apps.npr.org/elections20-primaries/embeds/?live");
     url.searchParams.set("race", race);
     url.searchParams.set("data", file);

@@ -1,3 +1,13 @@
+<%
+  var classify = function(str) {
+    return str
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+|[^\w\-]|-+$/g, "");
+  };
+%>
+
 <!doctype html>
 <html lang="en-US">
   <head>
@@ -80,22 +90,21 @@
         <div class="event-row index-<%= i%> ">
           <div class="date"><%= event.dateText %></div>
 
-          <div class="category <%= event.category %>"><%= event.category %></div>
-          
+          <div class="category <%= classify(event.category) %>"><span class="pill"><%= event.category %></span></div>
+
           <div class="content">
             <div class="title"><%= event.title %></div>
+            <div class="desc"><%= event.description %></div>
             <div class="links">
               <% if (event.link) { %>
-              <a class="coverage-link" href="<%= event.link %>">NPR Coverage</a>
+              <a class="coverage-link" href="<%= event.link %>">NPR coverage</a>
               <% } %>
               <% if (event.link && event.races) { %>
               |
               <% }%>
               <% if (event.races) { %>
               Results:
-                <%= event.races.map(r => `
-              <a href="states/${r.state}.html#date=${r.date}&office=${r.office}">${strings[r.office]}</a>
-                `).join(", ") %>
+                <%= event.races.map(r => `<a href="states/${r.state}.html#date=${r.date}&office=${r.office}">${strings[r.office]}</a>`).join(", ") %>
               <% } %>
             </div>
           </div>
@@ -106,6 +115,9 @@
         }); // month
       %>
     </main>
+
+    <%= t.include("partials/_footer.html", { content: `
+    `}) %>
 
     <script src="app.js" async></script>
     <%= t.include("partials/_analytics.html") %>
