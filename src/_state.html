@@ -30,7 +30,7 @@ Things passed into this page:
 
       <header>
         <img src="../assets/states/<%= state %>.svg" class="state-icon" alt="">
-        <h2>2020 Primaries and Caucuses</h2>
+        <h2><a href="../../">2020 Primaries and Caucuses</a></h2>
         <h1><%= json.strings[state] %> Results</h1>
       </header>
 
@@ -56,7 +56,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
           <select class="mobile-calendar">
             <% displays.forEach(function(item) { %>
               <% if (item.parties) { %>
-              <option 
+              <option
                 value="<%= hashRace(item.race) %>&party=Dem&counties=true"
                 data-timestamp="<%= item.race.timestamp.valueOf() %>">
                 <%= item.office %> - Dem. (<%= item.date %>)
@@ -85,8 +85,8 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
             <a class="office" href="#<%= hashRace(item.race) %>"><%= item.office %></a>
             <% if (item.parties) { %>
             <span class="parties">
-              <a href="#<%= hashRace(item.race) %>&party=Dem&counties=true">Dem.</a> 
-              | 
+              <a href="#<%= hashRace(item.race) %>&party=Dem&counties=true">Dem.</a>
+              |
               <a href="#<%= hashRace(item.race,) %>&party=GOP&counties=true">GOP</a>
             </span>
             <% } %>
@@ -149,4 +149,3 @@ Designed and developed by Audrey Carlsen, Alyson Hurt and Thomas Wilburn
     <%= t.include("partials/_analytics.html") %>
   </body>
 </html>
-

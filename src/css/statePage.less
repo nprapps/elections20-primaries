@@ -31,12 +31,18 @@ header {
   }
 
   h2 {
+    .knockout-header();
     margin: 0;
-    text-transform: uppercase;
-    .knockout();
     color: var(--secondary);
-    font-size: .8rem;
-    letter-spacing: 0.05em;
+    font-size: .85rem;
+
+    a, a:link, a:visited {
+      color: var(--secondary);
+      text-decoration: none;
+    }
+    a:hover, a:active {
+      color: var(--link);
+    }
   }
 
   h1 {
