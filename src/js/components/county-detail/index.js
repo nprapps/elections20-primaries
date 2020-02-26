@@ -76,6 +76,7 @@ class CountyDetail extends ElementBase {
           votes: 0
         };
         totals[candidate.id].votes += candidate.votes;
+        delete candidate.winner;
       });
       counties[r.county] = r.fips;
       fips[r.fips] = r.county;
