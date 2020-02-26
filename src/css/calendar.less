@@ -1,0 +1,126 @@
+main.calendar {
+  .gotham();
+  max-width: 800px;
+  margin: auto;
+  padding: 33px 15px;
+
+  h1 {
+    font-size: 2.3em;
+    font-weight: bold;
+    color: var(--foreground);
+    margin: 0 0 1em 0;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 1.1em;
+    text-transform: uppercase;
+    margin: 0 0 .5em 0;
+  }
+
+
+  a, a:link, a:visited {
+    color: var(--link);
+    text-decoration: none;
+  }
+
+  a:hover, a:active, a:focus {
+    opacity: 0.7;
+  }
+
+  .event-row + h2 {
+    margin-top: 33px;
+  }
+
+  .event-row {
+    border-top: 1px solid #EEE;
+    padding: 11px 0;
+
+    @media @mobile-above {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+
+    .date {
+      font-size: 0.9em;
+      opacity: 0;
+      white-space: nowrap;
+      margin-bottom: 6px;
+      padding-top: 2px;
+
+      @media @mobile {
+        float: left;
+      }
+
+      @media @mobile-above {
+        flex: 0 0 5em;
+      }
+    }
+
+    &.index-0 .date {
+      opacity: 1;
+    }
+  }
+
+  .category {
+    @media @mobile {
+      margin-left: 11px;
+      float: right;
+    }
+
+    @media @mobile-above {
+      flex: 0 0 80px;
+    }
+
+    .pill {
+      text-align: center;
+      border-radius: 8px;
+      color: var(--background);
+      background: var(--accent);
+      padding: 6px 7px 5px 7px;
+      display: inline-block;
+      font-size: 0.75em;
+      text-transform: uppercase;
+      font-weight: bold;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      margin: 0 0 5px 0;
+      width: 75px;
+
+      @media @mobile-above {
+        display: block;
+        margin: 2px 20px 0 20px;
+      }
+    }
+
+    &.vote .pill { background: #bb77c7; }
+    &.event .pill { background: #eaaa61; }
+    &.finance .pill { background: #92c777; }
+    &.debate .pill { background: @true; }
+  }
+
+  .content {
+    @media @mobile {
+      margin-left: 75px;
+    }
+
+    @media @mobile-above {
+      flex: 1;
+    }
+
+    .title {
+      font-size: 1.1em;
+      font-weight: bold;
+      margin-bottom: 1px;
+    }
+    .desc,
+    .links {
+      color: var(--secondary);
+      font-size: 0.9em;
+      margin-bottom: 3px;
+    }
+
+  }
+}
