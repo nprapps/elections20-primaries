@@ -4,6 +4,8 @@ require("../president-results");
 require("./president-primary.less");
 var { mapToElements, toggleAttribute } = require("../utils");
 
+var strings = require("../../../../data/strings.sheet.json");
+
 class PresidentPrimary extends ElementBase {
   constructor() {
     super();
@@ -71,6 +73,8 @@ class PresidentPrimary extends ElementBase {
       toggleAttribute(child, "test", isTest);
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
+      var partyText = data.party == "Dem" ? "Democratic" : data.party;
+      child.setAttribute("headline", `${strings[data.state + "-AP"]} ${partyText} results`)
       child.render(data);
     });
   }
