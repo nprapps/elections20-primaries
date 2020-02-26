@@ -74,7 +74,7 @@ class PresidentPrimary extends ElementBase {
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       var partyText = data.party == "Dem" ? "Democratic" : data.party;
-      child.setAttribute("headline", `${strings[data.state + "-AP"]} ${partyText} results`)
+      child.setAttribute("headline", `${strings[data.state + "-AP"]} ${partyText} primary results`)
       child.render(data);
     });
   }

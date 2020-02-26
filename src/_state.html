@@ -139,11 +139,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
     </main>
 
-    <%= t.include("partials/_footer.html", { content: `
-<div class="credits">
-Designed and developed by Audrey Carlsen, Alyson Hurt and Thomas Wilburn
-</div>
-    `}) %>
+    <%= t.include("partials/_footer.html", { content: t.include("_footerNav.html")}) %>
 
     <script src="state.js" async></script>
     <%= t.include("partials/_analytics.html") %>

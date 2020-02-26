@@ -100,7 +100,8 @@ class HousePrimary extends ElementBase {
         if (href) child.setAttribute("href", href);
         child.setAttribute("max", 99);
         toggleAttribute(child, "test", test);
-        child.setAttribute("headline", `${data.party} results`)
+        var readableParty = data.party == "Dem" ? "Democratic" : data.party;
+        child.setAttribute("headline", `${readableParty} primary results`);
         child.render(data);
       });
     });

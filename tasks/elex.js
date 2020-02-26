@@ -66,12 +66,15 @@ module.exports = function(grunt) {
       candidates: grunt.data.json.candidates
     };
 
+    var states = [...new Set(schedule.flatMap(r => r.states))].sort();
+
     // save some of this data for the build task
     grunt.data.elex = {
       schedule,
       races,
       today,
-      retroactive
+      retroactive,
+      states
     };
 
     api

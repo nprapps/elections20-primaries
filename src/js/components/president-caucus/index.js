@@ -4,6 +4,8 @@ require("./president-caucus.less");
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 
+var strings = require("../../../../data/strings.sheet.json");
+
 var defaultRefresh = 15;
 
 var mugs = require("../../../../data/mugs.sheet.json");
@@ -116,7 +118,7 @@ class PresidentCaucus extends ElementBase {
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       var readableParty = data.party == "Dem" ? "Democratic" : data.party;
-      child.setAttribute("headline", `${readableParty} ${data.caucus ? "caucus" : ""} results`);
+      child.setAttribute("headline", `${strings[data.state + "-AP"]} ${readableParty} ${data.caucus ? "caucus" : "primary"} results`);
       child.render(data);
     });
   }

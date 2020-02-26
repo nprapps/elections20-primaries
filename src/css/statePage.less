@@ -197,7 +197,42 @@ hr {
   }
 }
 
-.credits {
+footer {
   .gotham();
-  font-style: italic;
+
+  .nav-hed {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .state-nav {
+    column-count: 5;
+    margin: 20px 0 40px 0;
+
+    @media @mobile {
+      column-count: 3;
+    }
+
+    @media @tiny {
+      font-size: 0.9em;
+    }
+
+    a {
+      color: white;
+      line-height: 1.8em;
+      /*font-size: 0.9em;*/
+      text-decoration: none;
+
+      &:hover {
+        color: #aaa;
+      }
+    }
+  }
+
+  .credits {
+    font-size: 0.9em;
+    color: #eee;
+  }
 }
+
+

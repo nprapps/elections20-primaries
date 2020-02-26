@@ -77,6 +77,8 @@ class StandardPrimary extends ElementBase {
         if (href) child.setAttribute("href", href);
         if (max) child.setAttribute("max", max);
         toggleAttribute(child, "test", test);
+        var readableParty = data.party == "Dem" ? "Democratic" : data.party;
+        child.setAttribute("headline", `${readableParty} primary results`);
         child.render(data);
       });
     });
