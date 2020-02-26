@@ -111,7 +111,7 @@ class PresidentResultsMultiple extends ElementBase {
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
-        this.fetch.watch(value);
+        this.fetch.watch(value, 15);
         break;
     }
   }
