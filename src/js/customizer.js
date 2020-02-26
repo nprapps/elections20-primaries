@@ -6,7 +6,7 @@ var races = require("../../data/races.sheet.json").filter(r => !r.feedOnly && r.
 
 var form = $.one("form");
 var preview = $.one("side-chain");
-var embed = $.one("pre");
+var embed = $.one("textarea");
 
 var stateSelect = $.one("form .state");
 var raceSelect = $.one(`form [name="race"]`);
@@ -22,7 +22,6 @@ states.forEach(function(s) {
 });
 
 var onFormChange = function() {
-  var url = new URL("https://apps.npr.org/elections20-primaries/embeds/");
   var formData = {};
   $("select, input", form).forEach(function(input) {
     var name = input.name;
@@ -32,16 +31,29 @@ var onFormChange = function() {
       formData[name] = input.value;
     }
   });
-  var [race, file] = formData.race.split(":");
-  url.searchParams.set("race", race);
-  url.searchParams.set("data", file);
-  if (formData.party) {
-    url.searchParams.set("party", formData.party);
+  var [race, file, date] = formData.race.split(":");
+  var url;
+  form.dataset.type = formData.type;
+  if (formData.type == "page") {
+    url = new URL(`https://apps.npr.org/elections20-primaries/states/${stateSelect.value}.html?embedded=true`);
+    var hash = new URLSearchParams("counties=true");
+    hash.set("date", date);
+    hash.set("office", race == "C" ? "P" : race);
+    url.hash = hash.toString();
+  } else {
+    url = new URL("https://apps.npr.org/elections20-primaries/embeds/?live");
+    url.searchParams.set("race", race);
+    url.searchParams.set("data", file);
+    if (formData.party) {
+      url.searchParams.set("party", formData.party);
+    }
+    if (formData.delegates) {
+      url.searchParams.set("delegates", "");
+    }
+    if (formData.link) {
+      url.searchParams.set("link", `https://apps.npr.org/elections20-primaries/states/${stateSelect.value}.html`);
+    }
   }
-  if (formData.delegates) {
-    url.searchParams.set("delegates", "");
-  }
-  url.searchParams.set("link", `https://apps.npr.org/elections20-primaries/states/${stateSelect.value}.html`);
   embed.innerHTML = `<p
   data-pym-loader
   data-child-src="${url.toString()}" 
@@ -59,7 +71,7 @@ var onStateChange = function() {
   var filtered = races.filter(r => r.state == stateSelect.value);
   filtered.forEach(function(r) {
     var option = document.createElement("option");
-    option.value = `${r.caucus ? "C" : r.office}:${r.filename}`;
+    option.value = `${r.caucus ? "C" : r.office}:${r.filename}:${r.date}`;
     option.innerHTML = `${r.date} - ${strings[r.office]}`;
     raceSelect.appendChild(option);
   });

@@ -14,10 +14,20 @@
     <main class="customizer">
 
       <h2>Customize your embed</h2>
+      <p>
+        Results tables will only be shown for races where data exists.
       <form class="custom">
         <div class="row">
           <label>State:</label>
           <select class="state"></select>
+        </div>
+
+        <div class="row">
+          <label>Embed type</label>
+          <select name="type">
+            <option value="race">Individual race</option>
+            <option value="page">State page</option>
+          </select>
         </div>
 
         <div class="row">
@@ -27,34 +37,38 @@
           </select>
         </div>
 
-        <div class="row">
-          <label>Party:</label>
-          <select name="party">
-            <option value="">Both</option>
-            <option value="Dem">Democrats-only</option>
-            <option value="GOP">GOP-only</option>
-          </select>
-        </div>
+        <div class="embed-only">
 
-        <div class="row">
-          <label for="live">Live updates?</label>
-          <input type="checkbox" id="live" name="live">
-        </div>
+          <div class="row">
+            <label>Party:</label>
+            <select name="party">
+              <option value="">Both</option>
+              <option value="Dem">Democrats-only</option>
+              <option value="GOP">GOP-only</option>
+            </select>
+          </div>
 
-        <div class="row">
-          <label for="delegates">Include delegates (presidential only)?</label>
-          <input type="checkbox" id="delegates" name="delegates">
+          <div class="row">
+            <label for="link">Link out to detailed results on NPR.org</label>
+            <input type="checkbox" id="link" name="link">
+          </div>
+
+          <div class="row">
+            <label for="delegates">Include delegate totals (presidential only)?</label>
+            <input type="checkbox" id="delegates" name="delegates">
+          </div>
+
         </div>
 
       </form>
 
+      <h2>Embed</h2>
+
+      <textarea></textarea>
+
       <h2>Preview</h2>
 
       <side-chain></side-chain>
-
-      <h2>Embed</h2>
-
-      <pre></pre>
 
     </main>
 
