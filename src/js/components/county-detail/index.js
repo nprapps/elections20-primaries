@@ -6,8 +6,6 @@ require("./county-detail.less");
 
 var { formatAPDate, formatTime, groupBy, mapToElements, toggleAttribute } = require("../utils");
 
-var fips = require("../../../../data/fips.sheet.json");
-
 class CountyDetail extends ElementBase {
 
   constructor() {
