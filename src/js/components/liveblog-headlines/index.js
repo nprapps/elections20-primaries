@@ -76,8 +76,12 @@ class LiveblogHeadlines extends ElementBase {
 
   async load() {
     var elements = this.illuminate();
-    elements.moreLink.href = elements.titleLink.href = this.getAttribute("href");
     var src = this.getAttribute("src");
+    var href = this.getAttribute("href");
+    if (!href) {
+      href = src.replace(/\/[^\/]+$/, "/");
+    }
+    elements.moreLink.href = elements.titleLink.href = href;
     var rss = await this.getDocument(src);
     var headlines = $("item", rss).map(function(element) {
       var tags = $("category", element).map(c => c.innerHTML);
@@ -92,7 +96,7 @@ class LiveblogHeadlines extends ElementBase {
       }
     });
     var max = this.hasAttribute("max") ? this.getAttribute("max") : 6;
-    headlines = headlines.slice(0, max);
+    headlines = headlines.sort((a, b) => b.date - a.date).slice(0, max);
     elements.headlines.innerHTML = template({ headlines, formatAPDate, formatTime })
   }
 

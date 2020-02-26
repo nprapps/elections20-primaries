@@ -14,15 +14,15 @@
     </script>
 
     <!-- <liveblog-headlines src="TKTK" live></liveblog-headlines> -->
-    <liveblog-headlines max=4 src="https://apps.npr.org/liveblogs/20200219-dem-debate/feed.rss" href="https://apps.npr.org/liveblogs/20200219-dem-debate/"></liveblog-headlines>
+    <liveblog-headlines></liveblog-headlines>
     <script>
       var widget = document.querySelector("liveblog-headlines");
-      if (here.searchParams.get("link")) {
-        widget.setAttribute("href", here.searchParams.get("link"));
+      if (here.searchParams.get("feed")) {
+        widget.setAttribute("src", here.searchParams.get("feed"));
       }
     </script>
 
-    <script src="../embed.js" async></script>
+    <script src="headlines.js" async></script>
     <%= t.include("partials/_analytics.html", { json: { project: { embedded: true }}}) %>
   </body>
 </html>

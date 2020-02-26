@@ -1,7 +1,7 @@
 var $ = require("./lib/qsa");
 
 // load Sidechain and the legacy browser shim
-require("@webcomponents/custom-elements");
+// require("@webcomponents/custom-elements");
 var Sidechain = require("@nprapps/sidechain");
 
 // ugh CorePub
