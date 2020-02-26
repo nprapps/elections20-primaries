@@ -1,1 +1,74 @@
 @import "base";
+@import "nav";
+
+main.calendar {
+  max-width: 800px;
+  margin: auto;
+  .knockout();
+
+  h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: black;
+  }
+
+  h2 {
+    text-transform: uppercase;
+  }
+
+  .event-row {
+    display: flex;
+    align-items: flex-start;
+    border-top: 1px solid #EEE;
+    padding: 8px 0 16px;
+
+    .date {
+      font-size: 1.2em;
+      opacity: 0;
+      .knockout();
+      flex: 0 0 80px;
+    }
+
+    &.index-0 .date {
+      opacity: 1;
+    }
+  }
+
+  .category {
+    text-align: center;
+    flex: 0 0 80px;
+    border-radius: 8px;
+    color: white;
+    .knockout();
+    background: #333;
+    padding: 2px 16px;
+    display: block;
+    width: 100%;
+    margin: 0 20px;
+
+    &.Vote {
+      background: @orange3;
+    }
+
+    &.Event {
+      background: @blue3;
+    }
+
+    &.Finance {
+      background: @teal3;
+    }
+
+    &.Debate {
+      background: @red3;
+    }
+  }
+
+  .content {
+    flex: 1;
+
+    .title {
+      font-size: 1.4em;
+      font-weight: bold;
+    }
+  }
+}
