@@ -28,11 +28,16 @@ Things passed into this page:
 
     <main>
 
-      <header>
-        <img src="../assets/states/<%= state %>.svg" class="state-icon" alt="">
-        <h2><a href="../../">2020 Primaries and Caucuses</a></h2>
-        <h1><%= json.strings[state] %> Results</h1>
-      </header>
+      <div class="side-ad" aria-hidden="true">
+        <google-ad></google-ad>
+      </div>
+
+      <div class="main">
+        <header>
+          <img src="../assets/states/<%= state %>.svg" class="state-icon" alt="">
+          <h2><a href="../../">2020 Primaries and Caucuses</a></h2>
+          <h1><%= json.strings[state] %> Results</h1>
+        </header>
 
       <%
 
@@ -50,103 +55,105 @@ var makeOption = (item, suffix = "") => `value="${hashRace(item.race)}${suffix}"
 var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
       %>
-      <div class="mobile-calendar-wrapper">
-        <div class="select-label">Select a contest</div>
-        <div class="outer-mobile-calendar">
-          <select class="mobile-calendar">
-            <% displays.forEach(function(item) { %>
-              <% if (item.parties) { %>
-              <option
-                value="<%= hashRace(item.race) %>&party=Dem&counties=true"
-                data-timestamp="<%= item.race.timestamp.valueOf() %>">
-                <%= item.office %><%= item.special ? " - Special " : " " %>- Dem. (<%= item.date %>)
-              </option>
-              <option
-                value="<%= hashRace(item.race) %>&party=GOP&counties=true"
-                data-timestamp="<%= item.race.timestamp.valueOf() %>">
-                <%= item.office %><%= item.race.special ? " - Special " : " " %>- GOP (<%= item.date %>)
-              </option>
-              <% } else { %>
-              <option
-                value="<%= hashRace(item.race) %>"
-                data-timestamp="<%= item.race.timestamp.valueOf() %>">
-                <%= item.office %><%= item.race.special ? " - Special " : " " %> (<%= item.date %>)
-              </option>
-              <% } %>
-            <% }) %>
-          </select>
+        <div class="mobile-calendar-wrapper">
+          <div class="select-label">Select a contest</div>
+          <div class="outer-mobile-calendar">
+            <select class="mobile-calendar">
+              <% displays.forEach(function(item) { %>
+                <% if (item.parties) { %>
+                <option
+                  value="<%= hashRace(item.race) %>&party=Dem&counties=true"
+                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
+                  <%= item.office %><%= item.special ? " - Special " : " " %>- Dem. (<%= item.date %>)
+                </option>
+                <option
+                  value="<%= hashRace(item.race) %>&party=GOP&counties=true"
+                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
+                  <%= item.office %><%= item.race.special ? " - Special " : " " %>- GOP (<%= item.date %>)
+                </option>
+                <% } else { %>
+                <option
+                  value="<%= hashRace(item.race) %>"
+                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
+                  <%= item.office %><%= item.race.special ? " - Special " : " " %> (<%= item.date %>)
+                </option>
+                <% } %>
+              <% }) %>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <nav class="race-calendar">
-        <ul>
-          <% displays.forEach(function(item) { %>
-          <li data-timestamp="<%= item.race.timestamp.valueOf() %>">
-            <a class="office" href="#<%= hashRace(item.race) %>">
-              <%= item.office %>
-              <% if (item.race.special) { %>
-              <span class="special">- <br />Special Election</span>
+        <nav class="race-calendar">
+          <ul>
+            <% displays.forEach(function(item) { %>
+            <li data-timestamp="<%= item.race.timestamp.valueOf() %>">
+              <a class="office" href="#<%= hashRace(item.race) %>">
+                <%= item.office %>
+                <% if (item.race.special) { %>
+                <span class="special">- <br />Special Election</span>
+                <% } %>
+              </a>
+              <% if (item.parties) { %>
+              <span class="parties">
+                <a href="#<%= hashRace(item.race) %>&party=Dem&counties=true">Dem.</a>
+                |
+                <a href="#<%= hashRace(item.race,) %>&party=GOP&counties=true">GOP</a>
+              </span>
               <% } %>
-            </a>
-            <% if (item.parties) { %>
-            <span class="parties">
-              <a href="#<%= hashRace(item.race) %>&party=Dem&counties=true">Dem.</a>
+              <span class="date"><%= item.date %></span>
+            <% }) %>
+          </ul>
+        </nav>
+
+        <p class="chatter">
+          <%= grunt.data.json.chatter[state] %>
+        </p>
+
+        <h3 class="latest-results">Most recent results:</h3>
+
+        <% displays.forEach(function(row, i) { %>
+
+          <div class="module <%= i ? "hidden" : "" %>"
+            data-office="<%= row.race.office %>"
+            data-date="<%= row.race.date %>"
+            data-special="<%= row.race.special || "" %>"
+            tabindex="-1"
+          >
+            <h2>
+              <%= row.office %>
+              <% if (row.race.special) { %>
+              - Special Election
+              <% } %>
+            </h2>
+
+            <% if (row.race.office != "H") { %>
+            <div class="show-counties" data-timestamp="<%= row.race.timestamp.valueOf() %>">
+              See county results:
+              <a href="#<%= hashRace(row.race)%>&party=Dem&counties=true">Dem.</a>
               |
-              <a href="#<%= hashRace(item.race,) %>&party=GOP&counties=true">GOP</a>
-            </span>
+              <a href="#<%= hashRace(row.race)%>&party=GOP&counties=true">GOP</a>
+            </div>
             <% } %>
-            <span class="date"><%= item.date %></span>
-          <% }) %>
-        </ul>
-      </nav>
 
-      <p class="chatter">
-        <%= grunt.data.json.chatter[state] %>
-      </p>
+            <% var partial = row.race.caucus ? "caucus" : row.race.element ? "random" : row.race.office %>
+            <%= t.include(`statePartials/_${partial}.html`, { row }) %>
 
-      <h3 class="latest-results">Most recent results:</h3>
-
-      <% displays.forEach(function(row, i) { %>
-
-        <div class="module <%= i ? "hidden" : "" %>"
-          data-office="<%= row.race.office %>"
-          data-date="<%= row.race.date %>"
-          data-special="<%= row.race.special || "" %>"
-          tabindex="-1"
-        >
-          <h2>
-            <%= row.office %>
-            <% if (row.race.special) { %>
-            - Special Election
-            <% } %>
-          </h2>
+          </div>
 
           <% if (row.race.office != "H") { %>
-          <div class="show-counties" data-timestamp="<%= row.race.timestamp.valueOf() %>">
-            See county results:
-            <a href="#<%= hashRace(row.race)%>&party=Dem&counties=true">Dem.</a>
-            |
-            <a href="#<%= hashRace(row.race)%>&party=GOP&counties=true">GOP</a>
+          <div class="module hidden"
+            data-office="<%= row.race.office %>"
+            data-date="<%= row.race.date %>"
+            data-counties="true"
+            tabindex="-1"
+          >
+            <%= t.include("statePartials/_counties.html", { row }) %>
           </div>
           <% } %>
 
-          <% var partial = row.race.caucus ? "caucus" : row.race.element ? "random" : row.race.office %>
-          <%= t.include(`statePartials/_${partial}.html`, { row }) %>
+        <% }) %>
 
-        </div>
-
-        <% if (row.race.office != "H") { %>
-        <div class="module hidden"
-          data-office="<%= row.race.office %>"
-          data-date="<%= row.race.date %>"
-          data-counties="true"
-          tabindex="-1"
-        >
-          <%= t.include("statePartials/_counties.html", { row }) %>
-        </div>
-        <% } %>
-
-      <% }) %>
+      </div> <!-- the main wrapper -->
 
     </main>
 
