@@ -28,6 +28,15 @@ main.calendar {
     opacity: 0.7;
   }
 
+  a:not([href]) {
+    color: inherit;
+    cursor: default;
+    
+    &:hover, &:active, &:focus {
+      opacity: 1;
+    }
+  }
+
   .event-row + h2 {
     margin-top: 33px;
   }

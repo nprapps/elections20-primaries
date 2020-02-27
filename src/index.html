@@ -87,7 +87,7 @@
             var day = byDay[d];
             day.forEach(function(event, i) {
         %>
-        <div class="event-row index-<%= i%> ">
+        <div class="event-row index-<%= i%> " data-timestamp="<%= event.timestamp %>">
           <div class="date"><%= event.dateText %></div>
 
           <div class="category <%= classify(event.category) %>"><span class="pill"><%= event.category %></span></div>
@@ -120,7 +120,7 @@ ${strings[r.office]}${r.special ? " special election" : ""}</a>`).join(", ") %>
 
     <%= t.include("partials/_footer.html", { prefix: "states/" }) %>
 
-    <script src="app.js" async></script>
+    <script src="calendar.js" async></script>
     <%= t.include("partials/_analytics.html") %>
   </body>
 </html>
