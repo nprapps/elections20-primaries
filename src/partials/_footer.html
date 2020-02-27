@@ -5,12 +5,12 @@
   }
 %>
 
-<footer role="contentinfo">
+<footer class="mega-nav" role="contentinfo">
   <div class="constrained">
 
-    <div class="nav-hed">Results by state</div>
+    <h3 class="state-hed">2020 Primary Election Results, By State</h3>
 
-    <div class="state-nav">
+    <div class="state-nav link-block">
     	<% grunt.data.elex.states.forEach(function(s) { %>
     		<div>
     			<a href="<%= prefix %><%= s %>.html">
@@ -20,6 +20,22 @@
     	<% }); %>
     </div>
 
+    <h3 class="more-hed">More 2020 Resources</h3>
+
+    <div class="more-2020 link-block">
+      <ul>
+        <li><a href="https://www.npr.org/sections/elections/">Latest Election News</a></li>
+        <li><a href="https://www.npr.org/2020/02/10/799979293/how-many-delegates-do-the-2020-presidential-democratic-candidates-have">Delegate Tracker</a></li>
+        <li><a href="https://apps.npr.org/elections20-primaries/">2020 Election Calendar</a></li>
+        <li><a href="https://www.npr.org/series/758097234/election-2020-issue-tracker">Candidate Issue Statements</a></li>
+        <li><a href="https://www.npr.org/podcasts/510310/npr-politics-podcast">NPR Politics Podcast</a></li>
+        <li><a href="https://www.npr.org/newsletter/politics">Weekly Politics Newsletter</a></li>
+      </ul>
+    </div>
+</footer>
+
+<footer class="more" role="contentinfo">
+  <div class="constrained">
     <div class="credits">
     	<h3>Credits</h3>
     	<p><%= grunt.data.json.chatter["credits"] %></p>

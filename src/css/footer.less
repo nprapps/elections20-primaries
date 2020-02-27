@@ -1,20 +1,43 @@
 footer {
   .gotham();
-  background: #333;
+  background: #222;
   color: white;
   padding: 40px 20px;
   position: relative;
   z-index: 999;
   justify-content: flex-start;
 
+  &.mega-nav {
+    background: #454545;
+  }
+
   body.embedded & {
     display: none;
+  }
+
+  h3 {
+    margin: 0 0 6px 0;
+    text-transform: uppercase;
+    font-size: 1.1em;
+    color: #fff;
+
+    &.more-hed {
+      border-top: 1px solid #999;
+      padding-top: 33px;
+    }
   }
 
   ul {
     margin: 0;
     padding: 0;
     list-style-type: none;
+  }
+
+  a, a:link, a:visited {
+    color: white;
+    text-decoration: none;
+
+    &:hover { color: #aaa; }
   }
 
   .constrained {
@@ -26,15 +49,6 @@ footer {
 
   .npr {
     margin-top: 44px;
-
-    a, a:visited {
-      color: white;
-      text-decoration: none;
-
-      &:hover, &:focus {
-        color: #888;
-      }
-    }
 
     ul {
       border-top: 1px solid #555;
@@ -56,14 +70,9 @@ footer {
     }
   }
 
-  .nav-hed {
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
   .state-nav {
     column-count: 5;
-    margin: 20px 0 40px 0;
+    margin: 20px 0 33px 0;
 
     @media @mobile {
       column-count: 3;
@@ -73,30 +82,27 @@ footer {
       font-size: 0.9em;
     }
 
-    a {
-      color: white;
-      line-height: 1.8em;
-      /*font-size: 0.9em;*/
-      text-decoration: none;
+    a { line-height: 1.8; }
+  }
 
-      &:hover {
-        color: #aaa;
-      }
+  .more-2020 {
+    column-count: 3;
+    margin: 20px 0 0 0;
+
+    @media @tablet {
+      column-count: 1;
     }
+
+    @media @tiny {
+      font-size: 0.9em;
+    }
+
+    a { line-height: 1.8; }
   }
 
   .credits {
-    border-top: 1px solid #555;
-    padding-top: 44px;
     font-size: 0.9em;
     color: #ccc;
-
-    h3 {
-      margin: 0 0 11px 0;
-      text-transform: uppercase;
-      font-size: 1.1em;
-      color: #fff;
-    }
 
     p { line-height: 1.5; }
   }
