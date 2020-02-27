@@ -65,6 +65,7 @@ class PresidentPrimary extends ElementBase {
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
+    var host = this.getAttribute("host");
     var isTest = !!this.cache.test;
 
     races.sort((a, b) => a.party < b.party ? -1 : 1 );
@@ -73,10 +74,21 @@ class PresidentPrimary extends ElementBase {
     pairs.forEach(function([data, child]) {
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
+      
+      if (host == "statepage") {
+        var search = new URLSearchParams("counties=true&office=P");
+        search.set("date", data.date);
+        search.set("party", data.party);
+        var { resultsLink } = child.illuminate();
+        resultsLink.innerHTML = "See county results &rsaquo;";
+      }
+
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       var partyText = data.party == "Dem" ? "Democratic" : data.party;
-      child.setAttribute("headline", `${strings[data.state + "-AP"]} ${partyText} primary results`)
+      var headline = `${strings[data.state + "-AP"]} ${partyText} primary results`;
+      if (host == "statepage") headline = `${partyText} primary results`;
+      child.setAttribute("headline", headline);
       child.render(data);
     });
   }

@@ -74,6 +74,7 @@ class PresidentCaucus extends ElementBase {
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
+    var host = this.getAttribute("host");
     var isTest = !!this.cache.test;
     var caucusLabel = this.getAttribute("caucus") || this.cache.caucus;
 
@@ -117,10 +118,22 @@ class PresidentCaucus extends ElementBase {
     pairs.forEach(function([data, child]) {
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
+      
+      if (host == "statepage") {
+        var search = new URLSearchParams("counties=true&office=P");
+        search.set("date", data.date);
+        search.set("party", data.party);
+        href = "#" + search.toString();
+        var { resultsLink } = child.illuminate();
+        resultsLink.innerHTML = "See county results &rsaquo;";
+      }
+
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       var readableParty = data.party == "Dem" ? "Democratic" : data.party;
-      child.setAttribute("headline", `${strings[data.state + "-AP"]} ${readableParty} ${data.caucus ? "caucus" : "primary"} results`);
+      var headline = `${strings[data.state + "-AP"]} ${readableParty} ${data.caucus ? "caucus" : "primary"} results`;
+      if (host == "statepage") headline = `${readableParty} ${data.caucus ? "caucus" : "primary"} results`;
+      child.setAttribute("headline", headline);
       child.render(data);
     });
   }

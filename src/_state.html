@@ -137,15 +137,6 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
               <% } %>
             </h2>
 
-            <% if (row.race.office != "H") { %>
-            <div class="show-counties" data-timestamp="<%= row.race.timestamp.valueOf() %>">
-              See county results:
-              <a href="#<%= hashRace(row.race)%>&party=Dem&counties=true">Dem.</a>
-              |
-              <a href="#<%= hashRace(row.race)%>&party=GOP&counties=true">GOP</a>
-            </div>
-            <% } %>
-
             <% var partial = row.race.caucus ? "caucus" : row.race.element ? "random" : row.race.office %>
             <%= t.include(`statePartials/_${partial}.html`, { row }) %>
 
