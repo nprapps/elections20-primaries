@@ -23,11 +23,14 @@
 
     <h3 class="state-hed">2020 Primary Election Results</h3>
 
+
     <div class="state-nav link-block">
-    	<% grunt.data.elex.states.forEach(function(s) { %>
+      <% var states = grunt.data.elex.states.map(postal => ({ postal, name: grunt.data.json.strings[postal] })).sort((a, b) => a.name < b.name ? -1 : 1); %>
+
+    	<% states.forEach(function(s) { %>
     		<div>
-    			<a href="<%= prefix %><%= s %>.html">
-    				<%= grunt.data.json.strings[s] %>
+    			<a href="<%= prefix %><%= s.postal %>.html">
+    				<%= s.name %>
     			</a>
     		</div>
     	<% }); %>
