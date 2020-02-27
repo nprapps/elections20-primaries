@@ -90,6 +90,10 @@ class HousePrimary extends ElementBase {
 
       seatElements.seat.innerHTML = `District ${race.id}`;
 
+      element.dataset.count = race.results.length;
+
+      race.results.sort((a, b) => a.party < b.party ? -1 : 1);
+
       toggleAttribute(element, "hidden", party && race.party != party);
       // create result tables
       var pairs = mapToElements(seatElements.results, race.results, "results-table");

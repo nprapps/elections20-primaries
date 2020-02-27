@@ -1,7 +1,11 @@
 @import "../../../css/values.less";
 
 house-primary {
-  display: block;
+
+  .results {
+    display: flex;
+    flex-wrap: wrap;
+  }
   
   .footnote {
     font-family: @sans;
@@ -11,17 +15,32 @@ house-primary {
     margin-top: 5px;
   }
 
-  house-seat [data-as="results"] {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
+  house-seat {
+    padding-right: 20px;
+    flex: 0 0 100%;
 
-    @media @mobile {
-      display: block;
+    [data-as="results"] {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 20px;
 
-      .race + .race {
-        margin-top: 20px;
+      @media @mobile {
+        display: block;
+
+        .race + .race {
+          margin-top: 20px;
+        }
+      }
+    }
+
+    &[data-count="1"] {
+      flex: 0 0 50%;
+
+      [data-as="results"] {
+        display: block;
       }
     }
   }
+
+
 }
