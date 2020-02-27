@@ -6,12 +6,17 @@
       .replace(/\-\-+/g, "-")
       .replace(/^-+|[^\w\-]|-+$/g, "");
   };
+
+  var { seo } = grunt.data.json;
 %>
 
 <!doctype html>
 <html lang="en-US">
   <head>
-    <%= t.include("partials/_head.html", grunt.data.json) %>
+    <%= t.include("partials/_head.html", Object.assign({}, grunt.data.json, { project: {
+      title: seo.calendarTitle,
+      description: seo.calendarDescription
+    }})) %>
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>

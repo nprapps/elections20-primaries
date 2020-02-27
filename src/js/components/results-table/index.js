@@ -73,9 +73,13 @@ class ResultsTable extends ElementBase {
 
     this.setAttribute("party", party);
     // normalize percentages
+    var hasIncumbent = false;
     candidates.forEach(function(c) {
       c.percentage = c.percentage || 0;
+      hasIncumbent = c.incumbent || hasIncumbent;
     });
+    elements.incumbency.style.display = hasIncumbent ? "" : "none";
+
     // check for existing votes
     candidates.sort((a, b) => b.percentage - a.percentage);
     // re-sort if no votes are cast

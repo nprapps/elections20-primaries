@@ -4,13 +4,17 @@ Things passed into this page:
 * schedule: all possible races
 * displays: menu items for each race
 * state: which state this is
+* stateFull: the full state name
+* stateAP: AP abbreviation
   */
+var { seo } = grunt.data.json;
 %>
 <!doctype html>
 <html lang="en-US">
   <head>
     <%= t.include("partials/_head.html", Object.assign({}, grunt.data.json, { project: {
-      title: `${grunt.data.json.strings[state]} Primary Results`
+      title: seo.stateTitle.replace(/%state%/g, stateFull),
+      description: seo.stateDescription.replace(/%state%/g, stateFull)
     }})) %>
     <link rel="stylesheet" type="text/css" href="state.css">
   </head>
@@ -35,7 +39,7 @@ Things passed into this page:
       <div class="main">
         <header>
           <img src="../assets/states/<%= state %>.svg" class="state-icon" alt="">
-          <h2><a href="<%= json.project.url %>">2020 Primaries and Caucuses</a></h2>
+          <h2><a href="..">2020 Primaries and Caucuses</a></h2>
           <h1><%= json.strings[state] %> Results</h1>
         </header>
 
