@@ -48,10 +48,13 @@ class PresidentResults extends ElementBase {
     this.updated = updated;
     this.setAttribute("party", data.party);
     // assign mugs and normalize percentages
+    var hasIncumbent = false;
     candidates.forEach(function(c) {
       c.mugshot = mugs[c.last] ? mugs[c.last].src : "";
       c.percentage = c.percentage || 0;
+      hasIncumbent = c.incumbent || hasIncumbent;
     });
+    elements.incumbency.style.display = hasIncumbent ? "" : "none";
     // check for existing votes
     candidates.sort((a, b) => b.percentage - a.percentage);
     // resort if no votes are cast
