@@ -79,6 +79,7 @@ class PresidentPrimary extends ElementBase {
         var search = new URLSearchParams("counties=true&office=P");
         search.set("date", data.date);
         search.set("party", data.party);
+        href = "#" + search.toString();
         var { resultsLink } = child.illuminate();
         resultsLink.innerHTML = "See county results &rsaquo;";
       }
