@@ -55,6 +55,8 @@ class StandardPrimary extends ElementBase {
 
     if (!this.cache) return;
     var { races, chatter, footnote } = this.cache;
+    
+    races.sort((a, b) => a.party < b.party ? -1 : 1 );
 
     elements.chatter.innerHTML = chatter || "";
     elements.footnote.innerHTML = footnote || "";

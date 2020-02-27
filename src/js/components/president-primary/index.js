@@ -67,6 +67,8 @@ class PresidentPrimary extends ElementBase {
     var party = this.getAttribute("party");
     var isTest = !!this.cache.test;
 
+    races.sort((a, b) => a.party < b.party ? -1 : 1 );
+
     var pairs = mapToElements(elements.results, races, "president-results");
     pairs.forEach(function([data, child]) {
       toggleAttribute(child, "hidden", party && data.party != party);
