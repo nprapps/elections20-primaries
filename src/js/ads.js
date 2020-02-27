@@ -38,10 +38,9 @@ class GoogleAd extends ElementBase {
   }
 
   connectedCallback() {
-    var id = this.getAttribute("id");
-    if (id) return;
-    id = "google-ad-" + guid++;
-    this.setAttribute("id", id);
+    var elements = this.illuminate();
+    var id = "google-ad-" + guid++;
+    elements.container.id = id;
 
     googletag.cmd.push(() => {
       var adService = googletag.pubads();
@@ -68,6 +67,18 @@ class GoogleAd extends ElementBase {
       });
       googletag.display(id);
     });
+  }
+
+  static get template() {
+    return `
+<div class="ad-unit" data-as="container"></div>
+<div class="message">
+  <div>NPR thanks its sponsors</div>
+  <a href="https://www.npr.org/about-npr/186948703/corporate-sponsorship">
+    Become an NPR Sponsor
+  </a>
+</div>
+    `
   }
 }
 
