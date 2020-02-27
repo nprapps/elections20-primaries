@@ -38,7 +38,7 @@ Things passed into this page:
 
 var hashRace = function(race) {
   var search = new URLSearchParams();
-  var fields = "date office".split(" ");
+  var fields = "date office special".split(" ");
   for (var f of fields) {
     if (f in race) {
       search.set(f, race[f]);
@@ -51,7 +51,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
       %>
       <div class="mobile-calendar-wrapper">
-        <div class="select-label">SELECT A CONTEST</div>
+        <div class="select-label">Select a contest</div>
         <div class="outer-mobile-calendar">
           <select class="mobile-calendar">
             <% displays.forEach(function(item) { %>
@@ -59,18 +59,18 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
               <option
                 value="<%= hashRace(item.race) %>&party=Dem&counties=true"
                 data-timestamp="<%= item.race.timestamp.valueOf() %>">
-                <%= item.office %> - Dem. (<%= item.date %>)
+                <%= item.office %><%= item.special ? " Special " : " " %>- Dem. (<%= item.date %>)
               </option>
               <option
                 value="<%= hashRace(item.race) %>&party=GOP&counties=true"
                 data-timestamp="<%= item.race.timestamp.valueOf() %>">
-                <%= item.office %> - GOP (<%= item.date %>)
+                <%= item.office %><%= item.race.special ? " Special " : " " %>- GOP (<%= item.date %>)
               </option>
               <% } else { %>
               <option
                 value="<%= hashRace(item.race) %>"
                 data-timestamp="<%= item.race.timestamp.valueOf() %>">
-                <%= item.office %> (<%= item.date %>)
+                <%= item.office %><%= item.race.special ? " Special " : " " %> (<%= item.date %>)
               </option>
               <% } %>
             <% }) %>
@@ -90,6 +90,9 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
               <a href="#<%= hashRace(item.race,) %>&party=GOP&counties=true">GOP</a>
             </span>
             <% } %>
+            <% if (item.race.special) { %>
+            <span class="special">Special election</span>
+            <% } %>
             <span class="date"><%= item.date %></span>
           <% }) %>
         </ul>
@@ -106,9 +109,15 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
         <div class="module <%= i ? "hidden" : "" %>"
           data-office="<%= row.race.office %>"
           data-date="<%= row.race.date %>"
+          data-special="<%= row.race.special || "" %>"
           tabindex="-1"
         >
-          <h2 data-timestamp="<%= row.race.timestamp.valueOf() %>"><%= row.office %></h2>
+          <h2 data-timestamp="<%= row.race.timestamp.valueOf() %>">
+            <%= row.office %>
+            <% if (row.race.special) { %>
+            - Special election
+            <% } %>
+          </h2>
 
           <% if (row.race.office != "H") { %>
           <div class="show-counties" data-timestamp="<%= row.race.timestamp.valueOf() %>">

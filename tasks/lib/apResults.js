@@ -1,6 +1,7 @@
 var axios = require("axios");
 var fs = require("fs").promises;
 var depths = require("./depths");
+var crypto = require("crypto");
 
 var etags = {};
 
@@ -78,7 +79,7 @@ var issueTickets = function(races) {
       var date = apDate(d);
       var list = byDate[d];
       var states = [].concat(...list.map(r => r.states));
-      var offices = list.map(r => r.office);
+      var offices = list.map(r => r.ap || r.office);
       tickets.push({
         date,
         params: {
@@ -100,14 +101,16 @@ var redeemTicket = async function(ticket, options) {
       .sort()
       .map(p => `${p}=${ticket.params[p]}`)
       .join("&");
+  var md5 = crypto.createHash("md5");
+  var file = md5.update(tag).digest("hex");
   if (options.offline) {
     try {
-      var json = await fs.readFile(`temp/${tag}.json`);
+      var json = await fs.readFile(`temp/${file}.json`);
       var data = JSON.parse(json);
-      console.log(`Loaded offline data from temp/${tag}.json`);
+      console.log(`Loaded offline data from temp/${file}.json`);
       return data;
     } catch(err) {
-      console.log(`Couldn't load data for tag ${tag} - does the file exist?`);
+      console.log(`Couldn't load data for tag ${file} - does the file exist?`);
       // throw err;
     }
   } else {
@@ -129,7 +132,7 @@ var redeemTicket = async function(ticket, options) {
       }
       var data = response.data;
       await fs.mkdir("temp", { recursive: true });
-      await fs.writeFile(`temp/${tag}.json`, JSON.stringify(data, null, 2));
+      await fs.writeFile(`temp/${file}.json`, JSON.stringify(data, null, 2));
       etags[tag] = response.headers.etag;
       return data;
     } catch (err) {

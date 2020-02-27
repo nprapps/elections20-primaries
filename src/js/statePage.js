@@ -41,8 +41,8 @@ $("[data-live-timestamp]").forEach(function(element) {
 });
 
 var modules = $(".module");
-var exactParams = "date office".split(" ");
-var booleanParams = "counties".split(" ");
+var exactParams = ["date", "office"];
+var booleanParams = ["counties"];
 
 var lazyLoad = function() {
   var elements = $(".module:not(.hidden) [data-src]");
@@ -86,10 +86,19 @@ var onHashChange = function(e) {
   modules.forEach(function(module) {
     var visible = true;
     for (var p of exactParams) {
-      if (module.dataset[p] != params[p]) visible = false;
+      if (params[p] == "true" && !(p in module.dataset)) {
+        visible = false;
+      } else if (module.dataset[p] != params[p]) {
+        visible = false;
+      }
     }
     for (var p of booleanParams) {
       if (module.dataset[p] && module.dataset[p] != params[p]) visible = false;
+    }
+    if (params.special) {
+      if (!module.dataset.special) visible = false;
+    } else {
+      if (module.dataset.special) visible = false;
     }
     module.classList.toggle("hidden", !visible);
     // find things to toggle party
