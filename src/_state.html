@@ -112,7 +112,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
           data-special="<%= row.race.special || "" %>"
           tabindex="-1"
         >
-          <h2 data-timestamp="<%= row.race.timestamp.valueOf() %>">
+          <h2>
             <%= row.office %>
             <% if (row.race.special) { %>
             - Special election

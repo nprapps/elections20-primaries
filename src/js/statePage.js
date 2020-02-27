@@ -59,13 +59,19 @@ var onHashChange = function(e) {
   var hash = window.location.hash.replace("#", "");
   if (!hash) {
     // show the latest items
-    var latest = modules.filter(function(m) {
-      var [m, d, y] = m.dataset.date.split("/").map(Number);
+    var moduleDates = modules.map(function(m) {
+      var attribute = m.dataset.date;
+      var [m, d, y] = attribute.split("/").map(Number);
       var date = new Date(y, m - 1, d);
-      return date < now;
-    }).pop();
-    if (!latest) return lazyLoad();
-    var date = latest.dataset.date;
+      return { date, attribute };
+    }).sort((a, b) => a.date - b.date);
+    var latest = moduleDates.filter(d => d.date < now).pop();
+    console.log(latest);
+    if (!latest) {
+      // if nothing is there, use the first date instead
+      [latest] = moduleDates;
+    }
+    var date = latest.attribute;
     modules.forEach(function(module) {
       module.classList.toggle("hidden", !!(module.dataset.date != date || module.dataset.counties));
     })
