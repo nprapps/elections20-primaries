@@ -110,6 +110,7 @@ class CountyDetail extends ElementBase {
     var [ result ] = race.results.filter(r => r.fips == fips);
 
     resultsTable.setAttribute("headline", result.county);
+    resultsTable.setAttribute("max", 99);
     if (result) resultsTable.render(result);
   }
 
