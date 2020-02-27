@@ -97,13 +97,16 @@ module.exports = function(resultArray, overrides) {
           };
 
           if (ru.level == "FIPSCode") {
-            // do not set a winner at the county level
-            data.results.county.push({
-              fips: ru.fipsCode,
-              ...metadata,
-              total,
-              candidates
-            });
+            // only push if it actually has a FIPS
+            if (ru.fipsCode) {
+              // do not set a winner at the county level
+              data.results.county.push({
+                fips: ru.fipsCode,
+                ...metadata,
+                total,
+                candidates
+              });
+            }
           } else {
             data.state = ru.statePostal; // here it is
             data.results.state.push({

@@ -4,6 +4,27 @@ main.calendar {
   margin: auto;
   padding: 44px 15px;
 
+  .side-ad {
+    display: none;
+    float: right;
+  }
+
+  @media (min-width: 1200px) {
+    max-width: 1200px;
+    display: flex;
+
+    .main {
+      flex: 1 1 900px;
+    }
+
+    .side-ad {
+      display: block;
+      flex: 0 0 300px;
+      margin-left: 20px;
+      order: 2;
+    }
+  }
+
   h1 {
     font-size: 2.3em;
     font-weight: bold;

@@ -1,3 +1,4 @@
+require("./ads");
 var $ = require("./lib/qsa");
 
 var stamped = $("[data-timestamp]");
