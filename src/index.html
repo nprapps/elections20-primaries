@@ -43,7 +43,7 @@
           if (n.state) {
             n.races = [];
             races = races.filter(function(r) {
-              if (r.state == n.state && n.date == n.date) {
+              if (r.state == n.state && r.date == n.date) {
                 n.races.push(r);
                 return false;
               }
@@ -104,7 +104,9 @@
               <% }%>
               <% if (event.races) { %>
               Results:
-                <%= event.races.map(r => `<a href="states/${r.state}.html#date=${r.date}&office=${r.office}">${strings[r.office]}</a>`).join(", ") %>
+                <%= event.races.map(r => `
+<a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}">
+${strings[r.office]}${r.special ? " special election" : ""}</a>`).join(", ") %>
               <% } %>
             </div>
           </div>
