@@ -57,13 +57,14 @@ class ResultsTable extends ElementBase {
 
     var {
       candidates,
+      party,
       precincts,
       reporting,
       reportingPercentage,
       updated
     } = result;
     
-    this.setAttribute("party", result.party);
+    this.setAttribute("party", party);
     // normalize percentages
     candidates.forEach(function(c) {
       c.percentage = c.percentage || 0;
@@ -123,7 +124,7 @@ class ResultsTable extends ElementBase {
 
     // insert content
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
-    elements.content.innerHTML = table({ candidates, highest, fold });
+    elements.content.innerHTML = table({ candidates, highest, fold, party });
 
     // adjust reporting numbers
     if (reporting > 0 && reportingPercentage < 1) {
