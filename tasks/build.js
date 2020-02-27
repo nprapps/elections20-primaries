@@ -70,6 +70,9 @@ module.exports = function(grunt) {
     var stateTemplate = grunt.file.read("src/_state.html");
 
     states.forEach(function(state) {
+      var stateFull = grunt.data.json.strings[state];
+      var stateAP = grunt.data.json.strings[state + "-AP"];
+
       // create a data object with its specific data
       var officeOrder = ["P", "G", "S", "H"];
       var newestFirst = (a, b) => b.timestamp - a.timestamp;
@@ -99,6 +102,8 @@ module.exports = function(grunt) {
 
       var stateData = Object.assign({}, grunt.data, {
         state,
+        stateFull,
+        stateAP,
         schedule,
         displays
       });
