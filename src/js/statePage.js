@@ -41,7 +41,8 @@ $("[data-live-timestamp]").forEach(function(element) {
   }
 });
 
-var modules = $(".module");
+var modules = $(".module:not(.future)");
+var noResultsModule = $.one(".module.future");
 var exactParams = ["date", "office"];
 var booleanParams = ["counties"];
 
@@ -58,6 +59,7 @@ var onHashChange = function(e) {
   // we do this using the built-in type for parsing URL search params
   $(".race-calendar .active").forEach(el => el.classList.remove("active"));
   var hash = window.location.hash.replace("#", "");
+  noResultsModule.classList.add("hidden");
   if (!hash) {
     // show the latest items
     var moduleDates = modules.map(function(m) {
@@ -69,8 +71,10 @@ var onHashChange = function(e) {
     var latest = moduleDates.filter(d => d.date < now).pop();
     console.log(latest);
     if (!latest) {
-      // if nothing is there, use the first date instead
-      [latest] = moduleDates;
+      // if nothing is there, show the no-results module and hide everything else
+      modules.forEach(m => m.classList.add("hidden"));
+      noResultsModule.classList.remove("hidden");
+      return;
     }
     var date = latest.attribute;
     modules.forEach(function(module) {
