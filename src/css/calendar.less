@@ -1,4 +1,6 @@
 main.calendar {
+  @dateWidth: 6em;
+
   .gotham();
   max-width: 900px;
   margin: auto;
@@ -26,11 +28,15 @@ main.calendar {
   }
 
   h1 {
-    font-size: 2.3em;
+    font-size: 1.9em;
     font-weight: bold;
     color: var(--foreground);
     margin: 0 0 1em 0;
     line-height: 1.2;
+
+    @media @mobile-above {
+      font-size: 2.3em;
+    }
   }
 
   h2 {
@@ -76,7 +82,7 @@ main.calendar {
       }
 
       @media @mobile-above {
-        flex: 0 0 9em;
+        flex: 0 0 @dateWidth;
       }
     }
 
@@ -134,7 +140,7 @@ main.calendar {
 
   .content {
     @media @mobile {
-      margin-left: 75px;
+      margin-left: calc(@dateWidth + 10px);
     }
 
     @media @mobile-above {
