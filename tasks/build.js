@@ -91,7 +91,7 @@ module.exports = function(grunt) {
           live: race.timestamp <= grunt.data.elex.today && race.timestamp > grunt.data.elex.retroactive,
           race
         }
-        if (race.office != "H" && !race.parties) {
+        if (race.office != "H" && !race.singleParty) {
           item.parties = true;
         }
         return item;
