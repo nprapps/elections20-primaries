@@ -3,7 +3,7 @@
 Things passed into this page:
 * schedule: all possible races
 * displays: menu items for each race
-* state: which state this is
+* state: which state this is (postal abbr)
 * stateFull: the full state name
 * stateAP: AP abbreviation
   */
@@ -11,7 +11,7 @@ var { seo } = grunt.data.json;
 var metadata = {
   project: Object.assign({}, grunt.data.json.project, {
     title: seo.stateTitle.replace(/%state%/g, stateFull),
-    description: seo.stateDescription.replace(/%state%/g, stateFull)
+    description: seo["description" + state]
   })
 };
 %>
