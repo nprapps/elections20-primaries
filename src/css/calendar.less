@@ -6,27 +6,6 @@ main.calendar {
   margin: auto;
   padding: 44px 15px;
 
-  .side-ad {
-    display: none;
-    float: right;
-  }
-
-  @media (min-width: 1200px) {
-    max-width: 1200px;
-    display: flex;
-
-    .main {
-      flex: 1 1 900px;
-    }
-
-    .side-ad {
-      display: block;
-      flex: 0 0 300px;
-      margin-left: 20px;
-      order: 2;
-    }
-  }
-
   h1 {
     font-size: 1.9em;
     font-weight: bold;
@@ -114,11 +93,12 @@ main.calendar {
       line-height: 1;
       -webkit-font-smoothing: antialiased;
       margin: 0 0 5px 0;
-      width: 75px;
+      width: 65px;
 
       @media @mobile-above {
         display: block;
         margin: 2px 20px 0 20px;
+        width: 75px;
       }
     }
 

@@ -95,6 +95,15 @@
           var byMonth = groupBy(events, "month");
           Object.keys(byMonth).sort((a, b) => a - b).forEach(function(m) {
         %>
+
+        <h2><%= monthNames[m] %></h2>
+        <%
+          var byDay = groupBy(byMonth[m], "day");
+          Object.keys(byDay).sort((a, b) => a - b).forEach(function(d) {
+            var day = byDay[d];
+            day.forEach(function(event, i) {
+        %>
+
         <div class="event-row index-<%= i%> " data-timestamp="<%= event.timestamp %>">
           <div class="date">
             <% if (event.date_prose) { %>
