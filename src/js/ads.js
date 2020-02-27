@@ -4,6 +4,8 @@ window.googletag = window.googletag || {cmd: []};
 var gptLoaded = false;
 var gptSetup = false;
 
+var ccpaCookie = document.cookie.split(";").filter(c => c.includes("ccpa_rdp=true")).length > 0;
+
 var slug = window.location.pathname.replace(/[^\/]+\.html$/, "").split("/").pop();
 var storyId = "liveblog-" + (slug || "localhost");
 var isStagingServer = window.location.hostname == "stage-apps.npr.org";
@@ -51,6 +53,10 @@ class GoogleAd extends ElementBase {
         adService.setTargeting("advelvet", advelvetTargeting);
         adService.setTargeting("storyid", [storyId]);
         adService.setTargeting("testserver", [isStagingServer.toString()]);
+        if (ccpaCookie) {
+          console.log("DFP: ccpa rdp enabled");
+          adService.setPrivacySettings({ restrictDataProcessing: true, });
+        }
         googletag.enableServices();
         gptSetup = true;
       }
