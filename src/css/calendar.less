@@ -100,6 +100,16 @@ main.calendar {
     &.finance .pill { background: #92c777; }
     &.debate .pill { background: @true; }
   }
+  // in case we want to be "extra" about the later debates
+  // .event-row[data-timestamp="1601352000000"],
+  // .event-row[data-timestamp="1602043200000"],
+  // .event-row[data-timestamp="1602734400000"],
+  // .event-row[data-timestamp="1603339200000"] {
+  //   .category.debate .pill {
+  //     background-color: @true;
+  //     background: linear-gradient(90deg, @rigorous 0%, @true 100%);
+  //   }
+  // }
 
   .content {
     @media @mobile {
