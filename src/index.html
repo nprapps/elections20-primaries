@@ -111,10 +111,12 @@
               <a class="coverage-link" href="<%= event.link %>">NPR coverage</a>
               <% } %>
               <% if (event.link && event.races) { %>
+              <span class="results-label">
               |
+              </span>
               <% }%>
               <% if (event.races) { %>
-              Results:
+              <span class="results-label">Results:</span>
                 <%= event.races.map(r => `
 <a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}">
 ${strings[r.office]}${r.special ? " special election" : ""}</a>`).join(", ") %>

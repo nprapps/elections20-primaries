@@ -120,6 +120,13 @@ main.calendar {
       color: var(--secondary);
       font-size: 0.9em;
       margin-bottom: 3px;
+
+      a:not([href]) {
+        color: var(--secondary);
+        cursor: arrow;
+
+        &:hover { opacity: 1; }
+      }
     }
 
   }
