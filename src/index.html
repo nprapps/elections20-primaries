@@ -37,6 +37,15 @@
           n.day = d;
           n.timestamp = new Date(y, m - 1, d).valueOf();
           n.dateText = formatAPDate(new Date(n.timestamp)).replace(/, 2020/, "");
+
+          if (n.date_end) {
+            var [mEnd, dEnd, yEnd] = n.date_end.split("/");
+            n.monthEnd = mEnd;
+            n.dayEnd = dEnd;
+            n.timestampEnd = new Date(yEnd, mEnd - 1, dEnd).valueOf();
+            n.dateTextEnd = formatAPDate(new Date(n.timestampEnd)).replace(/, 2020/, "");
+          }
+
           // add to the events
           events.push(n);
           // find matching races
@@ -88,7 +97,9 @@
             day.forEach(function(event, i) {
         %>
         <div class="event-row index-<%= i%> " data-timestamp="<%= event.timestamp %>">
-          <div class="date"><%= event.dateText %></div>
+          <div class="date">
+            <%= event.dateText %><% if (event.dateTextEnd) { %>-<%= event.dateTextEnd %><% } %>
+          </div>
 
           <div class="category <%= classify(event.category) %>"><span class="pill"><%= event.category %></span></div>
 
