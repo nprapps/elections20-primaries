@@ -48,7 +48,9 @@ class ResultsTable extends ElementBase {
 
   illuminate() {
     var elements = super.illuminate();
-    elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
+    elements.moreButton.addEventListener("click", () =>
+      this.toggleAttribute("expanded")
+    );
     return elements;
   }
 
@@ -63,7 +65,12 @@ class ResultsTable extends ElementBase {
       reportingPercentage,
       updated
     } = result;
-    
+
+    elements.footnote.innerHTML =
+      candidates.length > 1
+        ? ""
+        : "The AP does not tabulate votes for uncontested races and declares its winner as soon as polls close.";
+
     this.setAttribute("party", party);
     // normalize percentages
     candidates.forEach(function(c) {
@@ -135,7 +142,9 @@ class ResultsTable extends ElementBase {
       reportingPercentage = reportingPercentage.toFixed(0);
     }
     var updated = new Date(updated);
-    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(updated)}`;
+    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(
+      updated
+    )}`;
     elements.updated.innerHTML = updateString;
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;

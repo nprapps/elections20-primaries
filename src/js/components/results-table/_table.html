@@ -33,8 +33,12 @@
         </span>
 
       </td>
+      <% if (data.candidates.length > 1) { %>
       <td role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</td>
       <td role="cell" class="td votes"><%= c.votes.toLocaleString() %></td>
+      <% } else { %>
+      <td role="cell" class="td votes uncontested" colspan="2">uncontested</td>
+      <% } %>
     </tr>
     <% }); %>
   </tbody>
