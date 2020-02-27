@@ -175,6 +175,10 @@ nav.race-calendar {
 }
 
 h3.latest-results {
+  .gotham();
+  font-weight: bold;
+  font-size: 1.5em;
+
   body.filtered & {
     display: none;
   }
@@ -196,6 +200,12 @@ hr {
     border-bottom: 2px solid #EEE;
     padding-bottom: 8px;
     font-family: @gotham;
+    font-size: 1.3em;
+
+    [data-office="H"] & {
+      border: none;
+      margin-bottom: 0;
+    }
   }
 
   &.hidden {
