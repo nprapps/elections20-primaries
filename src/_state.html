@@ -94,7 +94,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
               <a class="office" href="#<%= hashRace(item.race) %>">
                 <%= item.office %>
                 <% if (item.race.special) { %>
-                <span class="special">- <br />Special Election</span>
+                <span class="special">— <br />Special Election</span>
                 <% } %>
               </a>
               <% if (item.parties) { %>
@@ -130,7 +130,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
             <h2>
               <%= row.office %>
               <% if (row.race.special) { %>
-              - Special Election
+              — Special Election
               <% } %>
             </h2>
 
