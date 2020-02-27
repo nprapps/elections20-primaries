@@ -139,7 +139,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
     </main>
 
-    <%= t.include("partials/_footer.html", { content: t.include("_footerNav.html")}) %>
+    <%= t.include("partials/_footer.html", { prefix: "" }) %>
 
     <script src="state.js" async></script>
     <%= t.include("partials/_analytics.html") %>

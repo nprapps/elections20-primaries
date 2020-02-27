@@ -116,8 +116,7 @@
       %>
     </main>
 
-    <%= t.include("partials/_footer.html", { content: `
-    `}) %>
+    <%= t.include("partials/_footer.html", { prefix: "states/" }) %>
 
     <script src="app.js" async></script>
     <%= t.include("partials/_analytics.html") %>

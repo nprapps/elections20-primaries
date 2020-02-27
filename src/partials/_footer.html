@@ -1,6 +1,30 @@
+<%
+  var prefix;
+  if (typeof prefix == "undefined") {
+    prefix = "";
+  }
+%>
+
 <footer role="contentinfo">
   <div class="constrained">
-    <%= typeof content != "undefined" ? content : "" %>
+
+    <div class="nav-hed">Results by state</div>
+
+    <div class="state-nav">
+    	<% grunt.data.elex.states.forEach(function(s) { %>
+    		<div>
+    			<a href="<%= prefix %><%= s %>.html">
+    				<%= grunt.data.json.strings[s] %>
+    			</a>
+    		</div>
+    	<% }); %>
+    </div>
+
+    <div class="credits">
+    	<h3>Credits</h3>
+    	<p><%= grunt.data.json.chatter["credits"] %></p>
+    </div>
+
     <div class="npr">
       <ul>
         <li><a href="https://www.npr.org/about-npr/179876898/terms-of-use" target="_blank">Terms of Use</a></li>
