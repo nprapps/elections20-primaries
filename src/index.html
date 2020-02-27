@@ -80,7 +80,8 @@
               timestamp,
               category: "Vote",
               title: strings[r.state] + " primaries",
-              races: [r]
+              races: [r],
+              implicit: true
             };
             events.push(event);
             // add matching races to the event
@@ -101,6 +102,14 @@
           var byDay = groupBy(byMonth[m], "day");
           Object.keys(byDay).sort((a, b) => a - b).forEach(function(d) {
             var day = byDay[d];
+            day.sort(function(a, b) {
+              var aIndex = a.implicit ? 1 : 0;
+              var bIndex = b.implicit ? 1 : 0;
+              if (aIndex == bIndex) {
+                return a.title < b.title ? -1 : 1;
+              }
+              return aIndex - bIndex;
+            })
             day.forEach(function(event, i) {
         %>
 
