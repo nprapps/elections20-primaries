@@ -21,9 +21,13 @@
         <div class="bar-container">
           <div class="bar" style="width: <%= data.highest ? c.percentage / data.highest * 75 : 0 %>%"></div>
         </div>
+        
+        <% if (c.last == "Other") { %>
+        Other <span class="first">Candidates</span>
+        <% } else { %>
+        <span class="first"><%= c.first || "" %> </span><%= c.last %>
+        <% } %>
 
-        <span class="first"><%= c.first || "" %></span>
-        <%= c.last == "Other" ? "Other candidates" : c.last %>
         <% if (!data.party) { %>
         (<%= c.party %>)
         <% } %>
