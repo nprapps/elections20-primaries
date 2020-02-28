@@ -69,7 +69,6 @@ var onHashChange = function(e) {
       return { date, attribute };
     }).sort((a, b) => a.date - b.date);
     var latest = moduleDates.filter(d => d.date < now).pop();
-    console.log(latest);
     if (!latest) {
       // if nothing is there, show the no-results module and hide everything else
       modules.forEach(m => m.classList.add("hidden"));
