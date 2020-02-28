@@ -9,6 +9,8 @@ var headerTemplate = dot.compile(require("./_resultHeader.html"));
 
 var { formatTime, formatAPDate, groupBy, toggleAttribute } = require("../utils");
 
+const LEADER_THRESHOLD = 25;
+
 var mugs = require("../../../../data/mugs.sheet.json");
 
 // return a fresh object each time so we can mutate it
@@ -140,6 +142,7 @@ class PresidentResultsMultiple extends ElementBase {
     var stateRaces = {};
     // preprocess races for various metrics
     races.forEach(function(r, i) {
+      var leader = null;
       // only one reporting unit, so simplify the structure
       r.results = r.results[0];
       var { reporting, reportingPercentage, precincts } = r.results;
@@ -150,20 +153,27 @@ class PresidentResultsMultiple extends ElementBase {
       } else {
         reportingPercentage = reportingPercentage.toFixed(0);
       }
-      r.results.reportingPercentage = reportingPercentage;
       var byName = {};
+      var hasPercentage = r.results.candidates.some(c => c.percentage);
       r.results.candidates.forEach(function(c) {
         byName[c.last] = c;
         var { percentage } = c;
-        if (!reporting) {
+        if (!reporting && !hasPercentage) {
           percentage = percentage ||  "-";
         } else {
           percentage = percentage || "0.0%";
         }
         if (typeof percentage == "number") percentage = percentage.toFixed(1) + "%";
-        c.percentage = percentage;
+        if (r.results.reportingPercentage > LEADER_THRESHOLD) {
+          if (c.percentage && (!leader || leader.percentage < c.percentage)) {
+            leader = c;
+          }
+        }
+        c.displayPercentage = percentage;
       });
+      r.results.reportingPercentage = reportingPercentage;
       r.results.byName = byName;
+      r.results.leader = leader;
       stateRaces[r.state] = r;
     });
 
