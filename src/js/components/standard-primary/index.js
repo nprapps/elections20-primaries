@@ -79,10 +79,8 @@ class StandardPrimary extends ElementBase {
       // render each one
       var test = !!this.cache.test;
       pairs.forEach(function([data, child]) {
+        console.log(child);
 
-        if (href) child.setAttribute("href", href);
-        if (max) child.setAttribute("max", max);
-        toggleAttribute(child, "test", test);
 
         var readableParty = data.party == "Dem" ? "Democratic" : data.party;
         var headline = `${strings[race.state + "-AP"]} ${readableParty} primary results`;
@@ -98,6 +96,10 @@ class StandardPrimary extends ElementBase {
           var { resultsLink } = child.illuminate();
           resultsLink.innerHTML = "See county results &rsaquo;";
         }
+
+        if (href) child.setAttribute("href", href);
+        if (max) child.setAttribute("max", max);
+        toggleAttribute(child, "test", test);
 
         child.setAttribute("headline", headline);
         child.render(data);
