@@ -157,6 +157,7 @@ class ResultsTable extends ElementBase {
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
     elements.reporting.innerHTML = reportingString;
+    if (candidates.length < 2 ) elements.reporting.style.display = "none";
   }
 
   static get template() {
