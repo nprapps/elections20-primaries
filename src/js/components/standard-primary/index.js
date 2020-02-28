@@ -81,10 +81,10 @@ class StandardPrimary extends ElementBase {
       pairs.forEach(function([data, child]) {
 
         var readableParty = data.party == "Dem" ? "Democratic" : data.party;
-        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary results`;
+        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
 
         if (host == "statepage") {
-          headline = `${readableParty} primary results`;
+          headline = `${readableParty} primary`;
           var search = new URLSearchParams("counties=true");
           search.set("date", race.date);
           search.set("party", race.party);
