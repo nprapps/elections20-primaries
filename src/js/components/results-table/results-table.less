@@ -2,7 +2,7 @@
 
 results-table {
   @bar-height: .6em;
-  
+
   display: block;
   .gotham();
   font-size: var(--font-size);
@@ -60,6 +60,7 @@ results-table {
       color: var(--secondary);
       font-family: @sans;
       font-size: 0.85em;
+      text-align: right;
     }
   }
 
@@ -76,6 +77,8 @@ results-table {
     .thead {
       .knockout-header();
       color: var(--secondary);
+
+      th { font-weight: normal; }
 
       .sde {
         margin-right: -.5em;

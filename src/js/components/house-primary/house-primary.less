@@ -6,7 +6,7 @@ house-primary {
     display: flex;
     flex-wrap: wrap;
   }
-  
+
   .footnote {
     font-family: @sans;
     font-size: 0.85em;
@@ -30,13 +30,13 @@ house-primary {
     [data-as="results"] {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-gap: 20px;
+      grid-gap: 30px;
 
       @media @mobile {
         display: block;
 
-        .race + .race {
-          margin-top: 20px;
+        results-table + results-table {
+          margin-top: 30px;
         }
       }
     }
