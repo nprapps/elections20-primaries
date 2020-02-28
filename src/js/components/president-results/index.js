@@ -25,7 +25,11 @@ class PresidentResults extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["headline"];
+    return ["href", "headline"];
+  }
+
+  static get mirroredProps() {
+    return ["href", "headline"];
   }
 
   attributeChangedCallback(attr, was, value) {
@@ -34,6 +38,10 @@ class PresidentResults extends ElementBase {
     switch (attr) {
       case "headline":
         elements.headline.innerHTML = value ? value.trim() : "";
+        break;
+
+      case "href":
+        elements.resultsLink.href = value;
         break;
     }
   }
@@ -125,7 +133,6 @@ class PresidentResults extends ElementBase {
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
     elements.reporting.innerHTML = reportingString;
-    elements.resultsLink.href = this.getAttribute("href");
 
   }
 

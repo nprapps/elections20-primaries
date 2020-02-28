@@ -32,6 +32,10 @@ class ResultsTable extends ElementBase {
     return ["href", "headline"];
   }
 
+  static get mirroredProps() {
+    return ["href", "headline"];
+  }
+
   attributeChangedCallback(attr, was, value) {
     var elements = this.illuminate();
 
@@ -153,7 +157,6 @@ class ResultsTable extends ElementBase {
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
     elements.reporting.innerHTML = reportingString;
-    elements.resultsLink.href = this.getAttribute("href");
   }
 
   static get template() {
