@@ -75,7 +75,11 @@ class PresidentPrimary extends ElementBase {
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
       
+      var headline = `${strings[data.state + "-AP"]} ${partyText} primary results`;
+
       if (host == "statepage") {
+        headline = `${partyText} primary results`;
+        // update the link
         var search = new URLSearchParams("counties=true&office=P");
         search.set("date", data.date);
         search.set("party", data.party);
@@ -87,8 +91,6 @@ class PresidentPrimary extends ElementBase {
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       var partyText = data.party == "Dem" ? "Democratic" : data.party;
-      var headline = `${strings[data.state + "-AP"]} ${partyText} primary results`;
-      if (host == "statepage") headline = `${partyText} primary results`;
       child.setAttribute("headline", headline);
       child.render(data);
     });
