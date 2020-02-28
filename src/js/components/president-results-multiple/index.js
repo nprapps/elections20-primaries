@@ -12,7 +12,7 @@ var { formatTime, formatAPDate, groupBy, toggleAttribute } = require("../utils")
 
 const LEADER_THRESHOLD = 25;
 
-var mugs = require("../../../../data/mugs.sheet.json");
+var mugs = require("mugs.sheet.json");
 
 // return a fresh object each time so we can mutate it
 var getSchedule = function() {

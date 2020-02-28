@@ -4,7 +4,7 @@ require("../results-table");
 require("./house-primary.less");
 var { mapToElements, toggleAttribute, groupBy } = require("../utils");
 
-var strings = require("../../../../data/strings.sheet.json");
+var strings = require("strings.sheet.json");
 
 class HouseSeat extends ElementBase {
   static get template() {

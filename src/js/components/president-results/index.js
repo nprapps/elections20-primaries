@@ -5,7 +5,7 @@ var tableTemplate = dot.compile(require("./_table.html"));
 
 var { formatTime, formatAPDate } = require("../utils");
 
-var mugs = require("../../../../data/mugs.sheet.json");
+var mugs = require("mugs.sheet.json");
 var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 var defaultMax = 6;
 

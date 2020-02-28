@@ -4,7 +4,7 @@ require("../president-results");
 require("./president-primary.less");
 var { mapToElements, toggleAttribute } = require("../utils");
 
-var strings = require("../../../../data/strings.sheet.json");
+var strings = require("strings.sheet.json");
 
 class PresidentPrimary extends ElementBase {
   constructor() {
