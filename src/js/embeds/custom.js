@@ -29,10 +29,7 @@ if (!elementMap[race]) {
 } else {
   var tag = document.createElement(elementMap[race]);
   tag.src = `../data/${search.get("data")}.json`;
-
-  if (search.has("live")) {
-    tag.setAttribute("live", "");
-  }
+  tag.setAttribute("live", "");
 
   if (search.has("link")) {
     tag.setAttribute("href", search.get("link"));
@@ -46,6 +43,7 @@ if (!elementMap[race]) {
   if (search.has("delegates") && (race == "P" || race == "C")) {
     placeholder.parentElement.replaceChild(tag, placeholder);
   } else {
+    // wipe out delegates and the HR in favor of just our tag
     row.innerHTML = "";
     row.appendChild(tag);
   }
