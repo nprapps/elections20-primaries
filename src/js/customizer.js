@@ -22,6 +22,7 @@ states.forEach(function(s) {
 });
 
 var onFormChange = function() {
+  var prefix = "https://apps.npr.org/elections20-primaries/";
   var formData = {};
   $("select, input", form).forEach(function(input) {
     var name = input.name;
@@ -35,7 +36,7 @@ var onFormChange = function() {
   var url;
   form.dataset.type = formData.type;
   if (formData.type == "page") {
-    url = new URL(`https://apps.npr.org/elections20-primaries/states/${stateSelect.value}.html?embedded=true`);
+    url = new URL(`${prefix}states/${stateSelect.value}.html?embedded=true`);
     var hash = new URLSearchParams("");
     if (date) hash.set("date", date);
     if (race) {
@@ -48,7 +49,7 @@ var onFormChange = function() {
       preview.setAttribute("src", "");
       return;
     }
-    url = new URL("https://apps.npr.org/elections20-primaries/embeds/?live");
+    url = new URL(`${prefix}embeds/?live`);
     url.searchParams.set("race", race);
     url.searchParams.set("data", file);
     if (formData.party) {
@@ -58,7 +59,7 @@ var onFormChange = function() {
       url.searchParams.set("delegates", "");
     }
     if (formData.link) {
-      url.searchParams.set("link", `https://apps.npr.org/elections20-primaries/states/${stateSelect.value}.html`);
+      url.searchParams.set("link", `${prefix}states/${stateSelect.value}.html`);
     }
   }
   embed.innerHTML = `<p
@@ -68,7 +69,7 @@ var onFormChange = function() {
     Loading...
 </p>
 <script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js"></script>`.replace(/\</g, "&lt;");
-  preview.setAttribute("src", url.toString());
+  preview.setAttribute("src", url.toString().replace(prefix, ""));
 }
 
 $("select[name], input[name]").forEach(el => el.addEventListener("change", onFormChange));
