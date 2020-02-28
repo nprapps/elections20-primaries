@@ -111,10 +111,10 @@ class HousePrimary extends ElementBase {
         toggleAttribute(child, "test", test);
         
         var readableParty = data.party == "Dem" ? "Democratic" : (data.party || "Open");
-        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary results`;
+        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
 
         if (host == "statepage") {
-          headline = `${readableParty} primary results`;
+          headline = `${readableParty} primary`;
         }
 
         child.setAttribute("headline", headline);
