@@ -66,6 +66,7 @@ class CountyDetail extends ElementBase {
     var fips = {};
     var totals = {}; // by candidate ID
     results.forEach(function(r) {
+      var top = null;
       r.candidates.forEach(function(candidate) {
         if (!totals[candidate.id]) totals[candidate.id] = {
           first: candidate.first,
@@ -74,8 +75,14 @@ class CountyDetail extends ElementBase {
           votes: 0
         };
         totals[candidate.id].votes += candidate.votes;
+        if (!top || candidate.percentage > top.percentage) {
+          top = candidate;
+        }
         delete candidate.winner;
       });
+      if (r.reportingPercentage == 100) {
+        top.winner = true;
+      }
       counties[r.county] = r.fips;
       fips[r.fips] = r.county;
     });
