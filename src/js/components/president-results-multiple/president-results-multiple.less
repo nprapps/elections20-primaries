@@ -35,6 +35,73 @@ president-results-multiple {
     z-index: 9999;
   }
 
+  .results-header {
+    display: none;
+    margin-bottom: 13px;
+
+    h3 {
+      .gotham();
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0 0 6px 0;
+
+      @media @mobile-above {
+        margin: 0;
+      }
+
+      img {
+        width: auto;
+        height: 16px;
+        margin: 2px 11px 0 0;
+        vertical-align: top;
+      }
+
+      a:link, a:visited {
+        color: var(--foreground);
+      }
+      a:hover, a:active {
+        color: @accent-light;
+      }
+    }
+
+    a, a:link, a:visited, a:hover, a:active {
+      text-decoration: none;
+    }
+
+    nav {
+      .knockout-header();
+      font-size: 13px;
+
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+
+        + li {
+          margin-left: 22px;
+        }
+      }
+    }
+
+    body.homepage & {
+      display: block;
+      padding-top: 20px;
+
+      @media @mobile-above {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+      }
+    }
+  }
+
   .board-multiple {
     color: var(--foreground);
     display: flex;
