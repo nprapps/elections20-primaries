@@ -39,7 +39,7 @@
     <% Object.keys(activeMugs).forEach(function(name) { %>
     <% var candidate = race.results.byName[name]; %>
     <td role="cell" class="cand <%= classify(name) %> <% if (candidate.winner) { %> winner <% } %>">
-      <span class="value"><%= candidate.percentage.toFixed(1) %>%</span>
+      <span class="value"><%= candidate.percentage %></span>
     </td>
     <% }); %>
 

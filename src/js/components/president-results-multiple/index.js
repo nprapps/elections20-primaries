@@ -139,7 +139,7 @@ class PresidentResultsMultiple extends ElementBase {
     // lookup table for races by state
     var stateRaces = {};
     // preprocess races for various metrics
-    races.forEach(function(r) {
+    races.forEach(function(r, i) {
       // only one reporting unit, so simplify the structure
       r.results = r.results[0];
       var { reporting, reportingPercentage, precincts } = r.results;
@@ -154,7 +154,14 @@ class PresidentResultsMultiple extends ElementBase {
       var byName = {};
       r.results.candidates.forEach(function(c) {
         byName[c.last] = c;
-        c.percentage = c.percentage || 0;
+        var { percentage } = c;
+        if (!reporting) {
+          percentage = percentage ||  "-";
+        } else {
+          percentage = percentage || "0.0%";
+        }
+        if (typeof percentage == "number") percentage = percentage.toFixed(1) + "%";
+        c.percentage = percentage;
       });
       r.results.byName = byName;
       stateRaces[r.state] = r;
