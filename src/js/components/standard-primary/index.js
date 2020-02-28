@@ -79,8 +79,6 @@ class StandardPrimary extends ElementBase {
       // render each one
       var test = !!this.cache.test;
       pairs.forEach(function([data, child]) {
-        console.log(child);
-
 
         var readableParty = data.party == "Dem" ? "Democratic" : data.party;
         var headline = `${strings[race.state + "-AP"]} ${readableParty} primary results`;
