@@ -73,6 +73,10 @@ class Retriever {
   }
 
   start(interval = this.interval) {
+    if (interval == this.interval && this.timeout) {
+      // ignore redundant start requests if we're already going
+      return;
+    }
     this.stop(true);
     this.interval = interval;
     this.timeout = setTimeout(this.tick, interval * 1000);
