@@ -37,9 +37,13 @@ class GoogleAd extends ElementBase {
   constructor() {
     super();
     if (!gptLoaded) observer.observe(this);
+    this.connected = false;
   }
 
   connectedCallback() {
+    if (this.connected) return;
+    this.connected = true;
+    
     var elements = this.illuminate();
     var id = "google-ad-" + guid++;
     elements.container.id = id;

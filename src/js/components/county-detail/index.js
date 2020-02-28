@@ -57,7 +57,7 @@ class CountyDetail extends ElementBase {
     var { races, test } = data;
 
     // filter races by type - no weird alignments
-    races = races.filter(r => !r.type.match(/alignment/i));
+    races = races.filter(r => r.type && !r.type.match(/alignment/i));
 
     var party = this.getAttribute("party");
 
