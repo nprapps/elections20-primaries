@@ -67,24 +67,26 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
           <div class="outer-mobile-calendar">
             <select class="mobile-calendar">
               <% displays.forEach(function(item) { %>
-                <% if (item.parties) { %>
-                <option
-                  value="<%= hashRace(item.race) %>&party=Dem&counties=true"
-                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
-                  <%= item.office %><%= item.special ? " - Special " : " " %>- Dem. (<%= item.date %>)
-                </option>
-                <option
-                  value="<%= hashRace(item.race) %>&party=GOP&counties=true"
-                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
-                  <%= item.office %><%= item.race.special ? " - Special " : " " %>- GOP (<%= item.date %>)
-                </option>
-                <% } else { %>
+
                 <option
                   value="<%= hashRace(item.race) %>"
                   data-timestamp="<%= item.race.timestamp.valueOf() %>">
                   <%= item.office %><%= item.race.special ? " - Special " : " " %> (<%= item.date %>)
                 </option>
+
+                <% if (item.parties) { %>
+                <option
+                  value="<%= hashRace(item.race) %>&party=Dem&counties=true"
+                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
+                  <%= item.office %><%= item.special ? " - Special " : " " %>- Dem. only (<%= item.date %>)
+                </option>
+                <option
+                  value="<%= hashRace(item.race) %>&party=GOP&counties=true"
+                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
+                  <%= item.office %><%= item.race.special ? " - Special " : " " %>- GOP only (<%= item.date %>)
+                </option>
                 <% } %>
+
               <% }) %>
             </select>
           </div>
@@ -149,6 +151,12 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
             data-counties="true"
             tabindex="-1"
           >
+            <h2>
+              <%= row.office %> results by county
+              <% if (row.race.special) { %>
+              — Special Election
+              <% } %>
+            </h2>
             <%= t.include("statePartials/_counties.html", { row }) %>
           </div>
           <% } %>

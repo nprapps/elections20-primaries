@@ -2,9 +2,6 @@
 
 county-detail {
   .controls {
-    margin-top: 30px;
-    border-top: 2px solid #EEE;
-    padding-top: 20px;
 
     label {
       .knockout();
@@ -13,6 +10,10 @@ county-detail {
       margin-right: 6px;
       display: inline-block;
       text-transform: uppercase;
+
+      @media @mobile {
+        display: block;
+      }
     }
 
     .outer-county-select {
@@ -28,6 +29,10 @@ county-detail {
       font-family: @gotham;
       background: transparent;
       width: 100%;
+
+      @media @mobile {
+        font-size: 16px;
+      }
     }
   }
 
