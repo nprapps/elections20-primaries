@@ -4,6 +4,8 @@ require("../results-table");
 require("./house-primary.less");
 var { mapToElements, toggleAttribute, groupBy } = require("../utils");
 
+var strings = require("../../../../data/strings.sheet.json");
+
 class HouseSeat extends ElementBase {
   static get template() {
     return `
@@ -73,12 +75,14 @@ class HousePrimary extends ElementBase {
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
+    var host = this.getAttribute("host");
 
     var groupedResults = groupBy(this.cache.races, "seat");
     var seats = Object.keys(groupedResults).map(function(id) {
       return {
         results: groupedResults[id].map(r => r.results[0]),
-        id
+        id,
+        state: groupedResults[id][0].state
       }
     });
 
@@ -100,12 +104,20 @@ class HousePrimary extends ElementBase {
 
       // render each one
       var test = !!this.cache.test;
+
       pairs.forEach(function([data, child]) {
         if (href) child.setAttribute("href", href);
         child.setAttribute("max", 99);
         toggleAttribute(child, "test", test);
+        
         var readableParty = data.party == "Dem" ? "Democratic" : (data.party || "Open");
-        child.setAttribute("headline", `${readableParty} primary results`);
+        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary results`;
+
+        if (host == "statepage") {
+          headline = `${readableParty} primary results`;
+        }
+
+        child.setAttribute("headline", headline);
         child.render(data);
       });
     });

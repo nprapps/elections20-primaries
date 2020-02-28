@@ -118,8 +118,12 @@ class PresidentCaucus extends ElementBase {
     pairs.forEach(function([data, child]) {
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
+
+      var readableParty = data.party == "Dem" ? "Democratic" : data.party;
+      var headline = `${strings[data.state + "-AP"]} ${readableParty} ${data.caucus ? "caucus" : "primary"} results`;
       
       if (host == "statepage") {
+        headline = `${readableParty} ${data.caucus ? "caucus" : "primary"} results`;
         var search = new URLSearchParams("counties=true&office=P");
         search.set("date", data.date);
         search.set("party", data.party);
@@ -130,9 +134,6 @@ class PresidentCaucus extends ElementBase {
 
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
-      var readableParty = data.party == "Dem" ? "Democratic" : data.party;
-      var headline = `${strings[data.state + "-AP"]} ${readableParty} ${data.caucus ? "caucus" : "primary"} results`;
-      if (host == "statepage") headline = `${readableParty} ${data.caucus ? "caucus" : "primary"} results`;
       child.setAttribute("headline", headline);
       child.render(data);
     });
