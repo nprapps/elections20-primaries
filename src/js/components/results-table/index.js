@@ -113,7 +113,7 @@ class ResultsTable extends ElementBase {
     candidates = candidates.filter(function(c) {
       if (
         hasVotes &&
-        candidates.length > 6 &&
+        candidates.length > 3 &&
         c.last != "Other" &&
         c.percentage < 1 &&
         defaultFold.indexOf(c.last) == -1
