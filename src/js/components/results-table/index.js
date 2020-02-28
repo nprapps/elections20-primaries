@@ -150,9 +150,9 @@ class ResultsTable extends ElementBase {
       reportingPercentage = reportingPercentage.toFixed(0);
     }
     var updated = new Date(updated);
-    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(
+    var updateString = `${formatTime(updated)} on ${formatAPDate(
       updated
-    )}`;
+    )}.`;
     elements.updated.innerHTML = updateString;
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
