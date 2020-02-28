@@ -2,6 +2,7 @@ var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 require("./president-results-multiple.less");
 
+var $ = require("../../lib/qsa");
 var dot = require("../../lib/dot");
 var candidateListTemplate = dot.compile(require("./_candidate_list.html"));
 var resultTemplate = dot.compile(require("./_result.html"));
@@ -62,8 +63,19 @@ class PresidentResultsMultiple extends ElementBase {
   static get boundMethods() {
     return [
       "load",
-      "checkIfOverflow"
+      "checkIfOverflow",
+      "onHover"
     ]
+  }
+
+  onHover(e) {
+    var target = e.target;
+    var cell = target.closest("[data-candidate]");
+    $(".hover", this).forEach(el => el.classList.remove("hover"));
+    if (e.type == "mousemove" && cell) {
+      var row = $(`[data-candidate="${cell.dataset.candidate}"]`, this);
+      row.forEach(el => el.classList.add("hover"));
+    }
   }
 
   // direction is -1 for right, 1 for left
@@ -125,6 +137,8 @@ class PresidentResultsMultiple extends ElementBase {
     elements.nextButton.addEventListener("click", () => this.shiftResults(-1));
     elements.backButton.addEventListener("click", () => this.shiftResults(1));
     window.addEventListener("resize", this.checkIfOverflow);
+    elements.results.addEventListener("mousemove", this.onHover);
+    elements.results.addEventListener("mouseleave", this.onHover);
     return elements;
   }
 
