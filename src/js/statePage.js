@@ -84,28 +84,24 @@ var onHashChange = function(e) {
   }
   $(`.race-calendar [href="#${hash}"]`).forEach(el => el.closest("li").classList.add("active"));
   document.body.classList.add("filtered");
-  var search = new URLSearchParams(hash);
-  var params = {};
-  for (var [key, val] of search.entries()) {
-    params[key] = val;
-  }
+  var params = new URLSearchParams(hash);
   // set CSS hooks on the body
-  exactParams.forEach(p => document.body.dataset[p] = params[p]);
-  booleanParams.forEach(p => document.body.classList.toggle(p, p in params));
+  exactParams.forEach(p => document.body.dataset[p] = params.get(p));
+  booleanParams.forEach(p => document.body.classList.toggle(p, params.has(p)));
   // now filter visible modules by looking for matching data params
   modules.forEach(function(module) {
     var visible = true;
     for (var p of exactParams) {
-      if (params[p] == "true" && !(p in module.dataset)) {
+      if (params.get(p) == "true" && !(p in module.dataset)) {
         visible = false;
-      } else if (module.dataset[p] != params[p]) {
+      } else if (module.dataset[p] != params.get(p)) {
         visible = false;
       }
     }
     for (var p of booleanParams) {
-      if (module.dataset[p] && module.dataset[p] != params[p]) visible = false;
+      if (module.dataset[p] && module.dataset[p] != params.get(p)) visible = false;
     }
-    if (params.special) {
+    if (params.has("special")) {
       if (!module.dataset.special) visible = false;
     } else {
       if (module.dataset.special) visible = false;
@@ -113,8 +109,8 @@ var onHashChange = function(e) {
     module.classList.toggle("hidden", !visible);
     // find things to toggle party
     $(`[data-control="party"]`, module).forEach(function(element) {
-      if (params.party) {
-        element.setAttribute("party", params.party);
+      if (params.has("party")) {
+        element.setAttribute("party", params.get("party"));
       } else {
         element.removeAttribute("party");
       }
@@ -123,8 +119,15 @@ var onHashChange = function(e) {
 
   // send focus to the top-most module if this came from a click
   if (e) {
-    var headline = $.one(".module:not(.hidden) h2");
-    if (headline) headline.focus();
+    if (params.has("counties") && !params.has("state")) {
+      var countyModule = $.one(`.module:not(.hidden)[data-counties="true"]`);
+      var headline = $.one("h2", countyModule);
+      if (headline) headline.focus();
+      countyModule.scrollIntoView({ behavior: "smooth" });
+    } else {
+      var headline = $.one(".module:not(.hidden) h2");
+      if (headline) headline.focus();
+    }
   }
   lazyLoad();
 }

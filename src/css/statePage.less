@@ -6,6 +6,11 @@
   font-size: 16px;
 }
 
+// suppress focus styles for programmatic jumps
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
 main {
   max-width: 900px;
   margin: auto;

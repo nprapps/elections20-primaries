@@ -76,12 +76,12 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
                 <% if (item.parties) { %>
                 <option
-                  value="<%= hashRace(item.race) %>&party=Dem&counties=true"
+                  value="<%= hashRace(item.race) %>&party=Dem&counties=true&state"
                   data-timestamp="<%= item.race.timestamp.valueOf() %>">
                   <%= item.office %><%= item.special ? " - Special " : " " %>- Dem. only (<%= item.date %>)
                 </option>
                 <option
-                  value="<%= hashRace(item.race) %>&party=GOP&counties=true"
+                  value="<%= hashRace(item.race) %>&party=GOP&counties=true&state"
                   data-timestamp="<%= item.race.timestamp.valueOf() %>">
                   <%= item.office %><%= item.race.special ? " - Special " : " " %>- GOP only (<%= item.date %>)
                 </option>
@@ -104,9 +104,9 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
               </a>
               <% if (item.parties) { %>
               <span class="parties">
-                <a href="#<%= hashRace(item.race) %>&party=Dem&counties=true">Dem.</a>
+                <a href="#<%= hashRace(item.race) %>&party=Dem&counties=true&state">Dem.</a>
                 |
-                <a href="#<%= hashRace(item.race,) %>&party=GOP&counties=true">GOP</a>
+                <a href="#<%= hashRace(item.race,) %>&party=GOP&counties=true&state">GOP</a>
               </span>
               <% } %>
               <span class="date"><%= item.date %></span>
@@ -130,9 +130,8 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
             data-office="<%= row.race.office %>"
             data-date="<%= row.race.date %>"
             data-special="<%= row.race.special || "" %>"
-            tabindex="-1"
           >
-            <h2>
+            <h2 tabindex="-1">
               <%= row.office %>
               <% if (row.race.special) { %>
               — Special Election
@@ -149,9 +148,8 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
             data-office="<%= row.race.office %>"
             data-date="<%= row.race.date %>"
             data-counties="true"
-            tabindex="-1"
           >
-            <h2>
+            <h2 tabindex="-1">
               <%= row.office %> results by county
               <% if (row.race.special) { %>
               — Special Election
