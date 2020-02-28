@@ -152,7 +152,7 @@ class ResultsTable extends ElementBase {
     var updated = new Date(updated);
     var updateString = `${formatTime(updated)} on ${formatAPDate(
       updated
-    )}.`;
+    )}`;
     elements.updated.innerHTML = updateString;
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
