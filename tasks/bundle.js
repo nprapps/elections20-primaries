@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   var exorcist = require("exorcist");
   var fs = require("fs");
   var path = require("path");
+  var through = require("through2");
 
   grunt.registerTask("bundle", "Build app.js using browserify", function(mode) {
     //run in dev mode unless otherwise specified
@@ -20,7 +21,7 @@ module.exports = function(grunt) {
     var seeds = config.scripts;
 
     async.forEachOf(seeds, function(dest, src, c) {
-      var b = browserify({ debug: mode == "dev" });
+      var b = browserify({ debug: mode == "dev", paths: ["data"] });
       b.plugin(require("browser-pack-flat/plugin"));
       b.transform("babelify", { global: true, presets: [
         ["@babel/preset-env", {

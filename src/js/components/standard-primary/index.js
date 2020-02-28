@@ -4,7 +4,7 @@ require("../results-table");
 require("./standard-primary.less");
 var { mapToElements, toggleAttribute } = require("../utils");
 
-var strings = require("../../../../data/strings.sheet.json");
+var strings = require("strings.sheet.json");
 
 class StandardPrimary extends ElementBase {
   constructor() {

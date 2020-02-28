@@ -12,7 +12,7 @@ var { formatAPDate, formatTime } = require("../utils");
 
 var ElementBase = require("../elementBase");
 
-var mugs = require("../../../../data/mugs.sheet.json");
+var mugs = require("mugs.sheet.json");
 var defaultFold = Object.keys(mugs)
   .filter(k => mugs[k].featured)
   .sort();

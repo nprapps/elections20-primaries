@@ -4,11 +4,11 @@ require("./president-caucus.less");
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 
-var strings = require("../../../../data/strings.sheet.json");
+var strings = require("strings.sheet.json");
 
 var defaultRefresh = 15;
 
-var mugs = require("../../../../data/mugs.sheet.json");
+var mugs = require("mugs.sheet.json");
 var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 var { mapToElements, toggleAttribute, groupBy } = require("../utils");
 
