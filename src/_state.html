@@ -24,7 +24,9 @@ var metadata = {
   <body class="standalone">
     <script>
       var here = new URL(window.location);
-      document.body.classList.add(here.searchParams.get("theme"));
+      if (here.searchParams.has("theme")) {
+        document.body.classList.add(here.searchParams.get("theme"));
+      }
       if (here.searchParams.has("embedded")) {
         document.body.classList.add("embedded")
         document.body.classList.remove("standalone");
