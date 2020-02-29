@@ -19,7 +19,7 @@
 
         <!-- bar is in the name, but positioned relative to the whole table -->
         <div class="bar-container">
-          <div class="bar" style="width: <%= data.highest ? c.percentage / data.highest * 75 : 0 %>%"></div>
+          <div class="bar" style="width: <%= data.highest ? c.percentage / data.highest * 100 : 0 %>%"></div>
         </div>
         
         <% if (c.last == "Other") { %>

@@ -69,6 +69,7 @@ results-table {
     border-collapse: separate;
     border-spacing: 0 4px;
     font-size: 0.85em;
+    height: 100%; // fix for a dumb position bug
 
     .tbody, .thead {
 
@@ -93,6 +94,7 @@ results-table {
 
     .tr {
       position: relative;
+      height: 100%;
     }
 
     .thead .tr {
@@ -106,6 +108,7 @@ results-table {
     .th, .td {
       text-align: right;
       position: relative;
+      height: 100%;
 
       &:first-child {
         padding-left: 8px;
@@ -183,6 +186,10 @@ results-table {
 
     td.uncontested {
       font-style: italic;
+    }
+
+    .votes, .caucus, .percentage {
+      width: 75px;
     }
   }
 

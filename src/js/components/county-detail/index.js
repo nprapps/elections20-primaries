@@ -1,6 +1,7 @@
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 var $ = require("../../lib/qsa");
+var track = require("../../lib/tracking");
 require("../results-table");
 require("./county-detail.less");
 
@@ -128,6 +129,7 @@ class CountyDetail extends ElementBase {
   onSelectCounty() {
     var elements = this.illuminate();
     var fips = elements.countySelect.value;
+    track("select-county", fips);
     this.updateTable(fips);
   }
 
