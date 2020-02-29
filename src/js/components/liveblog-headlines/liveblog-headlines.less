@@ -62,15 +62,13 @@ liveblog-headlines {
     padding: 0;
 
     @media @mobile-above {
-      display: flex;
-      flex-wrap: wrap;
+      columns: 2;
     }
 
     > li {
       margin: 0 0 1.25em 0;
 
       @media @mobile-above {
-        width: calc(50% - 2em);
         margin-right: 2em;
       }
     }
