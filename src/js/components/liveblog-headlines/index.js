@@ -23,7 +23,7 @@ var relativeTime = function(timestamp) {
     return formatAPDate(new Date(timestamp));
   }
   var pluralize = (word, count) => count == 1 ? word : word + "s";
-  for (var d of ["week", "day", "minute"]) {
+  for (var d of ["week", "day", "hour", "minute",]) {
     var duration = ago[d];
     if (delta > duration) {
       var count = (delta / duration) | 0;
