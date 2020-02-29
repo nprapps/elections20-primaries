@@ -9,6 +9,8 @@ require("./components/standard-primary");
 require("./components/house-primary");
 require("./components/county-detail");
 
+var { formatAPDate, formatTime } = require("./components/utils");
+
 var now = new Date();
 var here = new URL(window.location.href);
 if (here.searchParams.has("embedded")) {
@@ -156,4 +158,17 @@ var selectBox = $.one(".mobile-calendar");
 selectBox.addEventListener("change", function() {
   var hash = selectBox.value;
   window.location.hash = hash;
+});
+
+// listen for update events and fix the footer if heard
+var lastUpdate = 0;
+var updateSpan = $.one(".page-timestamp");
+document.body.addEventListener("updatedtime", function(e) {
+  var { updated } = e.detail;
+  if (updated > lastUpdate) {
+    lastUpdate = updated;
+    var date = new Date(updated);
+    console.log("New timestamp:", date);
+    updateSpan.innerHTML = `, last updated ${formatAPDate(date)}, ${formatTime(date)}`;
+  }
 });

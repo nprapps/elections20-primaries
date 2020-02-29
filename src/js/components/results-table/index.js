@@ -70,6 +70,8 @@ class ResultsTable extends ElementBase {
       updated
     } = result;
 
+    this.dispatch("updatedtime", { updated });
+
     elements.footnote.innerHTML =
       candidates.length > 1
         ? ""
@@ -151,7 +153,7 @@ class ResultsTable extends ElementBase {
       reportingPercentage = reportingPercentage.toFixed(0);
     }
     var updated = new Date(updated);
-    var updateString = `${formatTime(updated)} on ${formatAPDate(
+    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(
       updated
     )}`;
     elements.updated.innerHTML = updateString;

@@ -52,8 +52,9 @@ class PresidentResults extends ElementBase {
     var result = data.results[0]; // only one for president
     var { caucus } = data;
     var { candidates, precincts, reporting, reportingPercentage, updated } = result;
-    if (updated == this.updated) return;
-    this.updated = updated;
+    
+    this.dispatch("updatedtime", { updated });
+
     this.setAttribute("party", data.party);
     // assign mugs and normalize percentages
     var hasIncumbent = false;
@@ -128,7 +129,7 @@ class PresidentResults extends ElementBase {
       reportingPercentage = reportingPercentage.toFixed(0);
     }
     var updated = new Date(updated);
-    var updateString = `${formatTime(updated)} on ${formatAPDate(
+    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(
       updated
     )}`;
     elements.updated.innerHTML = updateString;
