@@ -29,7 +29,7 @@ if (!elementMap[race]) {
 } else {
   var tag = document.createElement(elementMap[race]);
   tag.src = `../data/${search.get("data")}.json`;
-  tag.setAttribute("live", "");
+  tag.setAttribute("live", "15");
 
   if (search.has("link")) {
     tag.setAttribute("href", search.get("link"));
