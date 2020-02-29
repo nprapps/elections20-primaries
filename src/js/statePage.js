@@ -123,7 +123,8 @@ var onHashChange = function(e) {
   } else {
     $(`.race-calendar [href="#${hash}"]`).forEach(el => el.closest("li").classList.add("active"));
     document.body.classList.add("filtered");
-    showMatching(params);
+    var matched = showMatching(params);
+    if (!matched.length) showLatest();
   }
 
   // find things to toggle party

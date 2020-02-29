@@ -140,6 +140,9 @@ class ResultsTable extends ElementBase {
       this.removeAttribute("overflow");
     }
 
+    // if we only have one candidate (uncontested) don't show county results
+    elements.resultsLink.style.display = candidates.length < 2 ? "none" : "";
+
     // insert content
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
     elements.content.innerHTML = table({ candidates, highest, fold, party });
