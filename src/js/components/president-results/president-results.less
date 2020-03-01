@@ -123,6 +123,10 @@ president-results {
       &:last-child {
         padding-right: 8px;
       }
+
+      &.votes {
+        flex: 0 0 7em;
+      }
     }
 
     .tbody {
@@ -142,6 +146,7 @@ president-results {
       padding: 0;
       padding-right: @flourish-margin;
       z-index: 999;
+      flex: 0;
 
       .mugshot {
         width: @mug-size;
