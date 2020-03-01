@@ -52,7 +52,7 @@ module.exports = function(grunt) {
     }
     // Our window is 48 hours back in time
     // this should catch everything in the last day regardless of TZ
-    var retroactive = today.clone().subtract(3, "days");
+    var retroactive = today.clone().subtract(2, "days");
     today = today.valueOf();
     retroactive = retroactive.valueOf();
 
