@@ -15,6 +15,10 @@ Lots of flags available on this one:
 
 var api = require("./lib/ap");
 var depths = require("./lib/depths");
+var moment = require("moment-timezone");
+
+var ET = "America/New_York";
+moment.tz.setDefault(ET);
 
 module.exports = function(grunt) {
 
@@ -31,7 +35,7 @@ module.exports = function(grunt) {
     schedule.forEach(function(r) {
       // assign a timestamp
       var [m, d, y] = r.date.split("/");
-      r.timestamp = new Date(y, m - 1, d);
+      r.timestamp = moment(r.date, "MM/DD/YYYY").toDate();
       // split race IDs
       r.ids = r.raceID ? r.raceID.toString().split(/,\s*/g) : [];
       // split states
@@ -39,20 +43,18 @@ module.exports = function(grunt) {
     });
 
     var date = grunt.option("date");
-    var now = new Date();
-    var day = 1000 * 60 * 60 * 24;
-    var today;
+    // start one day in the future
+    var today = moment().add(1, "days");
+    today.hour(0).minute(0).second(0);
     if (date) {
       // date is provided
-      var [m, d, y] = date.split("/").map(Number);
-      today = new Date(y, m - 1, d);
-    } else {
-      // start from tomorrow and work back
-      today = new Date(now.valueOf() + day);
+      var today = moment(date, "MM/DD/YYYY");
     }
     // Our window is 48 hours back in time
     // this should catch everything in the last day regardless of TZ
-    var retroactive = new Date(today.valueOf() - day * 2);
+    var retroactive = today.clone().subtract(3, "days");
+    today = today.valueOf();
+    retroactive = retroactive.valueOf();
 
     var races = schedule.filter(
       r => r.alwaysRun || (r.timestamp <= today && r.timestamp >= retroactive)
