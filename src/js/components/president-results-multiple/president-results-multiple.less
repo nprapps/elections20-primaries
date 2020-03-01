@@ -350,6 +350,47 @@ president-results-multiple {
       }
     }
 
+    .key {
+      display: block;
+      margin-bottom: 6px;
+
+      @media @mobile-above {
+        display: inline;
+        margin-right: 33px;
+        margin-bottom: auto;
+      }
+
+      ul {
+        display: inline-block;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        white-space: nowrap;
+      }
+
+      li {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        font-style: normal;
+
+        + li {
+          margin-left: 18px;
+        }
+      }
+
+      b {
+        display: block;
+        float: left;
+        width: 1em;
+        height: 1em;
+        margin-right: 6px;
+        margin-top: 2px;
+      }
+      li.winner b { background-color: var(--dem); }
+      li.leader b { background-color: var(--dem-fade); }
+    }
+
     .footnote {
       display: block;
       margin-top: 5px;
