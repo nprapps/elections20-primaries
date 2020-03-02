@@ -94,7 +94,6 @@ class PresidentCaucus extends ElementBase {
             last: c.last,
             first: c.first,
             mugshot: mugs[c.last] ? mugs[c.last].src : "",
-            caucus: 0,
             votes: 0,
             percentage: 0
           };

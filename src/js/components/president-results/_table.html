@@ -42,8 +42,8 @@
           </span>
         </div>
         <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>
-        <% if ("caucus" in c) { %>
-        <div role="cell" class="td caucus"><%= c.caucus.toLocaleString() %></div>
+        <% if (typeof c.caucus == "number") { %>
+        <div role="cell" class="td caucus"><%=  c.caucus.toLocaleString() %></div>
         <% } %>
         <div role="cell" class="td votes"><%= c.votes ? c.votes.toLocaleString() : "-" %></div>
       </div>

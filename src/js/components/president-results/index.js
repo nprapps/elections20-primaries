@@ -97,7 +97,7 @@ class PresidentResults extends ElementBase {
       if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
         others.percentage += c.percentage;
         others.votes += c.votes;
-        others.caucus += c.caucus;
+        if (c.caucus) others.caucus += c.caucus;
         return false;
       }
       return true;
