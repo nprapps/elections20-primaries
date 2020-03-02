@@ -98,6 +98,10 @@
               }
               return true;
             });
+
+            if (event.races.every(r => r.caucus)) {
+              event.title = strings[r.state] + " caucus";
+            }
           }
           var byMonth = groupBy(events, "month");
           Object.keys(byMonth).sort((a, b) => a - b).forEach(function(m) {
