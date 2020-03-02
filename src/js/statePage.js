@@ -50,6 +50,7 @@ var modules = $(".module:not(.future)");
 var noResultsModule = $.one(".module.future");
 var exactParams = ["date", "office"];
 var booleanParams = ["counties"];
+var selectBox = $.one(".mobile-calendar");
 
 var lazyLoad = function() {
   var elements = $(".module:not(.hidden) [data-src]");
@@ -150,13 +151,15 @@ var onHashChange = function(e) {
     }
   }
 
+  // match the select box to the current view
+  selectBox.value = hash;
+
   lazyLoad();
 }
 
 window.addEventListener("hashchange", onHashChange);
 onHashChange();
 
-var selectBox = $.one(".mobile-calendar");
 selectBox.addEventListener("change", function() {
   var hash = selectBox.value;
   window.location.hash = hash;
