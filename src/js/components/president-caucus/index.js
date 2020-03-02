@@ -93,7 +93,10 @@ class PresidentCaucus extends ElementBase {
           var candidate = merging[c.last] || {
             last: c.last,
             first: c.first,
-            mugshot: mugs[c.last] ? mugs[c.last].src : ""
+            mugshot: mugs[c.last] ? mugs[c.last].src : "",
+            caucus: 0,
+            votes: 0,
+            percentage: 0
           };
           if (r.type == "Caucus") {
             // assign votes
