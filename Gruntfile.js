@@ -35,5 +35,5 @@ module.exports = function(grunt) {
   // server tasks
   grunt.registerTask("local", "Run the server for testing events", ["sheets", "static", "connect:dev", "cron:60:local"]);
   grunt.registerTask("deploy", "Deploy HTML to stage on a timer", ["sheets", "static", "publish", "cron:30:publish"]);
-  grunt.registerTask("deploy-live", "Deploy HTML to live on a timer", ["sheets", "static", "publish:live", "cron:20:publishLive"]);
+  grunt.registerTask("deploy-live", "Deploy HTML to live on a timer", ["sheets", "static", "publish:live", "cron:30:publishLive"]);
 };
