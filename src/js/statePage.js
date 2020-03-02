@@ -11,6 +11,16 @@ require("./components/county-detail");
 
 var { formatAPDate, formatTime, inDays } = require("./components/utils");
 
+var union = function(a, b) {
+  var ignore = new Set(["state"]);
+  var matching = true;
+  for (var [key, value] of a.entries()) {
+    if (ignore.has(key)) continue;
+    if (b.get(key) != value) matching = false;
+  }
+  return matching;
+};
+
 var now = new Date();
 var currentDay = inDays([now.getMonth() + 1, now.getDate(), now.getFullYear()].join("/"));
 console.log(`Currently on day ${currentDay} of 2020`);
@@ -123,7 +133,6 @@ var onHashChange = function(e) {
   if (!hash) {
     showLatest();
   } else {
-    $(`.race-calendar [href="#${hash}"]`).forEach(el => el.closest("li").classList.add("active"));
     document.body.classList.add("filtered");
     var matched = showMatching(params);
     if (!matched.length) showLatest();
@@ -151,8 +160,22 @@ var onHashChange = function(e) {
     }
   }
 
-  // match the select box to the current view
-  selectBox.value = hash;
+  // set active desktop nav
+  $(".race-calendar [href]").forEach(function(a) {
+    var linkParams = new URLSearchParams(a.getAttribute("href").replace(/^#/, ""));
+    if (union(linkParams, params)) {
+      a.closest("li").classList.add("active");
+    }
+  })
+  $(`.race-calendar [href="#${hash}"]`).forEach(el => el.closest("li").classList.add("active"));
+  
+  // set active mobile nav
+  $("option", selectBox).forEach(function(option) {
+    var optionParams = new URLSearchParams(option.value);
+    if (union(optionParams, params)) {
+      selectBox.value = option.value;
+    }
+  });
 
   lazyLoad();
 }
