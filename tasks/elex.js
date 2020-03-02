@@ -60,6 +60,7 @@ module.exports = function(grunt) {
       var [m, d, y] = r.date.split("/");
       r.days = inDays(r.date);
       r.timestamp = moment(r.date, "MM/DD/YYYY").toDate();
+      console.log(r.date, r.days, r.timestamp);
       // split race IDs
       r.ids = r.raceID ? r.raceID.toString().split(/,\s*/g) : [];
       // split states
