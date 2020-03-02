@@ -58,6 +58,10 @@ header {
     max-width: 75px;
     height: 60px;
     opacity: .4;
+
+    @media @tiny {
+      max-width: 55px;
+    }
   }
 
   h2 {
@@ -83,6 +87,10 @@ header {
 
     @media @mobile {
       font-size: 1.8rem;
+    }
+
+    @media @tiny {
+      font-size: 1.5rem;
     }
   }
 }
@@ -113,7 +121,7 @@ header {
 
 .mobile-calendar {
   border: none;
-  font-size: 16px;
+  font-size: 14px;
   font-family: @gotham;
   background: transparent;
   width: 100%;
