@@ -70,26 +70,28 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
             <select class="mobile-calendar">
               <% displays.forEach(function(item) { %>
 
+                <% if (!item.race.singleParty) { %>
                 <option
                   value="<%= hashRace(item.race) %>"
                   data-days="<%= item.race.days %>">
-                  <%= item.office %><%= item.race.special ? " - Special " : " " %> (<%= item.date %>)
-                </option>
-
-                <% if (item.parties) { %>
-                <option
-                  value="<%= hashRace(item.race) %>&party=Dem&counties=true&state"
-                  data-days="<%= item.race.days %>">
-                  <%= item.office %><%= item.special ? " - Special " : " " %>- Dem. only (<%= item.date %>)
-                </option>
-                <option
-                  value="<%= hashRace(item.race) %>&party=GOP&counties=true&state"
-                  data-days="<%= item.race.days %>">
-                  <%= item.office %><%= item.race.special ? " - Special " : " " %>- GOP only (<%= item.date %>)
+                  <%= item.office %>
+                  <%= item.race.special ? " - Special " : " " %>
+                  (<%= item.date %>)
                 </option>
                 <% } %>
 
-              <% }) %>
+                <% if (item.parties) item.parties.forEach(function(p) { %>
+                <option
+                  value="<%= hashRace(item.race) %>&party=<%= p %>&counties=true&state"
+                  data-days="<%= item.race.days %>">
+                  <%= item.office %>
+                  <%= item.special ? " - Special " : " " %>-
+                  <%= p == "Dem" ? "Dem." : p %> only
+                  (<%= item.date %>)
+                </option>
+                <% }); %>
+
+              <% }); %>
             </select>
           </div>
         </div>
@@ -106,10 +108,12 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
               </a>
               <% if (item.parties) { %>
               <span class="parties">
-                <a href="#<%= hashRace(item.race) %>&party=Dem&counties=true&state">Dem.</a>
-                |
-                <a href="#<%= hashRace(item.race,) %>&party=GOP&counties=true&state">GOP</a>
-              </span>
+                <%= item.parties.map(p => `
+                <a href="#${hashRace(item.race)}&party=${p}&counties=true&state">
+                  ${p == "Dem" ? "Dem." : p}
+                </a>
+                  `).join("|") %>
+                </span>
               <% } %>
               <span class="date"><%= item.date %></span>
             <% }) %>

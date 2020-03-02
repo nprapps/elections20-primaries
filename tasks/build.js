@@ -92,8 +92,8 @@ module.exports = function(grunt) {
           date: [months[m - 1], d].join(" "),
           race
         }
-        if (race.office != "H" && !race.singleParty) {
-          item.parties = true;
+        if (race.office != "H" || race.singleParty) {
+          item.parties = race.singleParty ? [race.singleParty] : ["Dem", "GOP"];
         }
         return item;
       });
