@@ -63,11 +63,10 @@ var showLatest = function() {
   document.body.classList.remove("filtered");
   var moduleDates = modules.map(function(m) {
     var attribute = m.dataset.date;
-    var [m, d, y] = attribute.split("/").map(Number);
-    var date = new Date(y, m - 1, d);
-    return { date, attribute };
-  }).sort((a, b) => a.date - b.date);
-  var latest = moduleDates.filter(d => d.date < now).pop();
+    var days = inDays(attribute);
+    return { days, attribute };
+  }).sort((a, b) => a.days - b.days);
+  var latest = moduleDates.filter(d => d.days < daysElapsed).pop();
   if (!latest) {
     // if nothing is there, show the no-results module and hide everything else
     modules.forEach(m => m.classList.add("hidden"));
