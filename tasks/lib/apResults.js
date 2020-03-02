@@ -8,21 +8,15 @@ var etags = {};
 var resultsURL = "https://api.ap.org/v2/elections/";
 var resultsParams = {
   apikey: process.env.AP_API_KEY,
-  format: "json"
+  format: "JSON"
 };
 
 var apDate = function(d) {
-  if (typeof d == "string") {
-    var [m, d, y] = d.split("/");
-    d = new Date(y, m - 1, d);
-  }
+  var [m, d, y] = d.split("/");
   return [
-    d.getFullYear(),
-    (d.getMonth() + 1).toString().padStart(2, "0"),
-    d
-      .getDate()
-      .toString()
-      .padStart(2, "0")
+    y,
+    m.padStart(2, "0"),
+    d.padStart(2, "0")
   ].join("-");
 };
 
@@ -52,7 +46,7 @@ var issueTickets = function(races) {
     });
 
     tickets.push({
-      date: apDate(r.timestamp),
+      date: apDate(r.date),
       params: {
         raceID: [...new Set(r.ids.concat(similar))].join(","),
         statePostal: r.state,

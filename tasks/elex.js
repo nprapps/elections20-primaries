@@ -113,6 +113,7 @@ module.exports = function(grunt) {
 
           var fromAP = results.filter(function(result) {
             if (ids.length) {
+              // console.log(result.id);
               return ids.indexOf(result.id) > -1;
             }
             // filter out third-parties
