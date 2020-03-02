@@ -12,8 +12,8 @@ require("./components/county-detail");
 var { formatAPDate, formatTime, inDays } = require("./components/utils");
 
 var now = new Date();
-var daysElapsed = inDays([now.getMonth() + 1, now.getDate(), now.getFullYear()].join("/"));
-console.log(`Currently on day ${daysElapsed} of 2020`);
+var currentDay = inDays([now.getMonth() + 1, now.getDate(), now.getFullYear()].join("/"));
+console.log(`Currently on day ${currentDay} of 2020`);
 var here = new URL(window.location.href);
 if (here.searchParams.has("embedded")) {
   var guest = Sidechain.registerGuest();
@@ -23,7 +23,7 @@ if (here.searchParams.has("embedded")) {
 if (!here.searchParams.has("eternal")) {
   $("[data-days]").forEach(function(element) {
     var navDays = element.dataset.days;
-    if (navDays > daysElapsed) {
+    if (navDays > currentDay) {
       element.setAttribute("disabled", "");
     }
   });
@@ -39,7 +39,7 @@ if (!here.searchParams.has("eternal")) {
 $("[data-live-days]").forEach(function(element) {
   var displayDays = element.dataset.liveDays * 1;
   // three day window
-  var distance = Math.abs(daysElapsed - displayDays);
+  var distance = Math.abs(currentDay - displayDays);
   if (distance < 3) {
     element.setAttribute("live", "");
   }
@@ -66,7 +66,7 @@ var showLatest = function() {
     var days = inDays(attribute);
     return { days, attribute };
   }).sort((a, b) => a.days - b.days);
-  var latest = moduleDates.filter(d => d.days < daysElapsed).pop();
+  var latest = moduleDates.filter(d => d.days < currentDay).pop();
   if (!latest) {
     // if nothing is there, show the no-results module and hide everything else
     modules.forEach(m => m.classList.add("hidden"));

@@ -185,7 +185,7 @@ module.exports = function(grunt) {
         if (grunt.option("results-only") || !races.length) return;
         // only request delegate reports every four requests
         // these don't change as much
-        if (reportMod % 4 > 0) return;
+        if ((reportMod % 4) > 0) return;
         reportMod++;
         var now = new Date();
         var delegateFile = ["delegates", now.getMonth() + 1, now.getDate(), now.getFullYear()].join("_");
