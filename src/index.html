@@ -76,14 +76,14 @@
           // now add orphan races
           while (races.length) {
             var r = races.shift();
-            var [m, d, y] = r.date.split("/");
+            var [m, d, y] = r.date.split("/").map(Number);
             // create dummy event
             var event = {
               date: r.date,
               month: m,
               day: d,
               days: r.days,
-              dateText: formatAPDate(new Date([y, m - 1, d])).replace(/, 2020/, ""),
+              dateText: formatAPDate(new Date(y, m - 1, d)).replace(/, 2020/, ""),
               category: "Vote",
               title: strings[r.state] + " primaries",
               races: [r],
