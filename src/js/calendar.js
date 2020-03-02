@@ -1,12 +1,15 @@
 require("./ads");
 var $ = require("./lib/qsa");
 
-var stamped = $("[data-timestamp]");
+var events = $("[data-days]");
 
-var now = Date.now();
-stamped.forEach(function(event) {
-  var timestamp = event.dataset.timestamp * 1;
-  if (timestamp > now) {
+var { inDays } = require("./components/utils");
+
+var now = new Date();
+var days = inDays([now.getMonth() + 1, now.getDate(), now.getFullYear()].join("/"));
+events.forEach(function(event) {
+  var eventDays = event.dataset.days;
+  if (eventDays > days) {
     // var links = $.one(".links", event);
     // links.remove();
     // if we just want liks to not be clickable

@@ -7,6 +7,17 @@ var timezones = [
   { re: /\(pacific/i, zone: "PT" }
 ];
 
+var monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+var inDays = function(dateString) {
+  var [m, d, y] = dateString.split("/").map(Number);
+  var days = 0;
+  for (var i = 0; i < m - 1; i++) {
+    days += monthLengths[i];
+  }
+  days += d;
+  return days;
+};
+
 var formatAPDate = date => `${apMonths[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
 var formatTime = function(date) {
   var h = date.getHours()
@@ -101,6 +112,7 @@ var toggleAttribute = function(element, attribute, force) {
 
 module.exports = {
   apMonths,
+  inDays,
   formatAPDate,
   formatTime,
   parseNPRDate,

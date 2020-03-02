@@ -72,19 +72,19 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
                 <option
                   value="<%= hashRace(item.race) %>"
-                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
+                  data-days="<%= item.race.days %>">
                   <%= item.office %><%= item.race.special ? " - Special " : " " %> (<%= item.date %>)
                 </option>
 
                 <% if (item.parties) { %>
                 <option
                   value="<%= hashRace(item.race) %>&party=Dem&counties=true&state"
-                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
+                  data-days="<%= item.race.days %>">
                   <%= item.office %><%= item.special ? " - Special " : " " %>- Dem. only (<%= item.date %>)
                 </option>
                 <option
                   value="<%= hashRace(item.race) %>&party=GOP&counties=true&state"
-                  data-timestamp="<%= item.race.timestamp.valueOf() %>">
+                  data-days="<%= item.race.days %>">
                   <%= item.office %><%= item.race.special ? " - Special " : " " %>- GOP only (<%= item.date %>)
                 </option>
                 <% } %>
@@ -97,7 +97,7 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
         <nav class="race-calendar">
           <ul>
             <% displays.forEach(function(item) { %>
-            <li data-timestamp="<%= item.race.timestamp.valueOf() %>">
+            <li data-days="<%= item.race.days %>">
               <a class="office" href="#<%= hashRace(item.race) %>">
                 <%= item.office %>
                 <% if (item.race.special) { %>

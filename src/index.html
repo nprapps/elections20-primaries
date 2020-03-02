@@ -41,7 +41,7 @@
           var { races, nonraces, strings } = grunt.data.json;
           // make a copy
           races = races.filter(r => !r.feedOnly && r.office != "R");
-          var { formatAPDate, formatTime, groupBy } = require("../src/js/components/utils");
+          var { formatAPDate, formatTime, groupBy, inDays } = require("../src/js/components/utils");
           // normalize events
           var monthNames = " January February March April May June July August September October November December".split(" ");
           var events = [];
@@ -49,15 +49,14 @@
             var [m, d, y] = n.date.split("/");
             n.month = m;
             n.day = d;
-            n.timestamp = new Date(y, m - 1, d).valueOf();
-            n.dateText = formatAPDate(new Date(n.timestamp)).replace(/, 2020/, "");
+            n.days = inDays(n.date);
+            n.dateText = formatAPDate(new Date(y, m - 1, d)).replace(/, 2020/, "");
 
             if (n.date_end) {
               var [mEnd, dEnd, yEnd] = n.date_end.split("/");
               n.monthEnd = mEnd;
               n.dayEnd = dEnd;
-              n.timestampEnd = new Date(yEnd, mEnd - 1, dEnd).valueOf();
-              n.dateTextEnd = formatAPDate(new Date(n.timestampEnd)).replace(/, 2020/, "");
+              n.dateTextEnd = formatAPDate(new Date(yEnd, mEnd - 1, dEnd)).replace(/, 2020/, "");
             }
 
             // add to the events
@@ -78,14 +77,13 @@
           while (races.length) {
             var r = races.shift();
             var [m, d, y] = r.date.split("/");
-            var timestamp = new Date(y, m - 1, d).valueOf();
             // create dummy event
             var event = {
               date: r.date,
               month: m,
               day: d,
-              dateText: formatAPDate(new Date(timestamp)).replace(/, 2020/, ""),
-              timestamp,
+              days: r.days,
+              dateText: formatAPDate(new Date([y, m - 1, d])).replace(/, 2020/, ""),
               category: "Vote",
               title: strings[r.state] + " primaries",
               races: [r],
@@ -121,7 +119,7 @@
             day.forEach(function(event, i) {
         %>
 
-        <div class="event-row index-<%= i%> " data-timestamp="<%= event.timestamp %>">
+        <div class="event-row index-<%= i%> " data-days="<%= event.days %>">
           <div class="date">
             <% if (event.date_prose) { %>
               <%= event.date_prose %>

@@ -9,9 +9,11 @@ require("./components/standard-primary");
 require("./components/house-primary");
 require("./components/county-detail");
 
-var { formatAPDate, formatTime } = require("./components/utils");
+var { formatAPDate, formatTime, inDays } = require("./components/utils");
 
 var now = new Date();
+var daysElapsed = inDays([now.getMonth() + 1, now.getDate(), now.getFullYear()].join("/"));
+console.log(`Currently on day ${daysElapsed} of 2020`);
 var here = new URL(window.location.href);
 if (here.searchParams.has("embedded")) {
   var guest = Sidechain.registerGuest();
@@ -19,9 +21,9 @@ if (here.searchParams.has("embedded")) {
 
 // disable future navigation items
 if (!here.searchParams.has("eternal")) {
-  $("[data-timestamp]").forEach(function(element) {
-    var timestamp = element.dataset.timestamp * 1;
-    if (timestamp > Date.now()) {
+  $("[data-days]").forEach(function(element) {
+    var navDays = element.dataset.days;
+    if (navDays > daysElapsed) {
       element.setAttribute("disabled", "");
     }
   });
@@ -34,11 +36,11 @@ if (!here.searchParams.has("eternal")) {
 }
 
 // set recent displays to be live
-$("[data-live-timestamp]").forEach(function(element) {
-  var timestamp = element.dataset.liveTimestamp * 1;
+$("[data-live-days]").forEach(function(element) {
+  var displayDays = element.dataset.liveDays * 1;
   // three day window
-  var recently = timestamp + (1000 * 60 * 60 * 24 * 3);
-  if (now < recently && now > timestamp) {
+  var distance = Math.abs(daysElapsed - displayDays);
+  if (distance < 3) {
     element.setAttribute("live", "");
   }
 });
