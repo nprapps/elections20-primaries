@@ -62,13 +62,15 @@ var onFormChange = function() {
       url.searchParams.set("link", `${prefix}states/${stateSelect.value}.html`);
     }
   }
-  embed.innerHTML = `<p
+  var embedHTML = `<p
   data-pym-loader
-  data-child-src="${url.toString()}" 
-  id="responsive-embed-sc-results">
+  data-child-src="${url.toString()}"
+  id="responsive-embed-${stateSelect.value}-${race}-${(date || "state").replace(/\//g, "")}-">
     Loading...
 </p>
-<script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js"></script>`.replace(/\</g, "&lt;");
+<script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js"></script>`;
+  embedHTML = embedHTML.replace(/\</g, "&lt;").replace(/[\n\s]+/g, " ");
+  embed.innerHTML = embedHTML
   preview.setAttribute("src", url.toString().replace(prefix, ""));
 }
 
