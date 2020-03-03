@@ -78,7 +78,7 @@ var showLatest = function() {
     var days = inDays(attribute);
     return { days, attribute };
   }).sort((a, b) => a.days - b.days);
-  var latest = moduleDates.filter(d => d.days < currentDay).pop();
+  var latest = moduleDates.filter(d => d.days <= currentDay).pop();
   if (!latest) {
     // if nothing is there, show the no-results module and hide everything else
     modules.forEach(m => m.classList.add("hidden"));
