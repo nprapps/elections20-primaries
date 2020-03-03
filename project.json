@@ -15,20 +15,18 @@
     "src/css/statePage.less": "build/states/state.css"
   },
   "scripts": {
-    "src/js/main.js": "build/app.js",
-    "src/js/embed.js": "build/embed.js",
-    "src/js/loader.js": "build/loader.js",
+    "src/js/customizer.js": "build/customizer.js",
+    "src/js/calendar.js": "build/calendar.js",
     "src/js/statePage.js": "build/states/state.js",
-    "src/js/embeds/iowa.js": "build/embeds/iowa.js",
-    "src/js/embeds/new-hampshire.js": "build/embeds/new-hampshire.js",
-    "src/js/embeds/nevada.js": "build/embeds/nevada.js",
-    "src/js/embeds/custom.js": "build/embeds/custom.js",
-    "src/js/embeds/custom.js": "build/embeds/super-tuesday.js"
+    "src/js/embeds/legacy-embeds.js": "build/embeds/legacy.js",
+    "src/js/embeds/super-tuesday.js": "build/embeds/super-tuesday.js",
+    "src/js/embeds/headlines.js": "build/embeds/headlines.js",
+    "src/js/embeds/custom.js": "build/embeds/custom.js"
   },
   "title": "2020 Primary Results",
   "description": "",
   "url": "https://apps.npr.org/elections20-primaries/",
-  "image": "assets/logo.png",
+  "image": "assets/primaries_logo.jpg",
   "analytics": {
     "topicIDs": [],
     "primaryTopic": "",

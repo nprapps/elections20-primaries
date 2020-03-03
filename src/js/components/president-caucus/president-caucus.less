@@ -1,8 +1,18 @@
+@import "../../../css/values.less";
+
 president-caucus {
+  .board {
+    .thead .th, .tbody .td {
+      @media @tiny {
+        font-size: 0.9em;
+      }
+    }
+  }
+
   .footnote {
     font-size: .85em;
     font-style: italic;
     color: var(--secondary);
-    margin-top: 0;
+    margin-top: 1em;
   }
 }

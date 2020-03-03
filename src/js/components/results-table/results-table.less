@@ -2,7 +2,7 @@
 
 results-table {
   @bar-height: .6em;
-  
+
   display: block;
   .gotham();
   font-size: var(--font-size);
@@ -60,6 +60,7 @@ results-table {
       color: var(--secondary);
       font-family: @sans;
       font-size: 0.85em;
+      text-align: right;
     }
   }
 
@@ -68,6 +69,7 @@ results-table {
     border-collapse: separate;
     border-spacing: 0 4px;
     font-size: 0.85em;
+    height: 100%; // fix for a dumb position bug
 
     .tbody, .thead {
 
@@ -76,6 +78,8 @@ results-table {
     .thead {
       .knockout-header();
       color: var(--secondary);
+
+      th { font-weight: normal; }
 
       .sde {
         margin-right: -.5em;
@@ -90,15 +94,21 @@ results-table {
 
     .tr {
       position: relative;
+      height: 100%;
     }
 
     .thead .tr {
       margin-bottom: 6px;
     }
 
+    .th.uncontested {
+      display: none;
+    }
+
     .th, .td {
       text-align: right;
       position: relative;
+      height: 100%;
 
       &:first-child {
         padding-left: 8px;
@@ -173,6 +183,14 @@ results-table {
     .incumbent .incumbent-icon {
       display: inline-block;
     }
+
+    td.uncontested {
+      font-style: italic;
+    }
+
+    .votes, .caucus, .percentage {
+      width: 75px;
+    }
   }
 
   .metadata-row {
@@ -196,7 +214,12 @@ results-table {
         &:hover, &:active { opacity: 0.7; }
       }
 
-      .star {
+      .footnote {
+        font-size: inherit;
+        font-style: inherit;
+      }
+
+      .incumbent-icon {
         font-style: normal;
       }
     }

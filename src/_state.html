@@ -3,19 +3,30 @@
 Things passed into this page:
 * schedule: all possible races
 * displays: menu items for each race
-* state: which state this is
+* state: which state this is (postal abbr)
+* stateFull: the full state name
+* stateAP: AP abbreviation
   */
+var { seo } = grunt.data.json;
+var metadata = {
+  project: Object.assign({}, grunt.data.json.project, {
+    title: seo.stateTitle.replace(/%state%/g, stateFull),
+    description: seo["description" + state]
+  })
+};
 %>
 <!doctype html>
 <html lang="en-US">
   <head>
-    <%= t.include("partials/_head.html", grunt.data.json) %>
+    <%= t.include("partials/_head.html", metadata) %>
     <link rel="stylesheet" type="text/css" href="state.css">
   </head>
   <body class="standalone">
     <script>
       var here = new URL(window.location);
-      document.body.classList.add(here.searchParams.get("theme"));
+      if (here.searchParams.has("theme")) {
+        document.body.classList.add(here.searchParams.get("theme"));
+      }
       if (here.searchParams.has("embedded")) {
         document.body.classList.add("embedded")
         document.body.classList.remove("standalone");
@@ -26,19 +37,24 @@ Things passed into this page:
 
     <main>
 
-      <header>
-        <img src="../assets/states/<%= state %>.svg" class="state-icon" alt="">
-        <h2>2020 Primaries and Caucuses</h2>
-        <h1><%= json.strings[state] %> Results</h1>
-      </header>
+      <div class="side-ad" aria-hidden="true">
+        <google-ad></google-ad>
+      </div>
+
+      <div class="main">
+        <header>
+          <img src="../assets/states/<%= state %>.svg" class="state-icon" alt="">
+          <h2><a href="..">2020 Primaries and Caucuses</a></h2>
+          <h1><%= json.strings[state] %> Results</h1>
+        </header>
 
       <%
 
 var hashRace = function(race) {
   var search = new URLSearchParams();
-  var fields = "date office".split(" ");
+  var fields = "date office special".split(" ");
   for (var f of fields) {
-    if (f in race) {
+    if (f in race && race[f]) {
       search.set(f, race[f]);
     }
   }
@@ -48,103 +64,116 @@ var makeOption = (item, suffix = "") => `value="${hashRace(item.race)}${suffix}"
 var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
       %>
-      <div class="mobile-calendar-wrapper">
-        <div class="select-label">SELECT A CONTEST</div>
-        <div class="outer-mobile-calendar">
-          <select class="mobile-calendar">
-            <% displays.forEach(function(item) { %>
-              <% if (item.parties) { %>
-              <option 
-                value="<%= hashRace(item.race) %>&party=Dem&counties=true"
-                data-timestamp="<%= item.race.timestamp %>">
-                <%= item.office %> - Dem. (<%= item.date %>)
-              </option>
-              <option
-                value="<%= hashRace(item.race) %>&party=GOP&counties=true"
-                data-timestamp="<%= item.race.timestamp %>">
-                <%= item.office %> - GOP (<%= item.date %>)
-              </option>
-              <% } else { %>
-              <option
-                value="<%= hashRace(item.race) %>"
-                data-timestamp="<%= item.race.timestamp %>">
-                <%= item.office %> (<%= item.date %>)
-              </option>
-              <% } %>
-            <% }) %>
-          </select>
+        <div class="mobile-calendar-wrapper">
+          <div class="select-label">Select a contest</div>
+          <div class="outer-mobile-calendar">
+            <select class="mobile-calendar">
+              <% displays.forEach(function(item) { %>
+
+                <% if (!item.race.singleParty) { %>
+                <option
+                  value="<%= hashRace(item.race) %>"
+                  data-days="<%= item.race.days %>">
+                  <%= item.office %>
+                  <%= item.race.special ? " - Special " : " " %>
+                  (<%= item.date %>)
+                </option>
+                <% } %>
+
+                <% if (item.parties) item.parties.forEach(function(p) { %>
+                <option
+                  value="<%= hashRace(item.race) %>&party=<%= p %>&counties=true&state"
+                  data-days="<%= item.race.days %>">
+                  <%= item.office %>
+                  <%= item.special ? " - Special " : " " %>-
+                  <%= p == "Dem" ? "Dem." : p %> only
+                  (<%= item.date %>)
+                </option>
+                <% }); %>
+
+              <% }); %>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <nav class="race-calendar">
-        <ul>
-          <% displays.forEach(function(item) { %>
-          <li data-timestamp="<%= item.race.timestamp %>">
-            <a class="office" href="#<%= hashRace(item.race) %>"><%= item.office %></a>
-            <% if (item.parties) { %>
-            <span class="parties">
-              <a href="#<%= hashRace(item.race) %>&party=Dem&counties=true">Dem.</a> 
-              | 
-              <a href="#<%= hashRace(item.race,) %>&party=GOP&counties=true">GOP</a>
-            </span>
-            <% } %>
-            <span class="date"><%= item.date %></span>
-          <% }) %>
-        </ul>
-      </nav>
+        <nav class="race-calendar">
+          <ul>
+            <% displays.forEach(function(item) { %>
+            <li data-days="<%= item.race.days %>">
+              <a class="office" href="#<%= hashRace(item.race) %>">
+                <%= item.office %>
+                <% if (item.race.special) { %>
+                <span class="special">— <br />Special Election</span>
+                <% } %>
+              </a>
+              <% if (item.parties) { %>
+              <span class="parties">
+                <%= item.parties.map(p => `
+                <a href="#${hashRace(item.race)}&party=${p}&counties=true&state">
+                  ${p == "Dem" ? "Dem." : p}
+                </a>
+                  `).join("|") %>
+                </span>
+              <% } %>
+              <span class="date"><%= item.date %></span>
+            <% }) %>
+          </ul>
+        </nav>
 
-      <p class="chatter">
-        <%= grunt.data.json.chatter[state] %>
-      </p>
+        <p class="chatter">
+          <%= grunt.data.json.chatter[state] %>
+        </p>
 
-      <!-- <h3 class="latest-results">Most recent results</h3> -->
+        <h3 class="latest-results">Most recent results</h3>
 
-      <% displays.forEach(function(row, i) { %>
+        <div class="module hidden future">
+          <span class="no-results">No results available yet.</span>
+        </div>
 
-        <div class="module <%= i ? "hidden" : "" %>"
-          data-office="<%= row.race.office %>"
-          data-date="<%= row.race.date %>"
-          tabindex="-1"
-        >
-          <h2><%= row.office %> - <%= row.date %></h2>
+        <% displays.forEach(function(row, i) { %>
+
+          <div class="module <%= i ? "hidden" : "" %>"
+            data-office="<%= row.race.office %>"
+            data-date="<%= row.race.date %>"
+            data-special="<%= row.race.special || "" %>"
+          >
+            <h2 tabindex="-1">
+              <%= row.office %>
+              <% if (row.race.special) { %>
+              — Special Election
+              <% } %>
+            </h2>
+
+            <% var partial = row.race.caucus ? "caucus" : row.race.element ? "random" : row.race.office %>
+            <%= t.include(`statePartials/_${partial}.html`, { row }) %>
+
+          </div>
 
           <% if (row.race.office != "H") { %>
-          <div class="show-counties">
-            See county results:
-            <a href="#<%= hashRace(row.race)%>&party=Dem&counties=true">Dem.</a>
-            |
-            <a href="#<%= hashRace(row.race)%>&party=GOP&counties=true">GOP</a>
+          <div class="module hidden"
+            data-office="<%= row.race.office %>"
+            data-date="<%= row.race.date %>"
+            data-counties="true"
+          >
+            <h2 tabindex="-1">
+              <%= row.office %> results by county
+              <% if (row.race.special) { %>
+              — Special Election
+              <% } %>
+            </h2>
+            <%= t.include("statePartials/_counties.html", { row }) %>
           </div>
           <% } %>
 
-          <% var partial = row.race.caucus ? "caucus" : row.race.element ? "random" : row.race.office; %>
-          <%= t.include(`statePartials/_${partial}.html`, { row }) %>
+        <% }) %>
 
-        </div>
-
-        <% if (row.race.office != "H") { %>
-        <div class="module hidden"
-          data-office="<%= row.race.office %>"
-          data-date="<%= row.race.date %>"
-          data-counties="true"
-          tabindex="-1"
-        >
-          <%= t.include("statePartials/_counties.html", { row }) %>
-        </div>
-        <% } %>
-
-      <% }); %>
+      </div> <!-- the main wrapper -->
 
     </main>
 
-    <%= t.include("partials/_footer.html", { content: `
-<div class="credits">
-Designed and developed by Audrey Carlsen, Alyson Hurt and Thomas Wilburn
-</div>
-    `}) %>
+    <%= t.include("partials/_footer.html", { prefix: "" }) %>
 
     <script src="state.js" async></script>
     <%= t.include("partials/_analytics.html") %>
   </body>
 </html>
-

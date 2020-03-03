@@ -2,6 +2,7 @@ var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 require("./president-results-multiple.less");
 
+var $ = require("../../lib/qsa");
 var dot = require("../../lib/dot");
 var candidateListTemplate = dot.compile(require("./_candidate_list.html"));
 var resultTemplate = dot.compile(require("./_result.html"));
@@ -9,7 +10,9 @@ var headerTemplate = dot.compile(require("./_resultHeader.html"));
 
 var { formatTime, formatAPDate, groupBy, toggleAttribute } = require("../utils");
 
-var mugs = require("../../../../data/mugs.sheet.json");
+const LEADER_THRESHOLD = 25;
+
+var mugs = require("mugs.sheet.json");
 
 // return a fresh object each time so we can mutate it
 var getSchedule = function() {
@@ -23,24 +26,24 @@ var getSchedule = function() {
     ],
     "8:00": [
       { state: "AL", ap: "Ala.", delegates: 52 },
-      { state: "MN", ap: "Maine", delegates: 24 },
+      { state: "ME", ap: "Maine", delegates: 24 },
       { state: "MA", ap: "Mass.", delegates: 91 },
       { state: "OK", ap: "Okla.", delegates: 37 },
       { state: "TN", ap: "Tenn.", delegates: 64 }
     ],
     "8:30": [
-      { state: "AR", ap: "Ark.", delegates: 52 }
+      { state: "AR", ap: "Ark.", delegates: 31 }
     ],
     "9:00": [
-      { state: "CO", ap: "Colo.", delegates: 52 },
-      { state: "MN", ap: "Minn.", delegates: 64 },
-      { state: "TX", ap: "Texas", delegates: 64 }
+      { state: "CO", ap: "Colo.", delegates: 67 },
+      { state: "MN", ap: "Minn.", delegates: 75 },
+      { state: "TX", ap: "Texas", delegates: 228 }
     ],
     "10:00": [
-      { state: "UT", ap: "Utah", delegates: 52 }
+      { state: "UT", ap: "Utah", delegates: 29 }
     ],
     "11:00": [
-      { state: "CA", ap: "Calif.", delegates: 52 }
+      { state: "CA", ap: "Calif.", delegates: 415 }
     ]
   };
 };
@@ -60,8 +63,19 @@ class PresidentResultsMultiple extends ElementBase {
   static get boundMethods() {
     return [
       "load",
-      "checkIfOverflow"
+      "checkIfOverflow",
+      "onHover"
     ]
+  }
+
+  onHover(e) {
+    var target = e.target;
+    var cell = target.closest("[data-candidate]");
+    $(".hover", this).forEach(el => el.classList.remove("hover"));
+    if (e.type == "mousemove" && cell) {
+      var row = $(`[data-candidate="${cell.dataset.candidate}"]`, this);
+      row.forEach(el => el.classList.add("hover"));
+    }
   }
 
   // direction is -1 for right, 1 for left
@@ -111,7 +125,7 @@ class PresidentResultsMultiple extends ElementBase {
   attributeChangedCallback(attr, was, value) {
     switch (attr) {
       case "src":
-        this.fetch.watch(value);
+        this.fetch.watch(value, 15);
         break;
     }
   }
@@ -123,11 +137,13 @@ class PresidentResultsMultiple extends ElementBase {
     elements.nextButton.addEventListener("click", () => this.shiftResults(-1));
     elements.backButton.addEventListener("click", () => this.shiftResults(1));
     window.addEventListener("resize", this.checkIfOverflow);
+    elements.results.addEventListener("mousemove", this.onHover);
+    elements.results.addEventListener("mouseleave", this.onHover);
     return elements;
   }
 
   load(data) {
-    
+
     var elements = this.illuminate();
 
     this.toggleAttribute("test", !!data.test);
@@ -139,7 +155,8 @@ class PresidentResultsMultiple extends ElementBase {
     // lookup table for races by state
     var stateRaces = {};
     // preprocess races for various metrics
-    races.forEach(function(r) {
+    races.forEach(function(r, i) {
+      var leader = null;
       // only one reporting unit, so simplify the structure
       r.results = r.results[0];
       var { reporting, reportingPercentage, precincts } = r.results;
@@ -150,16 +167,33 @@ class PresidentResultsMultiple extends ElementBase {
       } else {
         reportingPercentage = reportingPercentage.toFixed(0);
       }
-      r.results.reportingPercentage = reportingPercentage;
       var byName = {};
-      r.results.candidates.forEach(c => byName[c.last] = c);
+      var hasPercentage = r.results.candidates.some(c => c.percentage);
+      r.results.candidates.forEach(function(c) {
+        byName[c.last] = c;
+        var { percentage } = c;
+        if (!reporting && !hasPercentage) {
+          percentage = percentage ||  "-";
+        } else {
+          percentage = percentage || "0.0%";
+        }
+        if (typeof percentage == "number") percentage = percentage.toFixed(1) + "%";
+        if (r.results.reportingPercentage > LEADER_THRESHOLD) {
+          if (c.percentage && (!leader || leader.percentage < c.percentage)) {
+            leader = c;
+          }
+        }
+        c.displayPercentage = percentage;
+      });
+      r.results.reportingPercentage = reportingPercentage;
       r.results.byName = byName;
+      r.results.leader = leader;
       stateRaces[r.state] = r;
     });
 
     var latest = new Date(Math.max(...races.map(r => r.results.updated)));
 
-    var updateString = `${formatAPDate(latest)} at ${formatTime(latest)}`;
+    var updateString = `as of ${formatAPDate(latest)} at ${formatTime(latest)}`;
     elements.updated.innerHTML = updateString;
 
     // filter mugs to active candidates from the active party

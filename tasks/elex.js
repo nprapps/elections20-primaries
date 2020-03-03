@@ -15,6 +15,33 @@ Lots of flags available on this one:
 
 var api = require("./lib/ap");
 var depths = require("./lib/depths");
+var moment = require("moment-timezone");
+
+var monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+var inDays = function(dateString) {
+  var [m, d, y] = dateString.split("/").map(Number);
+  var days = 0;
+  for (var i = 0; i < m - 1; i++) {
+    days += monthLengths[i];
+  }
+  days += d;
+  return days;
+}
+
+var inDates = function(days) {
+  var m = 0;
+  while (days) {
+    if (days <= monthLengths[m]) {
+      return `${m + 1}/${days}/2020`;
+    }
+    days -= monthLengths[m++];
+  }
+}
+
+var ET = "America/New_York";
+moment.tz.setDefault(ET);
+
+var reportMod = 0;
 
 module.exports = function(grunt) {
 
@@ -31,32 +58,30 @@ module.exports = function(grunt) {
     schedule.forEach(function(r) {
       // assign a timestamp
       var [m, d, y] = r.date.split("/");
-      r.timestamp = new Date(y, m - 1, d);
+      r.days = inDays(r.date);
+      r.timestamp = moment(r.date, "MM/DD/YYYY").toDate();
       // split race IDs
       r.ids = r.raceID ? r.raceID.toString().split(/,\s*/g) : [];
       // split states
       r.states = r.state.split(/,\s*/g);
     });
 
+    // get today's day index
+    var today = inDays(moment().format("MM/DD/YYYY"));
     var date = grunt.option("date");
-    var now = new Date();
-    var day = 1000 * 60 * 60 * 24;
-    var today;
     if (date) {
       // date is provided
-      var [m, d, y] = date.split("/").map(Number);
-      today = new Date(y, m - 1, d);
-    } else {
-      // start from tomorrow and work back
-      today = new Date(now.valueOf() + day);
+      var today = inDays(date);
     }
-    // Our window is 48 hours back in time
-    // this should catch everything in the last day regardless of TZ
-    var retroactive = new Date(today.valueOf() - day * 2);
+    // subtract 2 from the day index
+    var retroactive = today - 2;
+    console.log(`Filtering races between ${inDates(retroactive)} and ${inDates(today)}`);
 
     var races = schedule.filter(
-      r => r.alwaysRun || (r.timestamp <= today && r.timestamp >= retroactive)
+      r => r.alwaysRun || (r.days <= today && r.days >= retroactive)
     );
+
+    console.log(`Found races: ${races.map(r => r.filename).join(", ")}`);
 
     var test = grunt.option("test");
     var offline = grunt.option("offline");
@@ -66,12 +91,15 @@ module.exports = function(grunt) {
       candidates: grunt.data.json.candidates
     };
 
+    var states = [...new Set(schedule.flatMap(r => r.states))].sort();
+
     // save some of this data for the build task
     grunt.data.elex = {
       schedule,
       races,
       today,
-      retroactive
+      retroactive,
+      states
     };
 
     api
@@ -85,6 +113,7 @@ module.exports = function(grunt) {
 
           var fromAP = results.filter(function(result) {
             if (ids.length) {
+              // console.log(result.id);
               return ids.indexOf(result.id) > -1;
             }
             // filter out third-parties

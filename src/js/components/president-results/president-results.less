@@ -81,7 +81,7 @@ president-results {
       display: block;
       columns: 2;
 
-      @media @mobile {
+      @media @tablet {
         columns: 1;
       }
     }
@@ -96,7 +96,7 @@ president-results {
     }
 
     .thead .tr.duplicate {
-      @media @mobile {
+      @media @tablet {
         display: none;
       }
     }
@@ -118,10 +118,14 @@ president-results {
 
     .th, .td {
       text-align: right;
-      flex: 0 0 5em;
+      flex: 0 0 4em;
 
       &:last-child {
         padding-right: 8px;
+      }
+
+      &.votes {
+        flex: 0 0 7em;
       }
     }
 
@@ -142,6 +146,7 @@ president-results {
       padding: 0;
       padding-right: @flourish-margin;
       z-index: 999;
+      flex: 0;
 
       .mugshot {
         width: @mug-size;
@@ -194,6 +199,10 @@ president-results {
         display: none;
         margin-left: 4px;
       }
+
+      .incumbent-icon {
+        display: none;
+      }
     }
 
     .winner .name {
@@ -203,6 +212,11 @@ president-results {
         display: inline-block;
       }
     }
+
+    .incumbent .incumbent-icon {
+      display: inline-block;
+    }
+
   }
 
   .metadata-row {
@@ -225,6 +239,10 @@ president-results {
 
         &:hover, &:active { opacity: 0.7; }
       }
+    }
+
+    .incumbent-icon {
+      font-style: normal;
     }
   }
 

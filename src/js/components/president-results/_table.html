@@ -13,8 +13,13 @@
   </div>
   <div class="tbody" role="rowgroup">
   <% data.candidates.forEach(function(c) { %>
+    <%
+      var classes = [];
+      if (c.winner) classes.push("winner");
+      if (c.incumbent) classes.push("incumbent");
+    %>
     <div class="row-wrapper <%= data.fold.indexOf(c.last) > -1 ? "shown" : "foldable" %>" role="presentation">
-      <div class="tr candidate <%= c.winner ? "winner" : "default" %> <% if (!c.mugshot) { %>noimg<% } %>" role="row">
+      <div class="tr candidate <%= classes.join(" ") %> <% if (!c.mugshot) { %>noimg<% } %>" role="row">
         <div aria-hidden="true" class="td flourishes">
           <div class="mugshot <% if (!c.mugshot) { %>noimg<% } %>" style="background-image: url(<%= c.mugshot || "" %>)"></div>
           <% if (c.votes) { %>
@@ -24,14 +29,21 @@
           <% } %>
         </div>
         <div role="cell" class="td name">
-          <span class="first"><%= c.first || "" %> </span><%= c.last == "Other" ? "Other candidates" : c.last %>
+          
+          <% if (c.last == "Other") { %>
+          Other <span class="first">Candidates</span>
+          <% } else { %>
+          <span class="first"><%= c.first || "" %> </span><%= c.last %>
+          <% } %>
+
+          <span class="incumbent-icon">&#9679;</span>
           <span class="winner-icon" role="img" aria-label="check mark">
             <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg>
           </span>
         </div>
         <div role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</div>
-        <% if (c.caucus) { %>
-        <div role="cell" class="td caucus"><%= c.caucus.toLocaleString() %></div>
+        <% if (typeof c.caucus == "number") { %>
+        <div role="cell" class="td caucus"><%=  c.caucus.toLocaleString() %></div>
         <% } %>
         <div role="cell" class="td votes"><%= c.votes ? c.votes.toLocaleString() : "-" %></div>
       </div>

@@ -1,8 +1,8 @@
 <!-- races with non-standard tags (mostly caucuses) -->
 <<%= row.race.element %>
-  data-live-timestamp="<%= row.race.timestamp %>"
+  data-live-days="<%= row.race.days %>"
   data-control="party"
   data-src="../data/<%= row.race.filename %>.json"
 >
-  No results
+  <div class="no-results">No results available.</div>
 </<%= row.race.element %>>

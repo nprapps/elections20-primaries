@@ -1,7 +1,25 @@
+<%
+  var classify = function(str) {
+    return str
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/\-\-+/g, "-")
+      .replace(/^-+|[^\w\-]|-+$/g, "");
+  };
+
+  var { seo } = grunt.data.json;  
+  var metadata = {
+    project: Object.assign({}, grunt.data.json.project, {
+      title: seo.calendarTitle,
+      description: seo.calendarDescription
+    })
+  };
+%>
+
 <!doctype html>
 <html lang="en-US">
   <head>
-    <%= t.include("partials/_head.html", grunt.data.json) %>
+    <%= t.include("partials/_head.html", metadata) %>
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
@@ -9,11 +27,145 @@
       document.body.classList.add(new URL(window.location).searchParams.get("theme"));
     </script>
 
+    <%= t.include("partials/_nav.html") %>
+
     <main class="calendar">
-      <%= t.include("_contestList.html", { races: json.races.filter(r => !r.feedOnly) }) %>
+
+      <div class="side-ad" aria-hidden="true">
+        <google-ad></google-ad>
+      </div>
+
+      <div class="main">
+        <h1>2020 Election Calendar</h1>
+        <%
+          var { races, nonraces, strings } = grunt.data.json;
+          // make a copy
+          races = races.filter(r => !r.feedOnly && r.office != "R");
+          var { formatAPDate, formatTime, groupBy, inDays } = require("../src/js/components/utils");
+          // normalize events
+          var monthNames = " January February March April May June July August September October November December".split(" ");
+          var events = [];
+          nonraces.forEach(function(n) {
+            var [m, d, y] = n.date.split("/");
+            n.month = m;
+            n.day = d;
+            n.days = inDays(n.date);
+            n.dateText = formatAPDate(new Date(y, m - 1, d)).replace(/, 2020/, "");
+
+            if (n.date_end) {
+              var [mEnd, dEnd, yEnd] = n.date_end.split("/");
+              n.monthEnd = mEnd;
+              n.dayEnd = dEnd;
+              n.dateTextEnd = formatAPDate(new Date(yEnd, mEnd - 1, dEnd)).replace(/, 2020/, "");
+            }
+
+            // add to the events
+            events.push(n);
+            // find matching races
+            if (n.state) {
+              n.races = [];
+              races = races.filter(function(r) {
+                if (r.state == n.state && r.date == n.date) {
+                  n.races.push(r);
+                  return false;
+                }
+                return true;
+              });
+            }
+          });
+          // now add orphan races
+          while (races.length) {
+            var r = races.shift();
+            var [m, d, y] = r.date.split("/").map(Number);
+            // create dummy event
+            var event = {
+              date: r.date,
+              month: m,
+              day: d,
+              days: r.days,
+              dateText: formatAPDate(new Date(y, m - 1, d)).replace(/, 2020/, ""),
+              category: "Vote",
+              title: strings[r.state] + " primaries",
+              races: [r],
+              implicit: true
+            };
+            events.push(event);
+            // add matching races to the event
+            races = races.filter(function(race) {
+              if (race.state == r.state && race.date == r.date) {
+                event.races.push(race);
+                return false;
+              }
+              return true;
+            });
+
+            if (event.races.every(r => r.caucus)) {
+              event.title = strings[r.state] + " caucuses";
+            }
+          }
+          var byMonth = groupBy(events, "month");
+          Object.keys(byMonth).sort((a, b) => a - b).forEach(function(m) {
+        %>
+
+        <h2><%= monthNames[m] %></h2>
+        <%
+          var byDay = groupBy(byMonth[m], "day");
+          Object.keys(byDay).sort((a, b) => a - b).forEach(function(d) {
+            var day = byDay[d];
+            day.sort(function(a, b) {
+              var aIndex = a.implicit ? 1 : 0;
+              var bIndex = b.implicit ? 1 : 0;
+              if (aIndex == bIndex) {
+                return a.title < b.title ? -1 : 1;
+              }
+              return aIndex - bIndex;
+            })
+            day.forEach(function(event, i) {
+        %>
+
+        <div class="event-row index-<%= i%> " data-days="<%= event.days %>">
+          <div class="date">
+            <% if (event.date_prose) { %>
+              <%= event.date_prose %>
+            <% } else { %>
+              <%= event.dateText %><% if (event.dateTextEnd) { %>-<%= event.dateTextEnd %><% } %>
+            <% } %>
+          </div>
+
+            <div class="category <%= classify(event.category) %>"><span class="pill"><%= event.category %></span></div>
+
+            <div class="content">
+              <div class="title"><%= event.title %></div>
+              <div class="desc"><%= event.description %></div>
+              <div class="links">
+                <% if (event.link) { %>
+                <a class="coverage-link" href="<%= event.link %>">NPR coverage</a>
+                <% } %>
+                <% if (event.link && event.races) { %>
+                <span class="results-label">
+                |
+                </span>
+                <% }%>
+                <% if (event.races) { %>
+                <span class="results-label">Results:</span>
+                  <%= event.races.map(r => `
+  <a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}">
+  ${strings[r.office]}${r.special ? " special election" : ""}</a>`).join(", ") %>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        <%
+              }); //event
+            }); // day
+          }); // month
+        %>
+      </div> <!-- the content div -->
     </main>
 
-    <script src="app.js" async></script>
+    <%= t.include("partials/_footer.html", { prefix: "states/" }) %>
+
+    <script src="calendar.js" async></script>
     <%= t.include("partials/_analytics.html") %>
   </body>
 </html>

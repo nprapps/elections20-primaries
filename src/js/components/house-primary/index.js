@@ -4,6 +4,8 @@ require("../results-table");
 require("./house-primary.less");
 var { mapToElements, toggleAttribute, groupBy } = require("../utils");
 
+var strings = require("strings.sheet.json");
+
 class HouseSeat extends ElementBase {
   static get template() {
     return `
@@ -73,12 +75,14 @@ class HousePrimary extends ElementBase {
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
+    var host = this.getAttribute("host");
 
     var groupedResults = groupBy(this.cache.races, "seat");
     var seats = Object.keys(groupedResults).map(function(id) {
       return {
         results: groupedResults[id].map(r => r.results[0]),
-        id
+        id,
+        state: groupedResults[id][0].state
       }
     });
 
@@ -90,17 +94,30 @@ class HousePrimary extends ElementBase {
 
       seatElements.seat.innerHTML = `District ${race.id}`;
 
+      element.dataset.count = race.results.length;
+
+      race.results.sort((a, b) => a.party < b.party ? -1 : 1);
+
       toggleAttribute(element, "hidden", party && race.party != party);
       // create result tables
       var pairs = mapToElements(seatElements.results, race.results, "results-table");
 
       // render each one
       var test = !!this.cache.test;
+
       pairs.forEach(function([data, child]) {
         if (href) child.setAttribute("href", href);
         child.setAttribute("max", 99);
         toggleAttribute(child, "test", test);
-        child.setAttribute("headline", `${data.party} results`)
+        
+        var readableParty = data.party == "Dem" ? "Democratic" : (data.party || "Open");
+        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
+
+        if (host == "statepage") {
+          headline = `${readableParty} primary`;
+        }
+
+        child.setAttribute("headline", headline);
         child.render(data);
       });
     });

@@ -12,7 +12,7 @@ var { formatAPDate, formatTime } = require("../utils");
 
 var ElementBase = require("../elementBase");
 
-var mugs = require("../../../../data/mugs.sheet.json");
+var mugs = require("mugs.sheet.json");
 var defaultFold = Object.keys(mugs)
   .filter(k => mugs[k].featured)
   .sort();
@@ -32,6 +32,10 @@ class ResultsTable extends ElementBase {
     return ["href", "headline"];
   }
 
+  static get mirroredProps() {
+    return ["href", "headline"];
+  }
+
   attributeChangedCallback(attr, was, value) {
     var elements = this.illuminate();
 
@@ -48,7 +52,9 @@ class ResultsTable extends ElementBase {
 
   illuminate() {
     var elements = super.illuminate();
-    elements.moreButton.addEventListener("click", () => this.toggleAttribute("expanded"));
+    elements.moreButton.addEventListener("click", () =>
+      this.toggleAttribute("expanded")
+    );
     return elements;
   }
 
@@ -57,17 +63,32 @@ class ResultsTable extends ElementBase {
 
     var {
       candidates,
+      party,
       precincts,
       reporting,
       reportingPercentage,
       updated
     } = result;
-    
-    this.setAttribute("party", result.party);
+
+    // copy the array before mutating
+    candidates = candidates.slice();
+
+    this.dispatch("updatedtime", { updated });
+
+    elements.footnote.innerHTML =
+      candidates.length > 1
+        ? ""
+        : "The AP does not tabulate votes for uncontested races and declares its winner as soon as polls close.";
+
+    this.setAttribute("party", party);
     // normalize percentages
+    var hasIncumbent = false;
     candidates.forEach(function(c) {
       c.percentage = c.percentage || 0;
+      hasIncumbent = c.incumbent || hasIncumbent;
     });
+    elements.incumbency.style.display = hasIncumbent ? "" : "none";
+
     // check for existing votes
     candidates.sort((a, b) => b.percentage - a.percentage);
     // re-sort if no votes are cast
@@ -97,6 +118,7 @@ class ResultsTable extends ElementBase {
     candidates = candidates.filter(function(c) {
       if (
         hasVotes &&
+        candidates.length > 3 &&
         c.last != "Other" &&
         c.percentage < 1 &&
         defaultFold.indexOf(c.last) == -1
@@ -121,9 +143,12 @@ class ResultsTable extends ElementBase {
       this.removeAttribute("overflow");
     }
 
+    // if we only have one candidate (uncontested) don't show county results
+    elements.resultsLink.style.display = candidates.length < 2 ? "none" : "";
+
     // insert content
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
-    elements.content.innerHTML = table({ candidates, highest, fold });
+    elements.content.innerHTML = table({ candidates, highest, fold, party });
 
     // adjust reporting numbers
     if (reporting > 0 && reportingPercentage < 1) {
@@ -134,12 +159,14 @@ class ResultsTable extends ElementBase {
       reportingPercentage = reportingPercentage.toFixed(0);
     }
     var updated = new Date(updated);
-    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(updated)}`;
+    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(
+      updated
+    )}`;
     elements.updated.innerHTML = updateString;
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
     elements.reporting.innerHTML = reportingString;
-    elements.resultsLink.href = this.getAttribute("href");
+    if (candidates.length < 2 ) elements.reporting.style.display = "none";
   }
 
   static get template() {

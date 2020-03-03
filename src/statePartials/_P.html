@@ -1,9 +1,10 @@
 <president-primary
-  data-live-timestamp="<%= row.race.timestamp %>"
+  data-live-days="<%= row.race.days %>"
   data-control="party"
   data-src="../data/<%= row.race.filename %>.json"
   expanded
   max="99"
+  host="statepage"
 >
-  No results
+  <div class="no-results">No results available.</div>
 </president-primary>

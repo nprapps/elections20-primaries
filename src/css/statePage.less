@@ -1,14 +1,40 @@
 @import "base";
 @import "nav";
+@import "footer";
 
 :root {
   font-size: 16px;
+}
+
+// suppress focus styles for programmatic jumps
+[tabindex="-1"]:focus {
+  outline: none;
 }
 
 main {
   max-width: 900px;
   margin: auto;
   padding: 24px 16px;
+
+  .side-ad {
+    display: none;
+  }
+
+  @media (min-width: 1200px) {
+    max-width: 1200px;
+    display: flex;
+
+    .main {
+      flex: 1 1 900px;
+    }
+
+    .side-ad {
+      display: block;
+      flex: 0 0 300px;
+      margin-left: 20px;
+      order: 2;
+    }
+  }
 }
 
 [disabled] a {
@@ -19,6 +45,10 @@ main {
   }
 }
 
+.show-counties[disabled], h2[disabled] {
+  display: none;
+}
+
 header {
   padding-bottom: 16px;
 
@@ -27,16 +57,26 @@ header {
     margin-right: 14px;
     max-width: 75px;
     height: 60px;
-    opacity: 40%;
+    opacity: .4;
+
+    @media @tiny {
+      max-width: 55px;
+    }
   }
 
   h2 {
+    .knockout-header();
     margin: 0;
-    text-transform: uppercase;
-    .knockout();
     color: var(--secondary);
-    font-size: .8rem;
-    letter-spacing: 0.05em;
+    font-size: .85rem;
+
+    a, a:link, a:visited {
+      color: var(--secondary);
+      text-decoration: none;
+    }
+    a:hover, a:active {
+      color: var(--link);
+    }
   }
 
   h1 {
@@ -47,6 +87,10 @@ header {
 
     @media @mobile {
       font-size: 1.8rem;
+    }
+
+    @media @tiny {
+      font-size: 1.5rem;
     }
   }
 }
@@ -65,6 +109,7 @@ header {
   margin-bottom: 8px;
   margin-right: 6px;
   display: inline-block;
+  text-transform: uppercase;
 }
 
 .outer-mobile-calendar {
@@ -76,7 +121,7 @@ header {
 
 .mobile-calendar {
   border: none;
-  font-size: 12px;
+  font-size: 14px;
   font-family: @gotham;
   background: transparent;
   width: 100%;
@@ -140,9 +185,29 @@ nav.race-calendar {
   font-family: @serif;
   font-size: 16px;
   line-height: 1.5em;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 22px;
+  margin-bottom: 22px;
+
+  &:empty { display: none; }
+
+  .module & {
+    font-family: @sans;
+    font-size: 1em;
+    font-style: italic;
+    color: #787878;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
 }
 
 h3.latest-results {
+  .knockout-header();
+  font-size: 1em;
+  margin: -14px 0 22px 0;
+  color: #787878;
+  font-weight: normal;
+
   body.filtered & {
     display: none;
   }
@@ -153,15 +218,22 @@ hr {
 }
 
 .module {
+  padding-bottom: 20px;
+
   pre {
     padding: 30px;
     background: #EEE;
   }
 
   h2 {
-    border-bottom: 2px solid #EEE;
-    padding-bottom: 8px;
-    font-family: @gotham;
+    .gotham();
+    font-weight: bold;
+    margin: 0 0 22px 0;
+    font-size: 1.3em;
+  }
+
+  h2 + house-primary .chatter {
+    margin-top: -15px;
   }
 
   &.hidden {
@@ -171,19 +243,18 @@ hr {
   &:focus {
     outline: none;
   }
-}
 
-.show-counties {
-  margin: 10px 0 20px;
-  font-size: 1em;
-  font-weight: bold;
-
-  body.counties & {
-    display: none;
+  .no-results {
+    .gotham();
   }
 }
 
-.credits {
-  .gotham();
-  font-style: italic;
+body.counties .full-results {
+  display: none !important;
+}
+
+president-results, results-table {
+  .source-line {
+    display: none;
+  }
 }

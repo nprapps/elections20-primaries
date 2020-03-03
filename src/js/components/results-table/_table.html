@@ -2,8 +2,8 @@
   <thead class="thead" role="rowgroup">
     <tr class="tr" role="row">
       <th role="columnheader" class="th name">Candidate</th>
-      <th role="columnheader" class="th percentage">Percent</th>
-      <th role="columnheader" class="th votes">Votes</th>
+      <th role="columnheader" class="th percentage <%= data.candidates.length > 1 ? "" : "uncontested"%>">Percent</th>
+      <th role="columnheader" class="th votes <%= data.candidates.length > 1 ? "" : "uncontested"%>">Votes</th>
     </tr>
   </thead>
   <tbody class="tbody" role="rowgroup">
@@ -19,19 +19,30 @@
 
         <!-- bar is in the name, but positioned relative to the whole table -->
         <div class="bar-container">
-          <div class="bar" style="width: <%= data.highest ? c.percentage / data.highest * 75 : 0 %>%"></div>
+          <div class="bar" style="width: <%= data.highest ? c.percentage / data.highest * 100 : 0 %>%"></div>
         </div>
+        
+        <% if (c.last == "Other") { %>
+        Other <span class="first">Candidates</span>
+        <% } else { %>
+        <span class="first"><%= c.first || "" %> </span><%= c.last %>
+        <% } %>
 
-        <span class="first"><%= c.first || "" %></span>
-        <%= c.last == "Other" ? "Other candidates" : c.last %>
-        <span class="incumbent-icon">*</span>
+        <% if (!data.party) { %>
+        (<%= c.party %>)
+        <% } %>
+        <span class="incumbent-icon">&#9679;</span>
         <span class="winner-icon" role="img" aria-label="check mark">
           <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"></path></svg>
         </span>
 
       </td>
+      <% if (data.candidates.length > 1) { %>
       <td role="cell" class="td percentage"><%= c.percentage.toFixed(1) %>%</td>
       <td role="cell" class="td votes"><%= c.votes.toLocaleString() %></td>
+      <% } else { %>
+      <td role="cell" class="td votes uncontested" colspan="2">Uncontested</td>
+      <% } %>
     </tr>
     <% }); %>
   </tbody>

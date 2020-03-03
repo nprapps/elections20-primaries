@@ -1,6 +1,7 @@
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 var $ = require("../../lib/qsa");
+var track = require("../../lib/tracking");
 require("../results-table");
 require("../county-map");
 require("./county-detail.less");
@@ -67,17 +68,42 @@ class CountyDetail extends ElementBase {
     if (!data) return;
     var { races, test } = data;
 
+    // filter races by type - no weird alignments
+    races = races.filter(r => r.type && !r.type.match(/alignment/i));
+
     var party = this.getAttribute("party");
 
     var results = [].concat(...races.filter(r => r.party == party).map(r => r.results));
     var counties = {};
     var fips = {};
     results.forEach(function(r) {
+      var top = null;
+      r.candidates.forEach(function(candidate) {
+        if (!totals[candidate.id]) totals[candidate.id] = {
+          first: candidate.first,
+          last: candidate.last,
+          id: candidate.id,
+          votes: 0
+        };
+        totals[candidate.id].votes += candidate.votes;
+        if (!top || candidate.percentage > top.percentage) {
+          top = candidate;
+        }
+        delete candidate.winner;
+      });
+      if (r.reportingPercentage == 100) {
+        top.winner = true;
+      }
       counties[r.county] = r.fips;
       fips[r.fips] = r.county;
     });
 
-    counties = Object.keys(counties).map(county => ({ county, id: counties[county] }));
+    // for future map use: determine the palette by statewide total position
+    var statewide = Object.values(totals);
+    statewide.sort((a, b) => b.votes - a.votes);
+
+    counties = Object.keys(counties).sort().map(county => ({ county, id: counties[county] }));
+    // counties.unshift({ county: "--", id: 0 });
     mapToElements(elements.countySelect, counties, function(data) {
       var option = document.createElement("option");
       option.innerHTML = data.county;
@@ -130,6 +156,7 @@ class CountyDetail extends ElementBase {
     elements.map.render(palette, race.results);
 
     resultsTable.setAttribute("headline", result.county);
+    resultsTable.setAttribute("max", 99);
     if (result) resultsTable.render(result);
   }
 
@@ -140,6 +167,7 @@ class CountyDetail extends ElementBase {
   onSelectCounty() {
     var elements = this.illuminate();
     var fips = elements.countySelect.value;
+    track("select-county", fips);
     this.updateTable(fips);
   }
 

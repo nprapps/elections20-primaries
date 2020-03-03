@@ -18,7 +18,7 @@ class ElementBase extends HTMLElement {
     if (def.mirroredProps) {
       def.mirroredProps.forEach(p => Object.defineProperty(this, p, {
         get() { this.getAttribute(p) },
-        set(v) { return this.setAttribute(p, v) }
+        set(v) { this.setAttribute(p, v); return v; }
       }));
     }
   }

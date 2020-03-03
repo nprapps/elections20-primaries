@@ -2,7 +2,38 @@
 
 county-detail {
   .controls {
-    text-align: right;
+
+    label {
+      .knockout();
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+      margin-right: 6px;
+      display: inline-block;
+      text-transform: uppercase;
+
+      @media @mobile {
+        display: block;
+      }
+    }
+
+    .outer-county-select {
+      padding: 6px 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    select#county-select {
+      border: none;
+      font-size: 12px;
+      font-family: @gotham;
+      background: transparent;
+      width: 100%;
+
+      @media @mobile {
+        font-size: 14px;
+      }
+    }
   }
 
   .counties {

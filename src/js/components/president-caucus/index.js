@@ -4,9 +4,11 @@ require("./president-caucus.less");
 var ElementBase = require("../elementBase");
 var Retriever = require("../retriever");
 
+var strings = require("strings.sheet.json");
+
 var defaultRefresh = 15;
 
-var mugs = require("../../../../data/mugs.sheet.json");
+var mugs = require("mugs.sheet.json");
 var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 var { mapToElements, toggleAttribute, groupBy } = require("../utils");
 
@@ -64,12 +66,15 @@ class PresidentCaucus extends ElementBase {
     if (!this.cache) return;
     var { races, chatter, footnote } = this.cache;
 
+    races.sort((a, b) => a.party < b.party ? -1 : 1 );
+
     elements.chatter.innerHTML = chatter || "";
     elements.footnote.innerHTML = footnote || "";
 
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
+    var host = this.getAttribute("host");
     var isTest = !!this.cache.test;
     var caucusLabel = this.getAttribute("caucus") || this.cache.caucus;
 
@@ -88,7 +93,9 @@ class PresidentCaucus extends ElementBase {
           var candidate = merging[c.last] || {
             last: c.last,
             first: c.first,
-            mugshot: mugs[c.last] ? mugs[c.last].src : ""
+            mugshot: mugs[c.last] ? mugs[c.last].src : "",
+            votes: 0,
+            percentage: 0
           };
           if (r.type == "Caucus") {
             // assign votes
@@ -113,10 +120,23 @@ class PresidentCaucus extends ElementBase {
     pairs.forEach(function([data, child]) {
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
+
+      var readableParty = data.party == "Dem" ? "Democratic" : data.party;
+      var headline = `${strings[data.state + "-AP"]} ${readableParty} ${data.caucus ? "caucus" : "primary"}`;
+      
+      if (host == "statepage") {
+        headline = `${readableParty} ${data.caucus ? "caucus" : "primary"}`;
+        var search = new URLSearchParams("counties=true&office=P");
+        search.set("date", data.date);
+        search.set("party", data.party);
+        href = "#" + search.toString();
+        var { resultsLink } = child.illuminate();
+        resultsLink.innerHTML = "See county results &rsaquo;";
+      }
+
       if (href) child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
-      var readableParty = data.party == "Dem" ? "Democratic" : data.party;
-      child.setAttribute("headline", `${readableParty} ${data.caucus ? "caucus" : ""} results`);
+      child.setAttribute("headline", headline);
       child.render(data);
     });
   }

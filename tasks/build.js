@@ -70,30 +70,38 @@ module.exports = function(grunt) {
     var stateTemplate = grunt.file.read("src/_state.html");
 
     states.forEach(function(state) {
+      var stateFull = grunt.data.json.strings[state];
+      var stateAP = grunt.data.json.strings[state + "-AP"];
+
       // create a data object with its specific data
+      var officeOrder = ["P", "G", "S", "H"];
       var newestFirst = (a, b) => b.timestamp - a.timestamp;
-      var oldestFirst = (a, b) => a.timestamp - b.timestamp;
+      var oldestFirst = (a, b) => {
+        var diff = a.timestamp - b.timestamp
+        if (diff) return diff;
+        return officeOrder.indexOf(a.office) - officeOrder.indexOf(b.office);
+      };
       var schedule = grunt.data.elex.schedule.filter(r => !r.feedOnly && r.state == state);
 
       var months = "Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.".split(" ");
       
       var displays = schedule.slice().sort(oldestFirst).map(function(race) {
-        var date = new Date(race.timestamp);
+        var [m, d] = race.date.split("/").map(Number);
         var item = {
           office: grunt.data.json.strings[race.office],
-          date: [months[date.getMonth()], date.getDate()].join(" "),
-          future: race.timestamp > grunt.data.elex.today,
-          live: race.timestamp <= grunt.data.elex.today && race.timestamp > grunt.data.elex.retroactive,
+          date: [months[m - 1], d].join(" "),
           race
         }
-        if (race.office != "H" && !race.parties) {
-          item.parties = true;
+        if (race.office != "H" || race.singleParty) {
+          item.parties = race.singleParty ? [race.singleParty] : ["Dem", "GOP"];
         }
         return item;
       });
 
       var stateData = Object.assign({}, grunt.data, {
         state,
+        stateFull,
+        stateAP,
         schedule,
         displays
       });

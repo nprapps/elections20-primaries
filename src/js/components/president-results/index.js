@@ -5,9 +5,10 @@ var tableTemplate = dot.compile(require("./_table.html"));
 
 var { formatTime, formatAPDate } = require("../utils");
 
-var mugs = require("../../../../data/mugs.sheet.json");
+var mugs = require("mugs.sheet.json");
 var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 var defaultMax = 6;
+var index = c => (defaultFold.indexOf(c.last) + 1) || (c.last == "Other" ? 101 : 100)
 
 class PresidentResults extends ElementBase {
 
@@ -25,7 +26,11 @@ class PresidentResults extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["headline"];
+    return ["href", "headline"];
+  }
+
+  static get mirroredProps() {
+    return ["href", "headline"];
   }
 
   attributeChangedCallback(attr, was, value) {
@@ -34,6 +39,10 @@ class PresidentResults extends ElementBase {
     switch (attr) {
       case "headline":
         elements.headline.innerHTML = value ? value.trim() : "";
+        break;
+
+      case "href":
+        elements.resultsLink.href = value;
         break;
     }
   }
@@ -44,14 +53,21 @@ class PresidentResults extends ElementBase {
     var result = data.results[0]; // only one for president
     var { caucus } = data;
     var { candidates, precincts, reporting, reportingPercentage, updated } = result;
-    if (updated == this.updated) return;
-    this.updated = updated;
+
+    // copy the array before mutating
+    candidates = candidates.slice();
+    
+    this.dispatch("updatedtime", { updated });
+
     this.setAttribute("party", data.party);
     // assign mugs and normalize percentages
+    var hasIncumbent = false;
     candidates.forEach(function(c) {
       c.mugshot = mugs[c.last] ? mugs[c.last].src : "";
       c.percentage = c.percentage || 0;
+      hasIncumbent = c.incumbent || hasIncumbent;
     });
+    elements.incumbency.style.display = hasIncumbent ? "" : "none";
     // check for existing votes
     candidates.sort((a, b) => b.percentage - a.percentage);
     // resort if no votes are cast
@@ -59,8 +75,8 @@ class PresidentResults extends ElementBase {
     if (!hasVotes) {
       // sort by default view, then by name
       candidates.sort(function(a, b) {
-        var aValue = (defaultFold.indexOf(a.last) + 1) || (a.last == "Other" ? 101 : 100);
-        var bValue = (defaultFold.indexOf(b.last) + 1) || (b.last == "Other" ? 101 : 100);
+        var aValue = index(a);
+        var bValue = index(b);
         if (aValue == bValue) {
           return a.last < b.last ? -1 : 1;
         }
@@ -85,7 +101,7 @@ class PresidentResults extends ElementBase {
       if (c.last != "Other" && c.percentage < 1 && defaultFold.indexOf(c.last) == -1) {
         others.percentage += c.percentage;
         others.votes += c.votes;
-        others.caucus += c.caucus;
+        if (c.caucus) others.caucus += c.caucus;
         return false;
       }
       return true;
@@ -117,12 +133,13 @@ class PresidentResults extends ElementBase {
       reportingPercentage = reportingPercentage.toFixed(0);
     }
     var updated = new Date(updated);
-    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(updated)}`;
+    var updateString = `as of ${formatTime(updated)} on ${formatAPDate(
+      updated
+    )}`;
     elements.updated.innerHTML = updateString;
 
     var reportingString = `${reportingPercentage}% of precincts reporting`;
     elements.reporting.innerHTML = reportingString;
-    elements.resultsLink.href = this.getAttribute("href");
 
   }
 

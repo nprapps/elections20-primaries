@@ -4,6 +4,8 @@ require("../results-table");
 require("./standard-primary.less");
 var { mapToElements, toggleAttribute } = require("../utils");
 
+var strings = require("strings.sheet.json");
+
 class StandardPrimary extends ElementBase {
   constructor() {
     super();
@@ -55,6 +57,8 @@ class StandardPrimary extends ElementBase {
 
     if (!this.cache) return;
     var { races, chatter, footnote } = this.cache;
+    
+    races.sort((a, b) => a.party < b.party ? -1 : 1 );
 
     elements.chatter.innerHTML = chatter || "";
     elements.footnote.innerHTML = footnote || "";
@@ -62,6 +66,7 @@ class StandardPrimary extends ElementBase {
     var href = this.getAttribute("href");
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
+    var host = this.getAttribute("host");
 
     var races = mapToElements(elements.results, this.cache.races);
     races.forEach(([race, element]) => {
@@ -74,9 +79,27 @@ class StandardPrimary extends ElementBase {
       // render each one
       var test = !!this.cache.test;
       pairs.forEach(function([data, child]) {
+
+        var readableParty = data.party == "Dem" ? "Democratic" : data.party;
+        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
+
+        if (host == "statepage") {
+          headline = `${readableParty} primary`;
+          var search = new URLSearchParams("counties=true");
+          search.set("date", race.date);
+          search.set("party", race.party);
+          search.set("office", race.office)
+          href = "#" + search.toString();
+
+          var { resultsLink } = child.illuminate();
+          resultsLink.innerHTML = "See county results &rsaquo;";
+        }
+
         if (href) child.setAttribute("href", href);
         if (max) child.setAttribute("max", max);
         toggleAttribute(child, "test", test);
+
+        child.setAttribute("headline", headline);
         child.render(data);
       });
     });
