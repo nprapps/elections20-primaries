@@ -8,6 +8,7 @@ var { formatTime, formatAPDate } = require("../utils");
 var mugs = require("mugs.sheet.json");
 var defaultFold = Object.keys(mugs).filter(n => mugs[n].featured).sort();
 var defaultMax = 6;
+var index = c => (defaultFold.indexOf(c.last) + 1) || (c.last == "Other" ? 101 : 100)
 
 class PresidentResults extends ElementBase {
 
@@ -52,6 +53,9 @@ class PresidentResults extends ElementBase {
     var result = data.results[0]; // only one for president
     var { caucus } = data;
     var { candidates, precincts, reporting, reportingPercentage, updated } = result;
+
+    // copy the array before mutating
+    candidates = candidates.slice();
     
     this.dispatch("updatedtime", { updated });
 
@@ -71,8 +75,8 @@ class PresidentResults extends ElementBase {
     if (!hasVotes) {
       // sort by default view, then by name
       candidates.sort(function(a, b) {
-        var aValue = (defaultFold.indexOf(a.last) + 1) || (a.last == "Other" ? 101 : 100);
-        var bValue = (defaultFold.indexOf(b.last) + 1) || (b.last == "Other" ? 101 : 100);
+        var aValue = index(a);
+        var bValue = index(b);
         if (aValue == bValue) {
           return a.last < b.last ? -1 : 1;
         }

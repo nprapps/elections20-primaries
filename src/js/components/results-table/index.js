@@ -70,6 +70,9 @@ class ResultsTable extends ElementBase {
       updated
     } = result;
 
+    // copy the array before mutating
+    candidates = candidates.slice();
+
     this.dispatch("updatedtime", { updated });
 
     elements.footnote.innerHTML =
