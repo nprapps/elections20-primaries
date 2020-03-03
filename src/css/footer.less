@@ -2,7 +2,7 @@ footer {
   .gotham();
   background: #222;
   color: white;
-  padding: 40px 20px;
+  padding: 40px 15px;
   position: relative;
   z-index: 999;
   justify-content: flex-start;
@@ -43,6 +43,10 @@ footer {
   .constrained {
     max-width: 900px;
     margin: auto;
+
+    @media @tablet-above {
+      padding-left: 15px;
+    }
 
     @media (min-width: 1200px) {
       max-width: 1200px;
@@ -96,8 +100,12 @@ footer {
     column-count: 3;
     margin: 20px 0 33px 0;
 
-    @media @tablet {
+    @media @mobile {
       column-count: 1;
+    }
+
+    @media @tablet {
+      column-count: 2;
     }
 
     @media @tiny {
