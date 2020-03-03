@@ -26,24 +26,24 @@ var getSchedule = function() {
     ],
     "8:00": [
       { state: "AL", ap: "Ala.", delegates: 52 },
-      { state: "MN", ap: "Maine", delegates: 24 },
+      { state: "ME", ap: "Maine", delegates: 24 },
       { state: "MA", ap: "Mass.", delegates: 91 },
       { state: "OK", ap: "Okla.", delegates: 37 },
       { state: "TN", ap: "Tenn.", delegates: 64 }
     ],
     "8:30": [
-      { state: "AR", ap: "Ark.", delegates: 52 }
+      { state: "AR", ap: "Ark.", delegates: 31 }
     ],
     "9:00": [
-      { state: "CO", ap: "Colo.", delegates: 52 },
-      { state: "MN", ap: "Minn.", delegates: 64 },
-      { state: "TX", ap: "Texas", delegates: 64 }
+      { state: "CO", ap: "Colo.", delegates: 67 },
+      { state: "MN", ap: "Minn.", delegates: 75 },
+      { state: "TX", ap: "Texas", delegates: 228 }
     ],
     "10:00": [
-      { state: "UT", ap: "Utah", delegates: 52 }
+      { state: "UT", ap: "Utah", delegates: 29 }
     ],
     "11:00": [
-      { state: "CA", ap: "Calif.", delegates: 52 }
+      { state: "CA", ap: "Calif.", delegates: 415 }
     ]
   };
 };
