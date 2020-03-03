@@ -1,6 +1,7 @@
 require("./ads");
 var $ = require("./lib/qsa");
 var Sidechain = require("@nprapps/sidechain");
+var track = require("./lib/tracking");
 
 // require possible elements
 require("./components/president-primary");
@@ -149,6 +150,7 @@ var onHashChange = function(e) {
   
   // send focus to the top-most module if this came from user interaction
   if (e) {
+    track("state-nav", hash);
     if (params.has("counties") && !params.has("state")) {
       var countyModule = $.one(`.module:not(.hidden)[data-counties="true"]`);
       var headline = $.one("h2", countyModule);
