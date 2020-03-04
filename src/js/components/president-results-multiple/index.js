@@ -173,11 +173,14 @@ class PresidentResultsMultiple extends ElementBase {
         byName[c.last] = c;
         var { percentage } = c;
         if (!reporting && !hasPercentage) {
-          percentage = percentage ||  c.winner ? "✔" : "-";
+          percentage = percentage ||  c.winner ? "✓" : "-";
         } else {
           percentage = percentage || "0.0%";
         }
-        if (typeof percentage == "number") percentage = percentage.toFixed(1) + "%";
+        if (typeof percentage == "number") {
+          percentage = percentage.toFixed(1) + "%";
+          if (c.winner) percentage += " ✓";
+        }
         if (r.results.reportingPercentage > LEADER_THRESHOLD) {
           if (c.percentage && (!leader || leader.percentage < c.percentage)) {
             leader = c;
