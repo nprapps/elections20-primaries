@@ -15,37 +15,9 @@ const LEADER_THRESHOLD = 25;
 var mugs = require("mugs.sheet.json");
 
 // return a fresh object each time so we can mutate it
-var getSchedule = function() {
-  return {
-    "7 p.m. ET": [
-      { state: "VT", ap: "Vt.", delegates: 16 },
-      { state: "VA", ap: "Va.", delegates: 99 }
-    ],
-    "7:30": [
-      { state: "NC", ap: "N.C.", delegates: 110 }
-    ],
-    "8:00": [
-      { state: "AL", ap: "Ala.", delegates: 52 },
-      { state: "ME", ap: "Maine", delegates: 24 },
-      { state: "MA", ap: "Mass.", delegates: 91 },
-      { state: "OK", ap: "Okla.", delegates: 37 },
-      { state: "TN", ap: "Tenn.", delegates: 64 }
-    ],
-    "8:30": [
-      { state: "AR", ap: "Ark.", delegates: 31 }
-    ],
-    "9:00": [
-      { state: "CO", ap: "Colo.", delegates: 67 },
-      { state: "MN", ap: "Minn.", delegates: 75 },
-      { state: "TX", ap: "Texas", delegates: 228 }
-    ],
-    "10:00": [
-      { state: "UT", ap: "Utah", delegates: 29 }
-    ],
-    "11:00": [
-      { state: "CA", ap: "Calif.", delegates: 415 }
-    ]
-  };
+
+var getSchedule = function(event) {
+  return require("./schedules.json")[event || "supertuesday"];
 };
 
 class PresidentResultsMultiple extends ElementBase {
@@ -211,6 +183,7 @@ class PresidentResultsMultiple extends ElementBase {
       activeMugs
     });
 
+    var event = this.getAttribute("event");
     var schedule = getSchedule();
 
     // template!
