@@ -125,9 +125,11 @@ class PresidentResults extends ElementBase {
     elements.content.innerHTML = tableTemplate({ candidates, highest, fold, caucus });
 
     // adjust reporting numbers
+
+    console.log(reporting, precincts, reportingPercentage)
     if (reporting > 0 && reportingPercentage < 1) {
       reportingPercentage = "<1";
-    } else if (reporting < precincts && reportingPercentage == 100) {
+    } else if (reporting < precincts && reportingPercentage > 99 && reportingPercentage < 100) {
       reportingPercentage = ">99";
     } else {
       reportingPercentage = reportingPercentage.toFixed(0);
