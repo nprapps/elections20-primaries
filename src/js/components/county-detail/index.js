@@ -18,6 +18,14 @@ class CountyDetail extends ElementBase {
     super();
     this.fetch = new Retriever(this.load);
     this.palette = {};
+    // this.addEventListener(fips-click)...
+  //   var { updated } = e.detail;
+  // if (updated > lastUpdate) {
+  //   lastUpdate = updated;
+  //   var date = new Date(updated);
+  //   console.log("New timestamp:", date);
+  //   updateSpan.innerHTML = `, last updated ${formatAPDate(date)}, ${formatTime(date)}`;
+  // }
   }
 
   static get boundMethods() {
@@ -68,14 +76,15 @@ class CountyDetail extends ElementBase {
     if (!data) return;
     var { races, test } = data;
 
-    // filter races by type - no weird alignments
-    races = races.filter(r => r.type && !r.type.match(/alignment/i));
-
     var party = this.getAttribute("party");
 
-    var results = [].concat(...races.filter(r => r.party == party).map(r => r.results));
+    // filter races by type - no weird alignments
+    var [ race ] = races.filter(r => r.party == party && r.type && !r.type.match(/alignment/i));
+
+    var results = race.results;
     var counties = {};
     var fips = {};
+    var totals = {};
     results.forEach(function(r) {
       var top = null;
       r.candidates.forEach(function(candidate) {
@@ -102,6 +111,17 @@ class CountyDetail extends ElementBase {
     var statewide = Object.values(totals);
     statewide.sort((a, b) => b.votes - a.votes);
 
+    var palette = {};
+    statewide.slice(0, colors.length).forEach(function(s, i) {
+      palette[s.id] = {
+        id: s.id,
+        first: s.first,
+        last: s.last,
+        color: colors[i]
+      };
+    });
+    elements.map.render(palette, race.results);
+
     counties = Object.keys(counties).sort().map(county => ({ county, id: counties[county] }));
     // counties.unshift({ county: "--", id: 0 });
     mapToElements(elements.countySelect, counties, function(data) {
@@ -113,7 +133,6 @@ class CountyDetail extends ElementBase {
 
     var value = elements.countySelect.value;
     this.updateTable(value);
-
   }
 
   updateTable(fips) {
@@ -125,35 +144,9 @@ class CountyDetail extends ElementBase {
     if (!data || !party) return;
 
     var { races } = data;
-    var [ race ] = races.filter(r => r.party == party);
-
-    var totals = {};
-    var [ result ] = race.results.filter(function(r) {
-      r.candidates.forEach(function(candidate) {
-        if (!totals[candidate.id]) totals[candidate.id] = {
-          first: candidate.first,
-          last: candidate.last,
-          id: candidate.id,
-          votes: 0
-        };
-        totals[candidate.id].votes += candidate.votes;
-      });
-      return r.fips == fips;
-    });
-
-    var statewide = Object.values(totals);
-    statewide.sort((a, b) => b.votes - a.votes);
-
-    var palette = {};
-    statewide.slice(0, colors.length).forEach(function(s, i) {
-      palette[s.id] = {
-        id: s.id,
-        first: s.first,
-        last: s.last,
-        color: colors[i]
-      };
-    });
-    elements.map.render(palette, race.results);
+    // filter races by type - no weird alignments
+    var [ race ] = races.filter(r => r.party == party && r.type && !r.type.match(/alignment/i));
+    var [ result ] = race.results.filter(r => r.fips == fips);
 
     resultsTable.setAttribute("headline", result.county);
     resultsTable.setAttribute("max", 99);

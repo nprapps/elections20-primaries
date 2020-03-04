@@ -111,8 +111,9 @@ class CountyMap extends ElementBase {
     }
   }
 
-  onClick() {
-
+  onClick(e) {
+    // e.target get FIPS code (data-id?)
+    // this.dispatch("fips-click", { fipscode });
   }
 
 }

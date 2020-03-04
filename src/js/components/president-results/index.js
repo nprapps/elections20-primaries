@@ -57,6 +57,7 @@ class PresidentResults extends ElementBase {
     // copy the array before mutating
     candidates = candidates.slice();
     
+    //LOOK AT THIS
     this.dispatch("updatedtime", { updated });
 
     this.setAttribute("party", data.party);
