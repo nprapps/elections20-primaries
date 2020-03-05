@@ -28,7 +28,7 @@
         <span class="first"><%= c.first || "" %> </span><%= c.last %>
         <% } %>
 
-        <% if (!data.party) { %>
+        <% if (!data.party && c.party) { %>
         (<%= c.party %>)
         <% } %>
         <span class="incumbent-icon">&#9679;</span>
