@@ -18,7 +18,7 @@ class CountyDetail extends ElementBase {
     super();
     this.fetch = new Retriever(this.load);
     this.palette = {};
-    this.addEventListener("fips-click", function(e) {
+    this.addEventListener("map-click", function(e) {
       var fips = e.detail.fips;
       track("click-county", fips);
       var elements = this.illuminate();

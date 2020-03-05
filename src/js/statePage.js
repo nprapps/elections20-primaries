@@ -194,8 +194,6 @@ selectBox.addEventListener("change", function() {
 var lastUpdate = 0;
 var updateSpan = $.one(".page-timestamp");
 
-
-// LOOK AT THIS
 document.body.addEventListener("updatedtime", function(e) {
   var { updated } = e.detail;
   if (updated > lastUpdate) {

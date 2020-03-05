@@ -24,8 +24,15 @@ path {
   stroke: gray;
   fill: transparent;
 }
+
 path:hover {
   cursor: pointer;
+  stroke-width: 6;
+}
+
+path.clicked {
+  stroke: #111;
+  stroke-width: 9;
 }
 `;
 
@@ -116,7 +123,8 @@ class CountyMap extends ElementBase {
 
   onClick(e) {
     var fips = e.target.id.replace("fips-", "");
-    if (fips.length > 0) this.dispatch("fips-click", { fips });
+    if (fips.length > 0) this.dispatch("map-click", { fips });
+    e.target.classList.add("clicked");
   }
 
 }
