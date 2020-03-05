@@ -18,14 +18,13 @@ class CountyDetail extends ElementBase {
     super();
     this.fetch = new Retriever(this.load);
     this.palette = {};
-    // this.addEventListener(fips-click)...
-  //   var { updated } = e.detail;
-  // if (updated > lastUpdate) {
-  //   lastUpdate = updated;
-  //   var date = new Date(updated);
-  //   console.log("New timestamp:", date);
-  //   updateSpan.innerHTML = `, last updated ${formatAPDate(date)}, ${formatTime(date)}`;
-  // }
+    this.addEventListener("fips-click", function(e) {
+      var fips = e.detail.fips;
+      track("click-county", fips);
+      var elements = this.illuminate();
+      elements.countySelect.value = fips;
+      this.updateTable(fips);
+    });
   }
 
   static get boundMethods() {

@@ -24,6 +24,9 @@ path {
   stroke: gray;
   fill: transparent;
 }
+path:hover {
+  cursor: pointer;
+}
 `;
 
 class CountyMap extends ElementBase {
@@ -112,8 +115,8 @@ class CountyMap extends ElementBase {
   }
 
   onClick(e) {
-    // e.target get FIPS code (data-id?)
-    // this.dispatch("fips-click", { fipscode });
+    var fips = e.target.id.replace("fips-", "");
+    if (fips.length > 0) this.dispatch("fips-click", { fips });
   }
 
 }
