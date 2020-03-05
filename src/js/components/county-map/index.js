@@ -28,13 +28,16 @@ path {
 path:hover {
   cursor: pointer;
   stroke-width: 6;
+  stroke: #111;
 }
 
 path.clicked {
-  stroke: #111;
   stroke-width: 9;
+  stroke: #111;
 }
 `;
+
+var lastClicked;
 
 class CountyMap extends ElementBase {
 
@@ -63,6 +66,17 @@ class CountyMap extends ElementBase {
     var style = document.createElement("style");
     style.innerHTML = stylesheet;
     this.shadowRoot.appendChild(style);
+
+    // this.addEventListener("select-county", function(e) {
+    //   console.log('select-county')
+    //   var fips = e.detail.fips;
+    //   var county = document.querySelectAll(".map path").find(c => c.id == `fips-${fips}`);
+    //   console.log(county)
+    //   if (county == lastClicked) return;
+    //   if (lastClicked) lastClicked.classList.remove("clicked");
+    //   county.classList.add("clicked");
+    //   lastClicked = county;
+    // });
   }
 
   static get boundMethods() {
@@ -122,9 +136,17 @@ class CountyMap extends ElementBase {
   }
 
   onClick(e) {
-    var fips = e.target.id.replace("fips-", "");
-    if (fips.length > 0) this.dispatch("map-click", { fips });
-    e.target.classList.add("clicked");
+    var county = e.target;
+    var fips = county.id.replace("fips-", "");
+    
+    if (fips.length > 0) {
+      this.dispatch("map-click", { fips });
+
+      if (county == lastClicked) return;
+      if (lastClicked) lastClicked.classList.remove("clicked");
+      county.classList.add("clicked");
+      lastClicked = county;
+    }
   }
 
 }
