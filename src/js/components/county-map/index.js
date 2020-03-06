@@ -64,17 +64,6 @@ class CountyMap extends ElementBase {
     var style = document.createElement("style");
     style.innerHTML = stylesheet;
     this.shadowRoot.appendChild(style);
-
-    // this.addEventListener("select-county", function(e) {
-    //   console.log('select-county')
-    //   var fips = e.detail.fips;
-    //   var county = document.querySelectAll(".map path").find(c => c.id == `fips-${fips}`);
-    //   console.log(county)
-    //   if (county == lastClicked) return;
-    //   if (lastClicked) lastClicked.classList.remove("clicked");
-    //   county.classList.add("clicked");
-    //   lastClicked = county;
-    // });
   }
 
   static get boundMethods() {
@@ -95,6 +84,14 @@ class CountyMap extends ElementBase {
         this.loadSVG(value);
         break;
     }
+  }
+
+  highlightCounty(fips) {
+    var county = this.svg.querySelector(`[id="fips-${fips}"]`);
+    if (county == this.lastClicked) return;
+    if (this.lastClicked) this.lastClicked.classList.remove("clicked");
+    county.classList.add("clicked");
+    this.lastClicked = county;
   }
 
   async loadSVG(url) {
@@ -139,11 +136,7 @@ class CountyMap extends ElementBase {
     
     if (fips.length > 0) {
       this.dispatch("map-click", { fips });
-
-      if (county == this.lastClicked) return;
-      if (this.lastClicked) this.lastClicked.classList.remove("clicked");
-      county.classList.add("clicked");
-      this.lastClicked = county;
+      this.highlightCounty(fips);
     }
   }
 

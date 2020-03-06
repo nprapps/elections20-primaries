@@ -161,7 +161,7 @@ class CountyDetail extends ElementBase {
     var fips = elements.countySelect.value;
     track("select-county", fips);
     this.updateTable(fips);
-    // this.dispatch("select-county", { fips });
+    elements.map.highlightCounty(fips);
   }
 
   illuminate() {
