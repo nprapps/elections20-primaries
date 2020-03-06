@@ -37,8 +37,6 @@ path.clicked {
 }
 `;
 
-var lastClicked;
-
 class CountyMap extends ElementBase {
 
   constructor() {
@@ -142,10 +140,10 @@ class CountyMap extends ElementBase {
     if (fips.length > 0) {
       this.dispatch("map-click", { fips });
 
-      if (county == lastClicked) return;
-      if (lastClicked) lastClicked.classList.remove("clicked");
+      if (county == this.lastClicked) return;
+      if (this.lastClicked) this.lastClicked.classList.remove("clicked");
       county.classList.add("clicked");
-      lastClicked = county;
+      this.lastClicked = county;
     }
   }
 
