@@ -172,19 +172,15 @@ class PresidentResultsMultiple extends ElementBase {
     elements.updated.innerHTML = updateString;
 
     // filter mugs to active candidates from the active party
+    var { schedule, candidates } = getSchedule();
     var activeMugs = {};
-    for (const cand in mugs) {
-      if (mugs[cand].party == party && mugs[cand].active) {
-        activeMugs[cand] = mugs[cand];
-      }
-    }
+    candidates.forEach(c => activeMugs[c] = mugs[c]);
 
     elements.candidateList.innerHTML = candidateListTemplate({
       activeMugs
     });
 
     var event = this.getAttribute("event");
-    var schedule = getSchedule();
 
     // template!
     elements.resultsHeader.innerHTML = headerTemplate({ activeMugs });
