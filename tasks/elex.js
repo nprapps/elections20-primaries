@@ -77,9 +77,18 @@ module.exports = function(grunt) {
     var retroactive = today - 2;
     console.log(`Filtering races between ${inDates(retroactive)} and ${inDates(today)}`);
 
-    var races = schedule.filter(
-      r => r.alwaysRun || (r.days <= today && r.days >= retroactive)
-    );
+    var races = schedule.filter(r => r.days <= today && r.days >= retroactive);
+
+    // find the most recent race and run back if nothing was found
+    if (!races.length && !date) {
+      console.log("No current races found, falling back to most recent...");
+      var latest = schedule.filter(r => r.days <= today).pop();
+      if (latest) {
+        races = schedule.filter(r => r.days <= latest.days && r.days >= latest.days - 2);
+      }
+    }
+
+    races.concat(schedule.filter(r => r.alwaysRun && races.indexOf(r) == -1));
 
     console.log(`Found races: ${races.map(r => r.filename).join(", ")}`);
 
