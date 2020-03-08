@@ -60,6 +60,8 @@ module.exports = function(resultArray, overrides) {
           if (call.indexOf(c.polID) > -1) candidate.winner = true;
         } else if (c.winner == "X") {
           candidate.winner = true;
+        } else if (c.winner == "R") {
+          candidate.runoff = true;
         }
         if (c.incumbent) candidate.incumbent = true;
         var override = overrides.candidates[candidate.id];
