@@ -35,14 +35,18 @@
   "march10": {
     "schedule": {
       "8 p.m. ET": [
-        { "state": "ID", "ap": "Idaho", "delegates": 20 },
-        { "state": "MI", "ap": "Mich.", "delegates": 125 },
         { "state": "MS", "ap": "Miss.", "delegates": 36 },
-        { "state": "MO", "ap": "Mo.", "delegates": 68 },
-        { "state": "ND", "ap": "N.D.", "delegates": 14 },
+        { "state": "MO", "ap": "Mo.", "delegates": 68 }
+      ],
+      "9 p.m. ET": [
+        { "state": "MI", "ap": "Mich.", "delegates": 125 },
+        { "state": "ND", "ap": "N.D.", "delegates": 14 }
+      ],
+      "11 p.m. ET": [
+        { "state": "ID", "ap": "Idaho", "delegates": 20 },
         { "state": "WA", "ap": "Wash.", "delegates": 89 }
       ]
     },
-    "candidates": ["Biden", "Sanders"]
+    "candidates": ["Biden", "Gabbard", "Sanders"]
   }
 }

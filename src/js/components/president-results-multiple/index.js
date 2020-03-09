@@ -13,11 +13,11 @@ var { formatTime, formatAPDate, groupBy, toggleAttribute } = require("../utils")
 const LEADER_THRESHOLD = 25;
 
 var mugs = require("mugs.sheet.json");
+var scheduleInfo = require("./schedules.json");
 
 // return a fresh object each time so we can mutate it
-
-var getSchedule = function(event) {
-  return require("./schedules.json")[event || "supertuesday"];
+var getSchedule = function(lineup) {
+  return scheduleInfo[lineup].schedule;
 };
 
 class PresidentResultsMultiple extends ElementBase {
@@ -91,7 +91,7 @@ class PresidentResultsMultiple extends ElementBase {
 
   // attributes will only trigger the callback if they're observed
   static get observedAttributes() {
-    return [ "src", "party" ];
+    return [ "src", "party", "lineup" ];
   }
 
   attributeChangedCallback(attr, was, value) {
@@ -171,15 +171,18 @@ class PresidentResultsMultiple extends ElementBase {
     var updateString = `as of ${formatAPDate(latest)} at ${formatTime(latest)}`;
     elements.updated.innerHTML = updateString;
 
-    // filter mugs to active candidates from the active party
-    var event = this.getAttribute("event");
-    var { schedule, candidates } = getSchedule(event);
+    // filter mugs to active candidates for this race
+    var lineup = this.getAttribute("lineup");
     var activeMugs = {};
-    candidates.forEach(c => activeMugs[c] = mugs[c]);
+    scheduleInfo[lineup].candidates.forEach(function(c) {
+      activeMugs[c] = mugs[c];
+    })
 
     elements.candidateList.innerHTML = candidateListTemplate({
       activeMugs
     });
+
+    var schedule = getSchedule(lineup);
 
     // template!
     elements.resultsHeader.innerHTML = headerTemplate({ activeMugs });
