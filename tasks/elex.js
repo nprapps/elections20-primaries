@@ -17,6 +17,8 @@ var api = require("./lib/ap");
 var depths = require("./lib/depths");
 var moment = require("moment-timezone");
 
+var TIMESPAN = 3;
+
 var monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var inDays = function(dateString) {
   var [m, d, y] = dateString.split("/").map(Number);
@@ -54,18 +56,6 @@ module.exports = function(grunt) {
 
     var done = this.async();
 
-    var schedule = grunt.data.json.races.filter(r => r.office != "R");
-    schedule.forEach(function(r) {
-      // assign a timestamp
-      var [m, d, y] = r.date.split("/");
-      r.days = inDays(r.date);
-      r.timestamp = moment(r.date, "MM/DD/YYYY").toDate();
-      // split race IDs
-      r.ids = r.raceID ? r.raceID.toString().split(/,\s*/g) : [];
-      // split states
-      r.states = r.state.split(/,\s*/g);
-    });
-
     // get today's day index
     var today = inDays(moment().format("MM/DD/YYYY"));
     var date = grunt.option("date");
@@ -74,23 +64,36 @@ module.exports = function(grunt) {
       var today = inDays(date);
     }
     // subtract 2 from the day index
-    var retroactive = today - 2;
+    var retroactive = today - TIMESPAN;
     console.log(`Filtering races between ${inDates(retroactive)} and ${inDates(today)}`);
+
+    var schedule = grunt.data.json.races.filter(r => r.office != "R");
+    var latest = 0;
+    schedule.forEach(function(r) {
+      // assign a timestamp
+      var [m, d, y] = r.date.split("/");
+      r.days = inDays(r.date);
+      if (r.days < today && r.days > latest) latest = r.days;
+      r.timestamp = moment(r.date, "MM/DD/YYYY").toDate();
+      // split race IDs
+      r.ids = r.raceID ? r.raceID.toString().split(/,\s*/g) : [];
+      // split states
+      r.states = r.state.split(/,\s*/g);
+    });
 
     var races = schedule.filter(r => r.days <= today && r.days >= retroactive);
 
     // find the most recent race and run back if nothing was found
     if (!races.length && !date) {
       console.log("No current races found, falling back to most recent...");
-      var latest = schedule.filter(r => r.days <= today).pop();
       if (latest) {
-        races = schedule.filter(r => r.days <= latest.days && r.days >= latest.days - 2);
+        races = schedule.filter(r => r.days <= latest && r.days >= latest - TIMESPAN);
       }
     }
 
     races.push(...schedule.filter(r => r.alwaysRun && races.indexOf(r) == -1));
 
-    console.log(`Found races: ${races.map(r => r.filename).join(", ")}`);
+    console.log(`Found races: ${races.length ? races.map(r => r.filename).join(", ") : "none"}`);
 
     var test = grunt.option("test");
     var offline = grunt.option("offline");
