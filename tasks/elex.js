@@ -172,8 +172,9 @@ module.exports = function(grunt) {
             countyResults.races.forEach(function(race) {
               race.results.forEach(function(result) {
                 var county = grunt.data.json.fips[result.fips];
-                if (county && county.name) {
+                if (county) {
                   result.county = county.name;
+                  result.population = county.population;
                 }
               })
             });
