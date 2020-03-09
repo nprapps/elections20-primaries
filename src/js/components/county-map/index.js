@@ -1,4 +1,6 @@
 var ElementBase = require("../elementBase");
+var dot = require("../../lib/dot");
+var key = dot.compile(require("./_key.html"));
 
 var stylesheet = `
 .container {
@@ -12,7 +14,7 @@ var stylesheet = `
 }
 
 .map {
-  // flex: 1;
+  flex: 1;
 }
 
 svg {
@@ -21,7 +23,7 @@ svg {
 }
 
 path {
-  stroke: gray;
+  stroke: white;
   fill: transparent;
 }
 
@@ -34,6 +36,48 @@ path:hover {
 path.clicked {
   stroke-width: 9;
   stroke: #111;
+}
+
+.key {
+  font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  font-size: 0.9em;
+}
+
+.key-hed {
+  font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-weight: normal;
+  color: #787878;
+  margin-bottom: 4px;
+}
+
+.key-hed div {
+  display: inline-block;
+  line-height: 1.2em;
+  letter-spacing: 0.025em;
+  width: 32%;
+}
+
+.more {
+  text-align: right;
+}
+
+.row {
+  margin-bottom: 3px;
+}
+
+.swatch {
+  width: 32px;
+  height: 13px;
+  display: inline-block;
+  margin-right: 1px;
+}
+
+.name {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: -1px;
+  margin-left: 5px;
 }
 `;
 
@@ -104,7 +148,6 @@ class CountyMap extends ElementBase {
     var height = svg.getAttribute("height") * 1;
     this.container.classList.toggle("vertical", width > height);
     this.svg = svg;
-    this.key.innerHTML = "KEY CONTENT HERE";
     this.paint();
   }
 
@@ -128,6 +171,9 @@ class CountyMap extends ElementBase {
       path.style.fill = pigment ? pigment.color : "#888";
       path.style.opacity = winner ? 1 : .5;
     }
+
+    var keyData = Object.keys(palette).map(p => palette[p]).sort((a,b) => a.last < b.last ? -1 : 1);
+    this.key.innerHTML = key({ keyData });
   }
 
   onClick(e) {

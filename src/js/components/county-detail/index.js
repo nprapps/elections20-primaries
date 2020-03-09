@@ -10,7 +10,7 @@ var { formatAPDate, formatTime, groupBy, mapToElements, toggleAttribute } = requ
 
 var fips = require("../../../../data/fips.sheet.json");
 
-var colors = ["purple", "magenta", "yellow", "green", "orange"];
+var colors = ["#bb77c7", "#92c777", "#eaaa61", "#237bbd"];
 
 class CountyDetail extends ElementBase {
 

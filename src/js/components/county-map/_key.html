@@ -1,0 +1,22 @@
+<div class="key-hed">
+	<div class="less">Less<br>populated</div>
+	<div class="more">More<br>populated</div>
+</div>
+
+<% data.keyData.forEach(function(c) { %>
+	<div class="row">
+		<div class="swatch" style="background: <%= c.color %>; opacity: 0.25"></div>
+		<div class="swatch" style="background: <%= c.color %>; opacity: 0.5"></div>
+		<div class="swatch" style="background: <%= c.color %>; opacity: 0.75"></div>
+		<div class="swatch" style="background: <%= c.color %>; opacity: 1"></div>
+		<div class="name"><%= c.last %></div>
+	</div>
+<% }); %>
+
+<div class="row">
+		<div class="swatch" style="background: #787878; opacity: 0.25"></div>
+		<div class="swatch" style="background: #787878; opacity: 0.5"></div>
+		<div class="swatch" style="background: #787878; opacity: 0.75"></div>
+		<div class="swatch" style="background: #787878; opacity: 1"></div>
+		<div class="name">Other</div>
+	</div>
