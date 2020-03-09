@@ -88,7 +88,7 @@ module.exports = function(grunt) {
       }
     }
 
-    races.concat(schedule.filter(r => r.alwaysRun && races.indexOf(r) == -1));
+    races.push(...schedule.filter(r => r.alwaysRun && races.indexOf(r) == -1));
 
     console.log(`Found races: ${races.map(r => r.filename).join(", ")}`);
 
