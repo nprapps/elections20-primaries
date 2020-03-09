@@ -36,11 +36,11 @@
     "schedule": {
       "8 p.m. ET": [
         { "state": "MS", "ap": "Miss.", "delegates": 36 },
-        { "state": "MO", "ap": "Mo.", "delegates": 68 }
+        { "state": "MO", "ap": "Mo.", "delegates": 68 },
+        { "state": "ND", "ap": "N.D.", "delegates": 14 }
       ],
       "9 p.m. ET": [
-        { "state": "MI", "ap": "Mich.", "delegates": 125 },
-        { "state": "ND", "ap": "N.D.", "delegates": 14 }
+        { "state": "MI", "ap": "Mich.", "delegates": 125 }
       ],
       "11 p.m. ET": [
         { "state": "ID", "ap": "Idaho", "delegates": 20 },
