@@ -1,11 +1,14 @@
 @import "../../../css/values.less";
 
 @candidate-width: 130px;
-@primary-width: 60px;
-@primary-width-desktop: 75px;
 @mug-size: 30px;
 
 president-results-multiple {
+  --primary-width: 75px;
+  @media @mobile-above {
+    --primary-width: 104px;
+  }
+
   .gotham();
   display: block;
   width: 100%;
@@ -15,6 +18,14 @@ president-results-multiple {
   &[party="GOP"] {
     --accent: var(--gop);
     --accent-fade: var(--gop-fade);
+  }
+
+  &[lineup="supertuesday"] {
+    --primary-width: 60px;
+
+    @media @mobile-above {
+      --primary-width: 75px;
+    }
   }
 
   &[test]::before {
@@ -170,12 +181,8 @@ president-results-multiple {
     }
 
     .primary {
-      width: @primary-width;
+      width: var(--primary-width);
       text-align: center;
-
-      @media @mobile-above {
-        width: @primary-width-desktop;
-      }
 
       > td {
         border-left: 1px solid var(--divider-minor);
@@ -304,7 +311,7 @@ president-results-multiple {
       font-size: 12px;
       text-align: center;
       display: inline-block;
-      line-height: 22px;
+      line-height: 1;
       margin: 0 22px;
     }
   }

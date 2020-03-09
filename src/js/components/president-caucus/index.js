@@ -122,10 +122,11 @@ class PresidentCaucus extends ElementBase {
       toggleAttribute(child, "test", isTest);
 
       var readableParty = data.party == "Dem" ? "Democratic" : data.party;
-      var headline = `${strings[data.state + "-AP"]} ${readableParty} ${data.caucus ? "caucus" : "primary"}`;
-      
+      var contestType = data.caucus || data.type == "Caucus" ? "caucus" : "primary";
+      var headline = `${strings[data.state + "-AP"]} ${readableParty} ${contestType}`;
+
       if (host == "statepage") {
-        headline = `${readableParty} ${data.caucus ? "caucus" : "primary"}`;
+        headline = `${readableParty} ${contestType}`;
         var search = new URLSearchParams("counties=true&office=P");
         search.set("date", data.date);
         search.set("party", data.party);

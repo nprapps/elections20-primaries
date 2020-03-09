@@ -1,0 +1,52 @@
+{
+  "supertuesday": {
+    "schedule": {
+      "7 p.m. ET": [
+        { "state": "VT", "ap": "Vt.", "delegates": 16 },
+        { "state": "VA", "ap": "Va.", "delegates": 99 }
+      ],
+      "7:30": [
+        { "state": "NC", "ap": "N.C.", "delegates": 110 }
+      ],
+      "8:00": [
+        { "state": "AL", "ap": "Ala.", "delegates": 52 },
+        { "state": "ME", "ap": "Maine", "delegates": 24 },
+        { "state": "MA", "ap": "Mass.", "delegates": 91 },
+        { "state": "OK", "ap": "Okla.", "delegates": 37 },
+        { "state": "TN", "ap": "Tenn.", "delegates": 64 }
+      ],
+      "8:30": [
+        { "state": "AR", "ap": "Ark.", "delegates": 31 }
+      ],
+      "9:00": [
+        { "state": "CO", "ap": "Colo.", "delegates": 67 },
+        { "state": "MN", "ap": "Minn.", "delegates": 75 },
+        { "state": "TX", "ap": "Texas", "delegates": 228 }
+      ],
+      "10:00": [
+        { "state": "UT", "ap": "Utah", "delegates": 29 }
+      ],
+      "11:00": [
+        { "state": "CA", "ap": "Calif.", "delegates": 415 }
+      ]
+    },
+    "candidates": ["Biden", "Bloomberg", "Gabbard", "Sanders", "Warren"]
+  },
+  "march10": {
+    "schedule": {
+      "8 p.m. ET": [
+        { "state": "MS", "ap": "Miss.", "delegates": 36 },
+        { "state": "MO", "ap": "Mo.", "delegates": 68 },
+        { "state": "ND", "ap": "N.D.", "delegates": 14 }
+      ],
+      "9 p.m. ET": [
+        { "state": "MI", "ap": "Mich.", "delegates": 125 }
+      ],
+      "11 p.m. ET": [
+        { "state": "ID", "ap": "Idaho", "delegates": 20 },
+        { "state": "WA", "ap": "Wash.", "delegates": 89 }
+      ]
+    },
+    "candidates": ["Biden", "Gabbard", "Sanders"]
+  }
+}

@@ -13,39 +13,11 @@ var { formatTime, formatAPDate, groupBy, toggleAttribute } = require("../utils")
 const LEADER_THRESHOLD = 25;
 
 var mugs = require("mugs.sheet.json");
+var scheduleInfo = require("./schedules.json");
 
 // return a fresh object each time so we can mutate it
-var getSchedule = function() {
-  return {
-    "7 p.m. ET": [
-      { state: "VT", ap: "Vt.", delegates: 16 },
-      { state: "VA", ap: "Va.", delegates: 99 }
-    ],
-    "7:30": [
-      { state: "NC", ap: "N.C.", delegates: 110 }
-    ],
-    "8:00": [
-      { state: "AL", ap: "Ala.", delegates: 52 },
-      { state: "ME", ap: "Maine", delegates: 24 },
-      { state: "MA", ap: "Mass.", delegates: 91 },
-      { state: "OK", ap: "Okla.", delegates: 37 },
-      { state: "TN", ap: "Tenn.", delegates: 64 }
-    ],
-    "8:30": [
-      { state: "AR", ap: "Ark.", delegates: 31 }
-    ],
-    "9:00": [
-      { state: "CO", ap: "Colo.", delegates: 67 },
-      { state: "MN", ap: "Minn.", delegates: 75 },
-      { state: "TX", ap: "Texas", delegates: 228 }
-    ],
-    "10:00": [
-      { state: "UT", ap: "Utah", delegates: 29 }
-    ],
-    "11:00": [
-      { state: "CA", ap: "Calif.", delegates: 415 }
-    ]
-  };
+var getSchedule = function(lineup) {
+  return scheduleInfo[lineup].schedule;
 };
 
 class PresidentResultsMultiple extends ElementBase {
@@ -119,7 +91,7 @@ class PresidentResultsMultiple extends ElementBase {
 
   // attributes will only trigger the callback if they're observed
   static get observedAttributes() {
-    return [ "src", "party" ];
+    return [ "src", "party", "lineup" ];
   }
 
   attributeChangedCallback(attr, was, value) {
@@ -173,11 +145,14 @@ class PresidentResultsMultiple extends ElementBase {
         byName[c.last] = c;
         var { percentage } = c;
         if (!reporting && !hasPercentage) {
-          percentage = percentage ||  "-";
+          percentage = percentage ||  c.winner ? "✓" : "-";
         } else {
           percentage = percentage || "0.0%";
         }
-        if (typeof percentage == "number") percentage = percentage.toFixed(1) + "%";
+        if (typeof percentage == "number") {
+          percentage = percentage.toFixed(1) + "%";
+          if (c.winner) percentage += " ✓";
+        }
         if (r.results.reportingPercentage > LEADER_THRESHOLD) {
           if (c.percentage && (!leader || leader.percentage < c.percentage)) {
             leader = c;
@@ -196,19 +171,18 @@ class PresidentResultsMultiple extends ElementBase {
     var updateString = `as of ${formatAPDate(latest)} at ${formatTime(latest)}`;
     elements.updated.innerHTML = updateString;
 
-    // filter mugs to active candidates from the active party
+    // filter mugs to active candidates for this race
+    var lineup = this.getAttribute("lineup");
     var activeMugs = {};
-    for (const cand in mugs) {
-      if (mugs[cand].party == party && mugs[cand].active) {
-        activeMugs[cand] = mugs[cand];
-      }
-    }
+    scheduleInfo[lineup].candidates.forEach(function(c) {
+      activeMugs[c] = mugs[c];
+    })
 
     elements.candidateList.innerHTML = candidateListTemplate({
       activeMugs
     });
 
-    var schedule = getSchedule();
+    var schedule = getSchedule(lineup);
 
     // template!
     elements.resultsHeader.innerHTML = headerTemplate({ activeMugs });

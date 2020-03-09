@@ -7,7 +7,7 @@ Things passed into this page:
 * stateFull: the full state name
 * stateAP: AP abbreviation
   */
-var { seo } = grunt.data.json;
+var { seo, strings } = grunt.data.json;
 var metadata = {
   project: Object.assign({}, grunt.data.json.project, {
     title: seo.stateTitle.replace(/%state%/g, stateFull),
@@ -45,7 +45,7 @@ var metadata = {
         <header>
           <img src="../assets/states/<%= state %>.svg" class="state-icon" alt="">
           <h2><a href="..">2020 Primaries and Caucuses</a></h2>
-          <h1><%= json.strings[state] %> Results</h1>
+          <h1><%= strings[state] %> Results</h1>
         </header>
 
       <%
@@ -63,6 +63,14 @@ var hashRace = function(race) {
 var makeOption = (item, suffix = "") => `value="${hashRace(item.race)}${suffix}"`;
 var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
 
+var getDescriptors = function(item) {
+  var key = "";
+  if (item.general) key += "G";
+  if (item.runoff) key += "R";
+  if (item.special) key += "S";
+  return strings["race-" + key];
+}
+
       %>
         <div class="mobile-calendar-wrapper">
           <div class="select-label">Select a contest</div>
@@ -75,7 +83,9 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
                   value="<%= hashRace(item.race) %>"
                   data-days="<%= item.race.days %>">
                   <%= item.office %>
-                  <%= item.race.special ? " - Special " : " " %>
+                  <% if (item.race.runoff || item.race.special || item.race.general) { %>
+                  - <%= getDescriptors(item.race) %>
+                  <% } %>
                   (<%= item.date %>)
                 </option>
                 <% } %>
@@ -85,8 +95,10 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
                   value="<%= hashRace(item.race) %>&party=<%= p %>&counties=true&state"
                   data-days="<%= item.race.days %>">
                   <%= item.office %>
-                  <%= item.special ? " - Special " : " " %>-
-                  <%= p == "Dem" ? "Dem." : p %> only
+                  <% if (item.race.runoff || item.race.special || item.race.general) { %>
+                  - <%= getDescriptors(item.race) %>
+                  <% } %>
+                  - <%= p == "Dem" ? "Dem." : p %> only
                   (<%= item.date %>)
                 </option>
                 <% }); %>
@@ -102,8 +114,8 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
             <li data-days="<%= item.race.days %>">
               <a class="office" href="#<%= hashRace(item.race) %>">
                 <%= item.office %>
-                <% if (item.race.special) { %>
-                <span class="special">— <br />Special Election</span>
+                <% if (item.race.runoff || item.race.special || item.race.general) { %>
+                <span class="special">— <br /><%= getDescriptors(item.race) %></span> 
                 <% } %>
               </a>
               <% if (item.parties) { %>
@@ -142,6 +154,9 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
               <% if (row.race.special) { %>
               — Special Election
               <% } %>
+              <% if (row.race.runoff) { %>
+              — Runoff
+              <% } %>
             </h2>
 
             <% var partial = row.race.caucus ? "caucus" : row.race.element ? "random" : row.race.office %>
@@ -156,10 +171,14 @@ var makeLink = (item, suffix = "") => `href="#${hashRace(item.race)}${suffix}"`;
             data-counties="true"
           >
             <h2 tabindex="-1">
-              <%= row.office %> results by county
+              <%= row.office %>
               <% if (row.race.special) { %>
-              — Special Election
+              — Special Election 
               <% } %>
+              <% if (row.race.runoff) { %>
+              — Runoff 
+              <% } %>
+              results by county
             </h2>
             <%= t.include("statePartials/_counties.html", { row }) %>
           </div>

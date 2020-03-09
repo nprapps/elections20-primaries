@@ -125,7 +125,7 @@ class CountyDetail extends ElementBase {
     // counties.unshift({ county: "--", id: 0 });
     mapToElements(elements.countySelect, counties, function(data) {
       var option = document.createElement("option");
-      option.innerHTML = data.county;
+      option.innerHTML = data.county.replace(/\s[a-z]/g, match => match.toUpperCase());
       option.value = data.id;
       return option;
     });
