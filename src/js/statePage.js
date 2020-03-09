@@ -12,12 +12,15 @@ require("./components/county-detail");
 
 var { formatAPDate, formatTime, inDays } = require("./components/utils");
 
-var union = function(a, b) {
+var union = function(first, second) {
   var ignore = new Set(["state"]);
   var matching = true;
-  for (var [key, value] of a.entries()) {
-    if (ignore.has(key)) continue;
-    if (b.get(key) != value) matching = false;
+  var checks = [[first, second], [second, first]];
+  for (var [a, b] of checks) {
+    for (var [key, value] of a.entries()) {
+      if (ignore.has(key)) continue;
+      if (b.get(key) != value) matching = false;
+    }
   }
   return matching;
 };
@@ -165,7 +168,7 @@ var onHashChange = function(e) {
   // set active desktop nav
   $(".race-calendar [href]").forEach(function(a) {
     var linkParams = new URLSearchParams(a.getAttribute("href").replace(/^#/, ""));
-    if (union(linkParams, params)) {
+    if (union(params, linkParams)) {
       a.closest("li").classList.add("active");
     }
   })
