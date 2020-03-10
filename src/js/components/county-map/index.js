@@ -25,17 +25,25 @@ svg {
 path {
   stroke: white;
   fill: transparent;
+  stroke-width: 0.5;
 }
 
 path:hover {
   cursor: pointer;
-  stroke-width: 6;
-  stroke: #111;
+  stroke-width: 2;
+  // stroke: #111;
 }
 
 path.clicked {
-  stroke-width: 9;
+  stroke-width: 2;
   stroke: #111;
+}
+
+.left, .right {
+  float: left;
+}
+.right {
+  margin-left: 20px;
 }
 
 .key {
@@ -48,14 +56,17 @@ path.clicked {
   font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   font-weight: normal;
   color: #787878;
-  margin-bottom: 4px;
+  letter-spacing: 0.025em;
+  line-height: 1.2em;
 }
 
-.key-hed div {
-  display: inline-block;
-  line-height: 1.2em;
-  letter-spacing: 0.025em;
-  width: 32%;
+.key-hed.row {
+  margin-bottom: 5px;
+}
+
+.key-hed .swatch {
+  width: 64px;
+  margin-right: 2px;
 }
 
 .more {
@@ -134,6 +145,7 @@ class CountyMap extends ElementBase {
     var county = this.svg.querySelector(`[id="fips-${fips}"]`);
     if (county == this.lastClicked) return;
     if (this.lastClicked) this.lastClicked.classList.remove("clicked");
+    county.parentElement.appendChild(county);
     county.classList.add("clicked");
     this.lastClicked = county;
   }
@@ -144,6 +156,8 @@ class CountyMap extends ElementBase {
     var content = await response.text();
     this.map.innerHTML = content;
     var svg = this.map.querySelector("svg");
+    var paths = this.map.querySelectorAll("path");
+    paths.forEach(p => p.setAttribute("vector-effect","non-scaling-stroke"));
     var width = svg.getAttribute("width") * 1;
     var height = svg.getAttribute("height") * 1;
     this.container.classList.toggle("vertical", width > height);
@@ -180,7 +194,7 @@ class CountyMap extends ElementBase {
                     popPerc > 0.2 ? 0.75 :
                     popPerc > 0.1 ? 0.5  :
                                     0.25 ;
-      path.style.opacity = opacity;
+      path.style["fill-opacity"] = opacity;
     }
 
     var keyData = Object.keys(palette).map(p => palette[p]).sort((a,b) => a.last < b.last ? -1 : 1);

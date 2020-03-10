@@ -1,22 +1,38 @@
-<div class="key-hed">
-	<div class="less">Less<br>populated</div>
-	<div class="more">More<br>populated</div>
+<div class="left">
+	<div class="row key-hed">
+		<div class="swatch">Less<br>populated</div>
+		<div class="swatch more">More<br>populated</div>
+		<div class="name"></div>
+	</div>
+
+	<% var keyData = data.keyData.length > 2 ? data.keyData.slice(0,2) : data.keyData; %>
+	<% keyData.forEach(function(c) { %>
+		<div class="row">
+			<div class="swatch" style="background: <%= c.color %>; opacity: 0.25"></div>
+			<div class="swatch" style="background: <%= c.color %>; opacity: 0.5"></div>
+			<div class="swatch" style="background: <%= c.color %>; opacity: 0.75"></div>
+			<div class="swatch" style="background: <%= c.color %>; opacity: 1"></div>
+			<div class="name"><%= c.last %></div>
+		</div>
+	<% }); %>
 </div>
 
-<% data.keyData.forEach(function(c) { %>
-	<div class="row">
-		<div class="swatch" style="background: <%= c.color %>; opacity: 0.25"></div>
-		<div class="swatch" style="background: <%= c.color %>; opacity: 0.5"></div>
-		<div class="swatch" style="background: <%= c.color %>; opacity: 0.75"></div>
-		<div class="swatch" style="background: <%= c.color %>; opacity: 1"></div>
-		<div class="name"><%= c.last %></div>
-	</div>
-<% }); %>
+<% if (data.keyData.length > 2) { %>
+	<div class="right">
+		<div class="row key-hed">
+			<div class="swatch">Less<br>populated</div>
+			<div class="swatch more">More<br>populated</div>
+			<div class="name"></div>
+		</div>
 
-<div class="row">
-		<div class="swatch" style="background: #787878; opacity: 0.25"></div>
-		<div class="swatch" style="background: #787878; opacity: 0.5"></div>
-		<div class="swatch" style="background: #787878; opacity: 0.75"></div>
-		<div class="swatch" style="background: #787878; opacity: 1"></div>
-		<div class="name">Other</div>
+		<% data.keyData.slice(2).forEach(function(c) { %>
+			<div class="row">
+				<div class="swatch" style="background: <%= c.color %>; opacity: 0.25"></div>
+				<div class="swatch" style="background: <%= c.color %>; opacity: 0.5"></div>
+				<div class="swatch" style="background: <%= c.color %>; opacity: 0.75"></div>
+				<div class="swatch" style="background: <%= c.color %>; opacity: 1"></div>
+				<div class="name"><%= c.last %></div>
+			</div>
+		<% }); %>
 	</div>
+<% } %>
