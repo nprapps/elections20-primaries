@@ -63,10 +63,7 @@ class StandardPrimary extends ElementBase {
     elements.chatter.innerHTML = chatter || "";
     elements.footnote.innerHTML = footnote || "";
 
-    var href = this.getAttribute("href");
-    var max = this.getAttribute("max");
     var party = this.getAttribute("party");
-    var host = this.getAttribute("host");
 
     var races = mapToElements(elements.results, this.cache.races);
     races.forEach(([race, element]) => {
@@ -78,7 +75,11 @@ class StandardPrimary extends ElementBase {
 
       // render each one
       var test = !!this.cache.test;
-      pairs.forEach(function([data, child]) {
+      pairs.forEach(([data, child]) => {
+
+        var href = this.getAttribute("href");
+        var max = this.getAttribute("max");
+        var host = this.getAttribute("host");
 
         var readableParty = data.party == "Dem" ? "Democratic" : data.party;
         var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;

@@ -71,13 +71,6 @@ class PresidentCaucus extends ElementBase {
     elements.chatter.innerHTML = chatter || "";
     elements.footnote.innerHTML = footnote || "";
 
-    var href = this.getAttribute("href");
-    var max = this.getAttribute("max");
-    var party = this.getAttribute("party");
-    var host = this.getAttribute("host");
-    var isTest = !!this.cache.test;
-    var caucusLabel = this.getAttribute("caucus") || this.cache.caucus;
-
     // merge races
     var byParty = groupBy(races, "party");
 
@@ -117,7 +110,15 @@ class PresidentCaucus extends ElementBase {
     }
 
     var pairs = mapToElements(elements.results, caucuses, "president-results");
-    pairs.forEach(function([data, child]) {
+    pairs.forEach(([data, child]) => {
+
+      var href = this.getAttribute("href");
+      var max = this.getAttribute("max");
+      var party = this.getAttribute("party");
+      var host = this.getAttribute("host");
+      var isTest = !!this.cache.test;
+      var caucusLabel = this.getAttribute("caucus") || this.cache.caucus;
+
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
 
