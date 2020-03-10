@@ -84,16 +84,18 @@ class StandardPrimary extends ElementBase {
         var readableParty = data.party == "Dem" ? "Democratic" : data.party;
         var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
 
-        if (host == "statepage" && href != "false") {
+        if (host == "statepage") {
           headline = `${readableParty} primary`;
-          var search = new URLSearchParams("counties=true");
-          search.set("date", race.date);
-          search.set("party", race.party);
-          search.set("office", race.office)
-          href = "#" + search.toString();
+          if (href != "false") {
+            var search = new URLSearchParams("counties=true");
+            search.set("date", race.date);
+            search.set("party", race.party);
+            search.set("office", race.office)
+            href = "#" + search.toString();
 
-          var { resultsLink } = child.illuminate();
-          resultsLink.innerHTML = "See county results &rsaquo;";
+            var { resultsLink } = child.illuminate();
+            resultsLink.innerHTML = "See county results &rsaquo;";
+          }
         }
 
         if (href && href != "false") child.setAttribute("href", href);
