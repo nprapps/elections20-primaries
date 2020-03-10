@@ -160,6 +160,11 @@ class CountyMap extends ElementBase {
     if (!this.cache || !this.svg) return;
     var { palette, results } = this.cache;
 
+    var maxPop = 0;
+    results.forEach(function(r) { 
+      if (r.population > maxPop) maxPop = r.population;
+    })
+
     var lookup = {};
     for (var r of results) {
       var { fips, candidates } = r;
@@ -169,7 +174,13 @@ class CountyMap extends ElementBase {
       var path = this.svg.querySelector(`[id="fips-${fips}"]`);
       var pigment = palette[winner ? winner.id : top.id];
       path.style.fill = pigment ? pigment.color : "#888";
-      path.style.opacity = winner ? 1 : .5;
+
+      var popPerc = r.population / maxPop;
+      var opacity = popPerc > 0.75 ? 1 :
+                    popPerc > 0.5  ? 0.75 :
+                    popPerc > 0.25 ? 0.5 :
+                                     0.25;
+      path.style.opacity = opacity;
     }
 
     var keyData = Object.keys(palette).map(p => palette[p]).sort((a,b) => a.last < b.last ? -1 : 1);
