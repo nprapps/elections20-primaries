@@ -131,6 +131,7 @@ class CountyDetail extends ElementBase {
     });
 
     var value = elements.countySelect.value;
+    elements.map.highlightCounty(value);
     this.updateTable(value);
   }
 
