@@ -176,10 +176,10 @@ class CountyMap extends ElementBase {
       path.style.fill = pigment ? pigment.color : "#888";
 
       var popPerc = r.population / maxPop;
-      var opacity = popPerc > 0.75 ? 1 :
-                    popPerc > 0.5  ? 0.75 :
-                    popPerc > 0.25 ? 0.5 :
-                                     0.25;
+      var opacity = popPerc > 0.5 ? 1    :
+                    popPerc > 0.2 ? 0.75 :
+                    popPerc > 0.1 ? 0.5  :
+                                    0.25 ;
       path.style.opacity = opacity;
     }
 
