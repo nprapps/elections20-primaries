@@ -5,6 +5,9 @@
   expanded
   max="99"
   host="statepage"
+  <% if (row.race.stateOnly) { %>
+  href="false"
+  <% } %>
 >
   <div class="no-results">No results available.</div>
 </president-primary>

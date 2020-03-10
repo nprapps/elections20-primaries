@@ -12,8 +12,7 @@
   <% }); %>
   </div>
   <div class="tbody" role="rowgroup">
-  <% data.candidates.forEach(function(c) { %>
-    <%
+  <% data.candidates.forEach(function(c) { 
       var classes = [];
       if (c.winner) classes.push("winner");
       if (c.incumbent) classes.push("incumbent");
@@ -48,6 +47,7 @@
         <div role="cell" class="td votes"><%= c.votes ? c.votes.toLocaleString() : "-" %></div>
       </div>
     </div>
+    <div class="row-wrapper column-fixer" role="presentation"></div>
   <% }); %>
   </div>
 </div>

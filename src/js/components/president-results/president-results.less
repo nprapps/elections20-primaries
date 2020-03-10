@@ -75,11 +75,9 @@ president-results {
     font-size: 0.85em;
 
     .tbody, .thead {
-      // display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
       display: block;
       columns: 2;
+      column-fill: auto;
 
       @media @tablet {
         columns: 1;
@@ -104,12 +102,18 @@ president-results {
     .row-wrapper {
       display: inline-block;
       width: 100%;
+      margin-bottom: 4px;
+
+      &.column-fixer {
+        display: block;
+        margin-bottom: 0;
+      }
     }
 
     .tr {
-      flex: 0 0 calc(50% - .5em);
-      display: flex;
       position: relative;
+      flex: 0 0 100%;
+      display: flex;
     }
 
     .thead .tr {
@@ -157,6 +161,7 @@ president-results {
         border: 1px solid var(--outline);
         background-size: cover;
         background-position: center;
+        background-repeat: no-repeat;
 
         &.noimg {
           border: transparent;

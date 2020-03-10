@@ -62,23 +62,24 @@ class PresidentPrimary extends ElementBase {
     elements.chatter.innerHTML = chatter || "";
     elements.footnote.innerHTML = footnote || "";
 
-    var href = this.getAttribute("href");
-    var max = this.getAttribute("max");
-    var party = this.getAttribute("party");
-    var host = this.getAttribute("host");
-    var isTest = !!this.cache.test;
-
     races.sort((a, b) => a.party < b.party ? -1 : 1 );
 
     var pairs = mapToElements(elements.results, races, "president-results");
-    pairs.forEach(function([data, child]) {
+    pairs.forEach(([data, child]) => {
+      
+      var href = this.getAttribute("href");
+      var max = this.getAttribute("max");
+      var party = this.getAttribute("party");
+      var host = this.getAttribute("host");
+      var isTest = !!this.cache.test;
+      
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
       
       var partyText = data.party == "Dem" ? "Democratic" : data.party;
       var headline = `${strings[data.state + "-AP"]} ${partyText} primary`;
 
-      if (host == "statepage") {
+      if (host == "statepage" && href != "false") {
         headline = `${partyText} primary`;
         // update the link
         var search = new URLSearchParams("counties=true&office=P");
@@ -89,7 +90,7 @@ class PresidentPrimary extends ElementBase {
         resultsLink.innerHTML = "See county results &rsaquo;";
       }
 
-      if (href) child.setAttribute("href", href);
+      if (href && href != "false") child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       child.setAttribute("headline", headline);
       child.render(data);

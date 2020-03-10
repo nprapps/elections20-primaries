@@ -151,11 +151,8 @@ var getDescriptors = function(item) {
           >
             <h2 tabindex="-1">
               <%= row.office %>
-              <% if (row.race.special) { %>
-              — Special Election
-              <% } %>
-              <% if (row.race.runoff) { %>
-              — Runoff
+              <% if (row.race.runoff || row.race.special || row.race.general) { %>
+              — <%= getDescriptors(row.race) %>
               <% } %>
             </h2>
 
@@ -164,7 +161,7 @@ var getDescriptors = function(item) {
 
           </div>
 
-          <% if (row.race.office != "H") { %>
+          <% if (row.race.office != "H" && !row.race.stateOnly) { %>
           <div class="module hidden"
             data-office="<%= row.race.office %>"
             data-date="<%= row.race.date %>"
@@ -172,11 +169,8 @@ var getDescriptors = function(item) {
           >
             <h2 tabindex="-1">
               <%= row.office %>
-              <% if (row.race.special) { %>
-              — Special Election 
-              <% } %>
-              <% if (row.race.runoff) { %>
-              — Runoff 
+              <% if (row.race.runoff || row.race.special || row.race.general) { %>
+              — <%= getDescriptors(row.race) %>
               <% } %>
               results by county
             </h2>
