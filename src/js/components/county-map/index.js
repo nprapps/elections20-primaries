@@ -1,96 +1,7 @@
 var ElementBase = require("../elementBase");
 var dot = require("../../lib/dot");
 var key = dot.compile(require("./_key.html"));
-
-var stylesheet = `
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.container.vertical {
-  flex-direction: column;
-}
-
-.map {
-  flex: 1;
-}
-
-svg {
-  width: 100%;
-  max-height: 50vh;
-}
-
-path {
-  stroke: white;
-  fill: transparent;
-  stroke-width: 0.5;
-}
-
-path:hover {
-  cursor: pointer;
-  stroke-width: 2;
-  // stroke: #111;
-}
-
-path.clicked {
-  stroke-width: 2;
-  stroke: #111;
-}
-
-.left, .right {
-  float: left;
-}
-.right {
-  margin-left: 20px;
-}
-
-.key {
-  font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
-  font-weight: normal;
-  font-size: 0.9em;
-}
-
-.key-hed {
-  font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  font-weight: normal;
-  color: #787878;
-  letter-spacing: 0.025em;
-  line-height: 1.2em;
-}
-
-.key-hed.row {
-  margin-bottom: 5px;
-}
-
-.key-hed .swatch {
-  width: 64px;
-  margin-right: 2px;
-}
-
-.more {
-  text-align: right;
-}
-
-.row {
-  margin-bottom: 3px;
-}
-
-.swatch {
-  width: 32px;
-  height: 13px;
-  display: inline-block;
-  margin-right: 1px;
-}
-
-.name {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: -1px;
-  margin-left: 5px;
-}
-`;
+require("./county-map.less");
 
 class CountyMap extends ElementBase {
 
@@ -99,26 +10,15 @@ class CountyMap extends ElementBase {
     this.cache = null;
     this.selected = null;
     this.svg = null;
+  }
 
-    this.attachShadow({ mode: "open" });
-
-    this.container = document.createElement("div");
-    this.container.className = "container";
-    this.shadowRoot.appendChild(this.container);
-
-    this.key = document.createElement("ul");
-    this.key.className = "key";
-    this.container.appendChild(this.key);
-
-    this.map = document.createElement("div");
-    this.map.className = "map";
-    this.container.appendChild(this.map);
-    this.map.addEventListener("click", this.onClick);
-
-
-    var style = document.createElement("style");
-    style.innerHTML = stylesheet;
-    this.shadowRoot.appendChild(style);
+  static get template() {
+    return `
+      <div class="container" data-as="container">
+        <div class="key" data-as="key"></div>
+        <div class="map" data-as="map"></div>
+      </div>
+    `;
   }
 
   static get boundMethods() {
@@ -142,6 +42,7 @@ class CountyMap extends ElementBase {
   }
 
   highlightCounty(fips) {
+    if (!this.svg) return;
     var county = this.svg.querySelector(`[id="fips-${fips}"]`);
     if (county == this.lastClicked) return;
     if (this.lastClicked) this.lastClicked.classList.remove("clicked");
@@ -152,16 +53,26 @@ class CountyMap extends ElementBase {
 
   async loadSVG(url) {
     console.log(`Loading map from ${url}...`);
+
+    var elements = this.illuminate();
     var response = await fetch(url);
     var content = await response.text();
-    this.map.innerHTML = content;
-    var svg = this.map.querySelector("svg");
-    var paths = this.map.querySelectorAll("path");
+    elements.map.innerHTML = content;
+
+    var svg = elements.map.querySelector("svg");
+    svg.setAttribute("preserveAspectRatio","xMaxYMid meet");
+
+    var paths = elements.map.querySelectorAll("path");
     paths.forEach(p => p.setAttribute("vector-effect","non-scaling-stroke"));
+
     var width = svg.getAttribute("width") * 1;
     var height = svg.getAttribute("height") * 1;
-    this.container.classList.toggle("vertical", width > height);
+    // elements.aspect.style.paddingBottom = height / width * 100 + "%";
+    elements.container.classList.toggle("horizontal", width < height);
+
     this.svg = svg;
+    this.svg.addEventListener("click", this.onClick);
+
     this.paint();
   }
 
@@ -171,6 +82,8 @@ class CountyMap extends ElementBase {
   }
 
   paint() {
+    var elements = this.illuminate();
+
     if (!this.cache || !this.svg) return;
     var { palette, results } = this.cache;
 
@@ -197,8 +110,8 @@ class CountyMap extends ElementBase {
       path.style["fill-opacity"] = opacity;
     }
 
-    var keyData = Object.keys(palette).map(p => palette[p]).sort((a,b) => a.last < b.last ? -1 : 1);
-    this.key.innerHTML = key({ keyData });
+    var keyData = Object.keys(palette).map(p => palette[p]);
+    elements.key.innerHTML = key({ keyData });
   }
 
   onClick(e) {

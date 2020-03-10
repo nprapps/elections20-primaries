@@ -1,0 +1,123 @@
+@import "../../../css/base.less";
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  &.horizontal {
+    flex-direction: row;
+
+    @media @mobile {
+      flex-direction: column;
+    }
+    
+    svg {
+      max-width: 50vw;
+    }
+
+    .key {
+      order: 1;
+      margin-left: 30px;
+      margin-bottom: 0;
+
+      @media @mobile {
+        order: 0;
+        margin-left: 0;
+        margin-bottom: 25px;
+      }
+    }
+  }
+}
+
+.map {
+  margin-bottom: 25px;
+}
+
+svg {
+  width: 100%;
+  max-height: 70vh;
+}
+
+path {
+  stroke: white;
+  fill: transparent;
+  stroke-width: 0.5;
+
+  &:hover {
+    cursor: pointer;
+    stroke-width: 2;
+  }
+
+  &.clicked {
+    stroke-width: 2;
+    stroke: #111;
+  }
+}
+
+.key {
+  margin-bottom: 25px;
+}
+
+.key-grid {
+  display: grid;
+  grid-template-columns: repeat(4,33px) 1fr repeat(4,33px) 1fr;
+
+  @media @mobile {
+    grid-template-columns: repeat(5,1fr);
+    grid-template-columns: repeat(4,33px) 1fr;
+  }
+
+  .horizontal & {
+    grid-template-columns: repeat(5,1fr);
+    grid-template-columns: repeat(4,33px) 1fr;
+  }
+
+  .name {
+    margin: -1px 20px 0 6px;
+    font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 0.9em;
+
+    @media @mobile {
+      margin-right: 0;
+    }
+  }
+}
+
+.label {
+  grid-column: span 2;
+  font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-weight: normal;
+  color: #787878;
+  letter-spacing: 0.025em;
+  line-height: 1.2em;
+
+  &.more {
+    text-align: right;
+    margin-bottom: 5px;
+  }
+}
+
+.swatch.first {
+  grid-column-start: 1;
+
+  &.even {
+    grid-column-start: 6;
+
+    @media @mobile {
+      grid-column-start: 1;
+    }
+
+    .horizontal & {
+      grid-column-start: 1;
+    }
+  }
+}
+
+.swatch {
+  width: 32px;
+  height: 13px;
+  margin-bottom: 6px;
+}
