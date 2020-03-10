@@ -161,7 +161,7 @@ var getDescriptors = function(item) {
 
           </div>
 
-          <% if (row.race.office != "H") { %>
+          <% if (row.race.office != "H" && !row.race.stateOnly) { %>
           <div class="module hidden"
             data-office="<%= row.race.office %>"
             data-date="<%= row.race.date %>"
