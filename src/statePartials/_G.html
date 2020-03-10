@@ -3,6 +3,9 @@
   data-control="party"
   data-src="../data/<%= row.race.filename %>.json"
   host="statepage"
+  <% if (row.race.stateOnly) { %>
+  href="false"
+  <% } %>
 >
   <div class="no-results">No results available.</div>
 </standard-primary>

@@ -83,7 +83,7 @@ class StandardPrimary extends ElementBase {
         var readableParty = data.party == "Dem" ? "Democratic" : data.party;
         var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
 
-        if (host == "statepage") {
+        if (host == "statepage" && href != "false") {
           headline = `${readableParty} primary`;
           var search = new URLSearchParams("counties=true");
           search.set("date", race.date);
@@ -95,7 +95,7 @@ class StandardPrimary extends ElementBase {
           resultsLink.innerHTML = "See county results &rsaquo;";
         }
 
-        if (href) child.setAttribute("href", href);
+        if (href && href != "false") child.setAttribute("href", href);
         if (max) child.setAttribute("max", max);
         toggleAttribute(child, "test", test);
 

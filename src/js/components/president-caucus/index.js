@@ -125,7 +125,7 @@ class PresidentCaucus extends ElementBase {
       var contestType = data.caucus || data.type == "Caucus" ? "caucus" : "primary";
       var headline = `${strings[data.state + "-AP"]} ${readableParty} ${contestType}`;
 
-      if (host == "statepage") {
+      if (host == "statepage" && href != "false") {
         headline = `${readableParty} ${contestType}`;
         var search = new URLSearchParams("counties=true&office=P");
         search.set("date", data.date);
@@ -135,7 +135,7 @@ class PresidentCaucus extends ElementBase {
         resultsLink.innerHTML = "See county results &rsaquo;";
       }
 
-      if (href) child.setAttribute("href", href);
+      if (href && href != "false") child.setAttribute("href", href);
       if (max) child.setAttribute("max", max);
       child.setAttribute("headline", headline);
       child.render(data);
