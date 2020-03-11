@@ -4,7 +4,6 @@ var key = dot.compile(require("./_key.html"));
 require("./county-map.less");
 
 class CountyMap extends ElementBase {
-
   constructor() {
     super();
     this.cache = null;
@@ -30,11 +29,11 @@ class CountyMap extends ElementBase {
   }
 
   static get mirroredProps() {
-    return ["src"]
+    return ["src"];
   }
 
   attributeChangedCallback(attr, was, value) {
-    switch(attr) {
+    switch (attr) {
       case "src":
         this.loadSVG(value);
         break;
@@ -60,10 +59,10 @@ class CountyMap extends ElementBase {
     elements.map.innerHTML = content;
 
     var svg = elements.map.querySelector("svg");
-    svg.setAttribute("preserveAspectRatio","xMaxYMid meet");
+    svg.setAttribute("preserveAspectRatio", "xMaxYMid meet");
 
     var paths = elements.map.querySelectorAll("path");
-    paths.forEach(p => p.setAttribute("vector-effect","non-scaling-stroke"));
+    paths.forEach(p => p.setAttribute("vector-effect", "non-scaling-stroke"));
 
     var width = svg.getAttribute("width") * 1;
     var height = svg.getAttribute("height") * 1;
@@ -88,42 +87,44 @@ class CountyMap extends ElementBase {
     var { palette, results } = this.cache;
 
     var maxPop = 0;
-    results.forEach(function(r) { 
+    var winners = new Set();
+    results.forEach(function(r) {
       if (r.population > maxPop) maxPop = r.population;
-    })
+      var [top] = r.candidates.sort((a, b) => b.percentage - a.percentage);
+      winners.add(top.id in palette ? top.id : "0");
+    });
 
     var lookup = {};
     for (var r of results) {
       var { fips, candidates } = r;
       var [top] = candidates.sort((a, b) => b.percentage - a.percentage);
       if (!top.votes) continue;
-      var [winner] = candidates.filter(c => c.winner);
       var path = this.svg.querySelector(`[id="fips-${fips}"]`);
-      var pigment = palette[winner ? winner.id : top.id];
+      var pigment = palette[top.id];
       path.style.fill = pigment ? pigment.color : "#787878";
 
       var popPerc = r.population / maxPop;
-      var opacity = popPerc > 0.5 ? 1    :
-                    popPerc > 0.2 ? 0.75 :
-                    popPerc > 0.1 ? 0.5  :
-                                    0.25 ;
+      var opacity =
+        popPerc > 0.5 ? 1 : popPerc > 0.2 ? 0.75 : popPerc > 0.1 ? 0.5 : 0.25;
       path.style["fill-opacity"] = opacity;
     }
 
-    var keyData = Object.keys(palette).map(p => palette[p]).sort((a,b) => a.order < b.order ? -1 : 1);
+    var keyData = Object.keys(palette)
+      .filter(k => winners.has(k))
+      .map(p => palette[p])
+      .sort((a, b) => (a.order < b.order ? -1 : 1));
     elements.key.innerHTML = key({ keyData });
   }
 
   onClick(e) {
     var county = e.target;
     var fips = county.id.replace("fips-", "");
-    
+
     if (fips.length > 0) {
       this.dispatch("map-click", { fips });
       this.highlightCounty(fips);
     }
   }
-
 }
 
 CountyMap.define("county-map");
