@@ -4,7 +4,7 @@
 @mug-size: 30px;
 
 president-results-multiple {
-  --primary-width: 75px;
+  --primary-width: 86px;
   @media @mobile-above {
     --primary-width: 104px;
   }
@@ -96,7 +96,7 @@ president-results-multiple {
         padding: 0;
 
         + li {
-          margin-left: 22px;
+          margin-left: 15px;
         }
       }
     }
@@ -401,6 +401,30 @@ president-results-multiple {
     .footnote {
       display: block;
       margin-top: 5px;
+    }
+  }
+
+  body.homepage &[lineup="march10"] {
+    @media @mobile {
+      .results-header {
+        h3 img {
+          display: block;
+        }
+      }
+    }
+
+    @media @mobile-above {
+      .board-multiple {
+        .results {
+          position: static;
+          top: auto;
+          left: auto;
+          width: 100%;
+        }
+        .primary {
+          width: calc(100% / 6);
+        }
+      }
     }
   }
 }

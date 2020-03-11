@@ -74,6 +74,7 @@ class PresidentCaucus extends ElementBase {
     // merge races
     var byParty = groupBy(races, "party");
 
+    var caucusLabel = this.getAttribute("caucus") || this.cache.caucus;
     var caucuses = races.filter(r => r.type == "Caucus");
 
     for (var p in byParty) {
@@ -117,7 +118,6 @@ class PresidentCaucus extends ElementBase {
       var party = this.getAttribute("party");
       var host = this.getAttribute("host");
       var isTest = !!this.cache.test;
-      var caucusLabel = this.getAttribute("caucus") || this.cache.caucus;
 
       toggleAttribute(child, "hidden", party && data.party != party);
       toggleAttribute(child, "test", isTest);
@@ -126,14 +126,16 @@ class PresidentCaucus extends ElementBase {
       var contestType = data.caucus || data.type == "Caucus" ? "caucus" : "primary";
       var headline = `${strings[data.state + "-AP"]} ${readableParty} ${contestType}`;
 
-      if (host == "statepage" && href != "false") {
+      if (host == "statepage") {
         headline = `${readableParty} ${contestType}`;
-        var search = new URLSearchParams("counties=true&office=P");
-        search.set("date", data.date);
-        search.set("party", data.party);
-        href = "#" + search.toString();
-        var { resultsLink } = child.illuminate();
-        resultsLink.innerHTML = "See county results &rsaquo;";
+        if (href != "false") {
+          var search = new URLSearchParams("counties=true&office=P");
+          search.set("date", data.date);
+          search.set("party", data.party);
+          href = "#" + search.toString();
+          var { resultsLink } = child.illuminate();
+          resultsLink.innerHTML = "See county results &rsaquo;";
+        }
       }
 
       if (href && href != "false") child.setAttribute("href", href);
