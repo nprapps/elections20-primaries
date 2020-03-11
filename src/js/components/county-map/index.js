@@ -100,7 +100,7 @@ class CountyMap extends ElementBase {
       var [winner] = candidates.filter(c => c.winner);
       var path = this.svg.querySelector(`[id="fips-${fips}"]`);
       var pigment = palette[winner ? winner.id : top.id];
-      path.style.fill = pigment ? pigment.color : "#888";
+      path.style.fill = pigment ? pigment.color : "#787878";
 
       var popPerc = r.population / maxPop;
       var opacity = popPerc > 0.5 ? 1    :
@@ -110,7 +110,7 @@ class CountyMap extends ElementBase {
       path.style["fill-opacity"] = opacity;
     }
 
-    var keyData = Object.keys(palette).map(p => palette[p]);
+    var keyData = Object.keys(palette).map(p => palette[p]).sort((a,b) => a.order < b.order ? -1 : 1);
     elements.key.innerHTML = key({ keyData });
   }
 

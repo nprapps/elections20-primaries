@@ -10,7 +10,7 @@ var { formatAPDate, formatTime, groupBy, mapToElements, toggleAttribute } = requ
 
 var fips = require("../../../../data/fips.sheet.json");
 
-var colors = ["#bb77c7", "#92c777", "#eaaa61", "#237bbd"];
+var colors = ["#bb77c7", "#92c777", "#eaaa61"];
 
 class CountyDetail extends ElementBase {
 
@@ -110,15 +110,26 @@ class CountyDetail extends ElementBase {
     var statewide = Object.values(totals);
     statewide.sort((a, b) => b.votes - a.votes);
 
+    console.log(statewide.slice(0, colors.length))
+
     var palette = {};
+    var includeOther = statewide.length > colors.length ? true : false;
     statewide.slice(0, colors.length).forEach(function(s, i) {
       palette[s.id] = {
+        order: i,
         id: s.id,
         first: s.first,
         last: s.last,
         color: colors[i]
       };
     });
+
+    palette.other = {
+      last: "Other",
+      color: "#787878",
+      order: 999
+    }
+
     elements.map.render(palette, race.results);
 
     counties = Object.keys(counties).sort().map(county => ({ county, id: counties[county] }));
