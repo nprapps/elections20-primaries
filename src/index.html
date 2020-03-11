@@ -14,6 +14,14 @@
       description: seo.calendarDescription
     })
   };
+
+  var getDescriptors = function(item) {
+    var key = "";
+    if (item.general) key += "G";
+    if (item.runoff) key += "R";
+    if (item.special) key += "S";
+    return strings["race-" + key];
+  }
 %>
 
 <!doctype html>
@@ -150,7 +158,7 @@
                 <span class="results-label">Results:</span>
                   <%= event.races.map(r => `
   <a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}">
-  ${strings[r.office]}${r.special ? " special election" : ""}</a>`).join(", ") %>
+  ${strings[r.office]}${r.special || r.general || r.runoff ? " - " + getDescriptors(r) : ""}</a>`).join(", ") %>
                 <% } %>
               </div>
             </div>
