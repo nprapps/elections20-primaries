@@ -113,7 +113,6 @@ class CountyDetail extends ElementBase {
     console.log(statewide.slice(0, colors.length))
 
     var palette = {};
-    var includeOther = statewide.length > colors.length ? true : false;
     statewide.slice(0, colors.length).forEach(function(s, i) {
       palette[s.id] = {
         order: i,
@@ -124,10 +123,12 @@ class CountyDetail extends ElementBase {
       };
     });
 
-    palette.other = {
-      last: "Other",
-      color: "#787878",
-      order: 999
+    if (statewide.length > colors.length) {
+      palette.other = {
+        last: "Other",
+        color: "#787878",
+        order: 999
+      }
     }
 
     elements.map.render(palette, race.results);
