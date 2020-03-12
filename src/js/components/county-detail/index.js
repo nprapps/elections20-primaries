@@ -190,9 +190,18 @@ class CountyDetail extends ElementBase {
       return option;
     });
 
-    var value = elements.countySelect.value;
-    elements.map.highlightCounty(value);
-    this.updateTable(value);
+    var maxPop = 0;
+    var maxFips;
+    results.forEach(function(r) {
+      if (r.population > maxPop) {
+        maxPop = r.population;
+        maxFips = r.fips;
+      }
+    });
+
+    elements.countySelect.value = maxFips;
+    elements.map.highlightCounty(maxFips);
+    this.updateTable(maxFips);
   }
 
   updateTable(fips) {
