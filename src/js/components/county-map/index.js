@@ -99,9 +99,12 @@ class CountyMap extends ElementBase {
       var { fips, candidates } = r;
       var [top] = candidates.sort((a, b) => b.percentage - a.percentage);
       if (!top.votes) continue;
+      
       var path = this.svg.querySelector(`[id="fips-${fips}"]`);
       var pigment = palette[top.id];
-      path.style.fill = pigment ? pigment.color : "#787878";
+      var hitThreshold = r.reportingPercentage > 25;
+
+      path.style.fill = hitThreshold ? pigment ? pigment.color : "#787878" : "white";
 
       var popPerc = r.population / maxPop;
       var opacity =

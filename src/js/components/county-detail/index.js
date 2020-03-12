@@ -78,8 +78,6 @@ class CountyDetail extends ElementBase {
   render() {
     colors = colorKey.slice(0,-1);
 
-    console.log(colorKey)
-
     var elements = this.illuminate();
     var data = this.cache;
     if (!data) return;
@@ -96,6 +94,14 @@ class CountyDetail extends ElementBase {
     var counties = {};
     var fips = {};
     var totals = {};
+
+    // TEST DATA
+    // results.forEach(function(r) {
+    //   r.candidates.forEach(function(c) {
+    //     c.votes = c.votes * (Math.floor(Math.random() * Math.floor(3)));
+    //   })
+    // })
+
     results.forEach(function(r) {
       var top = null;
       r.candidates.forEach(function(candidate) {
