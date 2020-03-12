@@ -16,7 +16,11 @@ var {
   toggleAttribute
 } = require("../utils");
 
-var colorKey = ["#bb77c7", "#92c777", "#eaaa61", "#237bbd"];
+var colorSet = new Set();
+for (var m in mugs) {
+  if (mugs[m].color) colorSet.add(mugs[m].color);
+}
+var colorKey = Array.from(colorSet);
 var colors = colorKey;
 
 class CountyDetail extends ElementBase {
