@@ -43,17 +43,20 @@ svg {
 
 path {
   stroke: #bbb;
+  fill-opacity: 0.5;
   fill: transparent;
   stroke-width: 1;
 
   &:hover {
     cursor: pointer;
     stroke-width: 2;
+    fill-opacity: 1;
   }
 
   &.clicked {
     stroke-width: 2;
     stroke: #111;
+    fill-opacity: 1;
   }
 }
 
@@ -61,64 +64,29 @@ path {
   margin-bottom: 25px;
 }
 
-.key-grid {
-  display: grid;
-  grid-template-columns: repeat(4,33px) 1fr repeat(4,33px) 1fr;
+.name {
+  font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  font-size: 0.9em;
+  display: inline-block;
+  margin-top: -1px;
+  vertical-align: top;
+}
 
-  @media @mobile {
-    grid-template-columns: repeat(5,1fr);
-    grid-template-columns: repeat(4,33px) 1fr;
-  }
-
-  .horizontal & {
-    grid-template-columns: repeat(5,1fr);
-    grid-template-columns: repeat(4,33px) 1fr;
-  }
-
-  .name {
-    margin: -1px 20px 0 6px;
-    font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    font-size: 0.9em;
-
-    @media @mobile {
-      margin-right: 0;
-    }
-  }
+.key-row {
+  display: inline-block;
 }
 
 .label {
-  grid-column: span 2;
   font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
   font-weight: normal;
   color: #787878;
   letter-spacing: 0.025em;
   line-height: 1.2em;
-
-  &.more {
-    text-align: right;
-    margin-bottom: 5px;
-  }
-}
-
-.swatch.first {
-  grid-column-start: 1;
-
-  &.even {
-    grid-column-start: 6;
-
-    @media @mobile {
-      grid-column-start: 1;
-    }
-
-    .horizontal & {
-      grid-column-start: 1;
-    }
-  }
 }
 
 .swatch {
+  display: inline-block;
   width: 32px;
   height: 13px;
-  margin-bottom: 6px;
 }

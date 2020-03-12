@@ -96,10 +96,8 @@ class CountyMap extends ElementBase {
     if (!this.cache || !this.svg) return;
     var { palette, results } = this.cache;
 
-    var maxPop = 0;
     var winners = new Set();
     results.forEach(function(r) {
-      if (r.population > maxPop) maxPop = r.population;
       var [top] = r.candidates.sort((a, b) => b.percentage - a.percentage);
       winners.add(top.id in palette ? top.id : "other");
     });
@@ -115,11 +113,6 @@ class CountyMap extends ElementBase {
       var hitThreshold = r.reportingPercentage > 25;
 
       path.style.fill = hitThreshold ? pigment ? pigment.color : "#787878" : "white";
-
-      var popPerc = r.population / maxPop;
-      var opacity =
-        popPerc > 0.5 ? 1 : popPerc > 0.2 ? 0.75 : popPerc > 0.1 ? 0.5 : 0.25;
-      path.style["fill-opacity"] = opacity;
     }
 
     var pKeys = Object.keys(palette);
