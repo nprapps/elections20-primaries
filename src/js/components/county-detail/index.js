@@ -21,7 +21,6 @@ for (var m in mugs) {
   if (mugs[m].color) colorSet.add(mugs[m].color);
 }
 var colorKey = Array.from(colorSet);
-var colors = colorKey;
 
 class CountyDetail extends ElementBase {
   constructor() {
@@ -80,7 +79,7 @@ class CountyDetail extends ElementBase {
   }
 
   render() {
-    colors = colorKey.slice(0,-1);
+    var colors = colorKey.slice();
 
     var elements = this.illuminate();
     var data = this.cache;
@@ -168,8 +167,8 @@ class CountyDetail extends ElementBase {
     }
 
     if (statewide.length > colors.length) {
-      palette["0"] = {
-        id: "0",
+      palette.other = {
+        id: "other",
         last: "Other",
         color: "#787878",
         order: 999

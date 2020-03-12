@@ -66,6 +66,16 @@ class CountyMap extends ElementBase {
 
     var width = svg.getAttribute("width") * 1;
     var height = svg.getAttribute("height") * 1;
+    if (width > height * 1.4) {
+      var ratio = height / width;
+      elements.map.style.width = "100%";
+      elements.map.style.paddingBottom = `${100 * ratio}%`;
+    } else {
+      var ratio = width / height;
+      var basis = height > width * 1.1 ? 65 : 55;
+      elements.map.style.height = basis + "vh";
+      elements.map.style.width = `${basis * ratio}vh`;
+    }
     // elements.aspect.style.paddingBottom = height / width * 100 + "%";
     elements.container.classList.toggle("horizontal", width < height);
 
@@ -91,7 +101,7 @@ class CountyMap extends ElementBase {
     results.forEach(function(r) {
       if (r.population > maxPop) maxPop = r.population;
       var [top] = r.candidates.sort((a, b) => b.percentage - a.percentage);
-      winners.add(top.id in palette ? top.id : "0");
+      winners.add(top.id in palette ? top.id : "other");
     });
 
     var lookup = {};
@@ -112,10 +122,12 @@ class CountyMap extends ElementBase {
       path.style["fill-opacity"] = opacity;
     }
 
-    var keyData = Object.keys(palette)
-      .filter(k => winners.has(k))
+    var pKeys = Object.keys(palette);
+    var keyData = pKeys
       .map(p => palette[p])
       .sort((a, b) => (a.order < b.order ? -1 : 1));
+    var filtered = keyData.filter(p => winners.has(p.id));
+    keyData = filtered.length < 2 ? keyData.slice(0, 2) : filtered;
     elements.key.innerHTML = key({ keyData });
   }
 
