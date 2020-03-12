@@ -98,7 +98,7 @@ class CountyDetail extends ElementBase {
     var fips = {};
     var totals = {};
 
-    // TEST DATA
+    // // TEST DATA
     // results.forEach(function(r) {
     //   r.candidates.forEach(function(c) {
     //     c.votes = c.votes * (Math.floor(Math.random() * Math.floor(3)));
@@ -219,7 +219,7 @@ class CountyDetail extends ElementBase {
     );
     var [result] = race.results.filter(r => r.fips == fips);
 
-    resultsTable.setAttribute("headline", result.county);
+    resultsTable.setAttribute("headline", result.county + ` (Pop. ${result.population})`);
     resultsTable.setAttribute("max", 99);
     if (result) resultsTable.render(result);
   }
