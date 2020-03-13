@@ -64,7 +64,7 @@ class CountyMap extends ElementBase {
     var paths = elements.map.querySelectorAll("path");
     paths.forEach((p, i) => {
       p.setAttribute("vector-effect", "non-scaling-stroke");
-      p.style.transitionDuration = (Math.random() * 2).toFixed(2) + "s";
+    //   p.style.transitionDuration = (Math.random() * 2).toFixed(2) + "s";
     });
 
     var width = svg.getAttribute("width") * 1;
