@@ -78,8 +78,8 @@ var issueTickets = function(races) {
         date,
         params: {
           level: requestCounties ? "FIPScode" : "state",
-          statePostal: [...new Set(states)],
-          officeID: [...new Set(offices)]
+          statePostal: [...new Set(states)].join(","),
+          officeID: [...new Set(offices)].join(",")
         }
       });
     }
