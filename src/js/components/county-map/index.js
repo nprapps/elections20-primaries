@@ -113,7 +113,7 @@ class CountyMap extends ElementBase {
     results.forEach(r => {
       var [top] = r.candidates.sort((a, b) => b.percentage - a.percentage);
       winners.add(top.id in palette ? top.id : "other");
-      this.fipsLookup[r.fips] = r.county;
+      this.fipsLookup[r.fips] = r;
     });
 
     var lookup = {};
@@ -156,7 +156,13 @@ class CountyMap extends ElementBase {
       return tooltip.classList.remove("shown");
     }
 
-    tooltip.innerHTML = this.fipsLookup[fips];
+    var result = this.fipsLookup[fips];
+    if (result) {
+      tooltip.innerHTML = `
+        <div class="name">${result.county}</div>
+        <div class="pop">Pop. ${result.population.toLocaleString()}</div>
+      `;
+    }
 
     var bounds = map.getBoundingClientRect();
     var x = e.clientX - bounds.left;
@@ -164,7 +170,7 @@ class CountyMap extends ElementBase {
     if (x > bounds.width / 2) {
       x -= tooltip.offsetWidth + 10;
     } else {
-      x += 10;
+      x += 20;
     }
     tooltip.style.left = x + "px";
     tooltip.style.top = y + "px";

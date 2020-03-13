@@ -33,12 +33,24 @@
   position: absolute;
   border: 1px solid #bbb;
   background-color: #eee;
-  padding: 4px;
+  padding: 4px 8px;
   display: none;
   pointer-events: none;
 
   &.shown {
     display: block;
+  }
+
+  .name {
+    border-bottom: 1px solid #888;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    font-weight: bold;
+  }
+
+  .pop {
+    font-size: .9rem;
+    font-style: italic;
   }
 }
 
