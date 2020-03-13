@@ -146,7 +146,7 @@ class CountyMap extends ElementBase {
       var hitThreshold = r.reportingPercentage > 25;
       var paint = "#bbb";
       if (hitThreshold) {
-        paint = pigment.color || "#bbb"
+        paint = pigment ? pigment.color : "#bbb"
       } else {
         paint = `url(#pending)`;
         incomplete = true;
