@@ -1,6 +1,8 @@
 @import "../../../css/base.less";
 
 county-map {
+  display: block;
+  
   .container {
     display: flex;
     align-items: center;
@@ -29,7 +31,7 @@ county-map {
     }
   }
 
-  .chonky & {
+  &.chonky {
     @media @mobile-above {
       padding: 0 10vw;
     }
