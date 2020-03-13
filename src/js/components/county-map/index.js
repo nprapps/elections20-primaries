@@ -1,6 +1,7 @@
 var ElementBase = require("../elementBase");
 var dot = require("../../lib/dot");
 var key = dot.compile(require("./_key.html"));
+var fipsKey = require("fips.sheet.json");
 require("./county-map.less");
 
 class CountyMap extends ElementBase {
@@ -16,6 +17,7 @@ class CountyMap extends ElementBase {
       <div class="container" data-as="container">
         <div class="key" data-as="key"></div>
         <div class="map" data-as="map"></div>
+        <div class="tooltip" data-as="tooltip"></div>
       </div>
     `;
   }
@@ -58,6 +60,8 @@ class CountyMap extends ElementBase {
     var content = await response.text();
     elements.map.innerHTML = content;
 
+    var tooltip = elements.tooltip;
+
     var svg = elements.map.querySelector("svg");
     svg.setAttribute("preserveAspectRatio", "xMaxYMid meet");
 
@@ -84,6 +88,26 @@ class CountyMap extends ElementBase {
 
     this.svg = svg;
     this.svg.addEventListener("click", this.onClick);
+    this.svg.addEventListener("mousemove", function(e) {
+      var fips = e.target.id.replace("fips-", "");
+      tooltip.innerHTML = fipsKey[fips].name;
+
+      var bounds = elements.map.getBoundingClientRect();
+      var x = e.clientX - bounds.left;
+      var y = e.clientY - bounds.top;
+      if (x > bounds.width / 2) {
+        x -= tooltip.offsetWidth + 10;
+      } else {
+        x += 10;
+      }
+      tooltip.style.left = x + "px";
+      tooltip.style.top = y + "px";
+
+      tooltip.classList.add("shown");
+    });
+    this.svg.addEventListener("mouseout", function(e) {
+      tooltip.classList.remove("shown");
+    });
 
     this.paint();
   }

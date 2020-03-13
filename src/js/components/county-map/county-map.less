@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  position: relative;
 
   &.horizontal {
     flex-direction: row;
@@ -24,6 +25,19 @@
         margin-bottom: 25px;
       }
     }
+  }
+}
+
+.tooltip {
+  .gotham();
+  position: absolute;
+  border: 1px solid #bbb;
+  background-color: #eee;
+  padding: 4px;
+  display: none;
+
+  &.shown {
+    display: block;
   }
 }
 
