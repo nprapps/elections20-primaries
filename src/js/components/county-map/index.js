@@ -16,7 +16,7 @@ class CountyMap extends ElementBase {
     return `
       <div class="container" data-as="container">
         <div class="key" data-as="key"></div>
-        <div class="map-container">
+        <div class="map-container" data-as="mapContainer">
           <div class="map" data-as="map"></div>
           <div class="tooltip" data-as="tooltip"></div>
         </div>
@@ -82,13 +82,13 @@ class CountyMap extends ElementBase {
     var height = svg.getAttribute("height") * 1;
     if (width > height * 1.4) {
       var ratio = height / width;
-      elements.map.style.width = "100%";
-      elements.map.style.paddingBottom = `${100 * ratio}%`;
+      elements.mapContainer.style.width = "100%";
+      elements.mapContainer.style.paddingBottom = `${100 * ratio}%`;
     } else {
       var ratio = width / height;
       var basis = height > width * 1.1 ? 65 : 55;
-      elements.map.style.height = basis + "vh";
-      elements.map.style.width = `${basis * ratio}vh`;
+      elements.mapContainer.style.height = basis + "vh";
+      elements.mapContainer.style.width = `${basis * ratio}vh`;
     }
     // elements.aspect.style.paddingBottom = height / width * 100 + "%";
     elements.container.classList.toggle("horizontal", width < height);
