@@ -62,7 +62,10 @@ class CountyMap extends ElementBase {
     svg.setAttribute("preserveAspectRatio", "xMaxYMid meet");
 
     var paths = elements.map.querySelectorAll("path");
-    paths.forEach(p => p.setAttribute("vector-effect", "non-scaling-stroke"));
+    paths.forEach((p, i) => {
+      p.setAttribute("vector-effect", "non-scaling-stroke");
+      p.style.transitionDuration = (Math.random() * 2).toFixed(2) + "s";
+    });
 
     var width = svg.getAttribute("width") * 1;
     var height = svg.getAttribute("height") * 1;
@@ -109,6 +112,7 @@ class CountyMap extends ElementBase {
       if (!top.votes) continue;
       
       var path = this.svg.querySelector(`[id="fips-${fips}"]`);
+      path.classList.add("painted");
       var pigment = palette[top.id];
       var hitThreshold = r.reportingPercentage > 25;
 

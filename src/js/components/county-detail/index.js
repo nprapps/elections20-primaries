@@ -219,7 +219,7 @@ class CountyDetail extends ElementBase {
     );
     var [result] = race.results.filter(r => r.fips == fips);
 
-    resultsTable.setAttribute("headline", result.county + ` (Pop. ${result.population})`);
+    resultsTable.setAttribute("headline", result.county + ` (Pop. ${result.population.toLocaleString()})`);
     resultsTable.setAttribute("max", 99);
     if (result) resultsTable.render(result);
   }

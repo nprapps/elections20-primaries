@@ -42,20 +42,27 @@ svg {
 }
 
 path {
-  stroke: #bbb;
-  fill-opacity: 0.6;
+  stroke: white;
+  fill-opacity: 0;
   fill: transparent;
   stroke-width: 1;
+  transition: fill-opacity 1s linear;
+
+  &.painted {
+    fill-opacity: .6;
+  }
 
   &:hover {
     cursor: pointer;
     stroke-width: 2;
     fill-opacity: 1;
+    transition-duration: 0s !important;
   }
 
   &.clicked {
-    stroke-width: 2;
-    stroke: #111;
+    stroke-width: 4;
+    paint-order: stroke fill;
+    // stroke: fade(white, .5);
     fill-opacity: 1;
   }
 }
@@ -66,14 +73,20 @@ path {
 
 .key-row {
   display: inline-block;
+  line-height: 1em;
+
+  .horizontal & {
+    display: block;
+    margin-bottom: 8px;
+  }
 
   .name {
     font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-size: 0.9em;
     display: inline-block;
-    margin-top: -1px;
     vertical-align: top;
+    margin-right: 8px;
   }
 }
 
@@ -87,6 +100,6 @@ path {
 
 .swatch {
   display: inline-block;
-  width: 32px;
-  height: 13px;
+  width: 1em;
+  height: 1em;
 }
