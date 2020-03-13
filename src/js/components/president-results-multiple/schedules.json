@@ -48,5 +48,20 @@
       ]
     },
     "candidates": ["Biden", "Gabbard", "Sanders"]
+  },
+  "march17": {
+    "schedule": {
+      "7:30 p.m. ET": [
+        { "state": "OH", "ap": "Ohio", "delegates": 136 }
+      ],
+      "8 p.m. ET": [
+        { "state": "FL", "ap": "Fla.", "delegates": 219 },
+        { "state": "IL", "ap": "Ill.", "delegates": 155 }
+      ],
+      "10 p.m. ET": [
+        { "state": "AZ", "ap": "Ariz.", "delegates": 67 }
+      ]
+    },
+    "candidates": ["Biden", "Sanders"]
   }
 }

@@ -28,6 +28,10 @@ president-results-multiple {
     }
   }
 
+  &[lineup="march17"] {
+    --primary-width: 85px;
+  }
+
   &[test]::before {
     .knockout();
     display: block;
@@ -42,7 +46,7 @@ president-results-multiple {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    opacity: .5;
+    opacity: 0.5;
     z-index: 9999;
   }
 
@@ -68,15 +72,21 @@ president-results-multiple {
         vertical-align: top;
       }
 
-      a:link, a:visited {
+      a:link,
+      a:visited {
         color: var(--foreground);
       }
-      a:hover, a:active {
+      a:hover,
+      a:active {
         color: @accent-light;
       }
     }
 
-    a, a:link, a:visited, a:hover, a:active {
+    a,
+    a:link,
+    a:visited,
+    a:hover,
+    a:active {
       text-decoration: none;
     }
 
@@ -164,7 +174,9 @@ president-results-multiple {
     .results-table {
       display: block;
 
-      tr, th, td {
+      tr,
+      th,
+      td {
         display: block;
         padding: 0;
       }
@@ -177,7 +189,7 @@ president-results-multiple {
       position: absolute;
       top: 0;
       left: 0;
-      transition: left .5s;
+      transition: left 0.5s;
     }
 
     .primary {
@@ -204,10 +216,14 @@ president-results-multiple {
 
         &:first-child {
           > td,
-          > td.header > div { border-left: none; }
+          > td.header > div {
+            border-left: none;
+          }
         }
 
-        .polls { padding-left: 5px; }
+        .polls {
+          padding-left: 5px;
+        }
       }
     }
 
@@ -216,11 +232,14 @@ president-results-multiple {
       padding: 11px 0 0 0;
       text-transform: uppercase;
 
-      a, a:link, a:visited {
+      a,
+      a:link,
+      a:visited {
         font-weight: bold;
         color: var(--link);
       }
-      a:hover, a:active {
+      a:hover,
+      a:active {
         opacity: 0.7;
       }
     }
@@ -255,7 +274,9 @@ president-results-multiple {
       font-size: 1em;
       line-height: 2em;
     }
-    .results .polls { text-align: left; }
+    .results .polls {
+      text-align: left;
+    }
     .results .primary:not(.new-zone) .polls {
       border-left: none;
     }
@@ -300,7 +321,8 @@ president-results-multiple {
       text-transform: uppercase;
       width: 100px;
 
-      &:hover, &:active {
+      &:hover,
+      &:active {
         cursor: pointer;
         opacity: 0.7;
       }
@@ -319,14 +341,18 @@ president-results-multiple {
   // for when we need to scroll the results contents
   &[overflow] {
     .board-multiple .results-wrapper::after {
-      content: '';
+      content: "";
       display: block;
       position: absolute;
       top: 0;
       bottom: 0;
       right: 0;
       background-color: var(--background);
-      background: linear-gradient(90deg, var(--background-faded) 0%, var(--background) 80%);
+      background: linear-gradient(
+        90deg,
+        var(--background-faded) 0%,
+        var(--background) 80%
+      );
       width: 20px;
     }
 
@@ -353,7 +379,10 @@ president-results-multiple {
       a {
         color: var(--link);
 
-        &:hover, &:active { opacity: 0.7; }
+        &:hover,
+        &:active {
+          opacity: 0.7;
+        }
       }
     }
 
@@ -394,8 +423,12 @@ president-results-multiple {
         margin-right: 6px;
         margin-top: 2px;
       }
-      li.winner b { background-color: var(--dem); }
-      li.leader b { background-color: var(--dem-fade); }
+      li.winner b {
+        background-color: var(--dem);
+      }
+      li.leader b {
+        background-color: var(--dem-fade);
+      }
     }
 
     .footnote {
@@ -404,7 +437,8 @@ president-results-multiple {
     }
   }
 
-  body.homepage &[lineup="march10"] {
+  body.homepage &[lineup="march10"],
+  &[lineup="march17"] {
     @media @mobile {
       .results-header {
         h3 img {
@@ -421,8 +455,32 @@ president-results-multiple {
           left: auto;
           width: 100%;
         }
+      }
+    }
+  }
+
+  body.homepage &[lineup="march10"] {
+    @media @mobile-above {
+      .board-multiple .primary {
+        width: calc(100% / 6);
+      }
+    }
+  }
+
+  &[lineup="march17"] {
+    @media @mobile-above {
+      .board-multiple .primary {
+        width: calc(100% / 4);
+      }
+    }
+
+    @media (min-width: 470px) and @desktop {
+      .board-multiple {
+        .results {
+          width: 100%;
+        }
         .primary {
-          width: calc(100% / 6);
+          width: calc(100% / 4);
         }
       }
     }
