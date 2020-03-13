@@ -158,8 +158,11 @@ class CountyMap extends ElementBase {
 
     var result = this.fipsLookup[fips];
     if (result) {
+      var countyDisplay = result.county.replace(/\s[a-z]/g, match =>
+        match.toUpperCase()
+      );
       tooltip.innerHTML = `
-        <div class="name">${result.county}</div>
+        <div class="name">${countyDisplay}</div>
         <div class="pop">Pop. ${result.population.toLocaleString()}</div>
       `;
     }
