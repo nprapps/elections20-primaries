@@ -5,4 +5,12 @@
     	<div class="name"><%= c.last %></div>
     </div>
   <% }); %>
+  <% if (data.incomplete) { %>
+    <div class="key-row">
+      <svg class="swatch" viewBox="0 0 40 40">
+        <rect fill="url(#pending)" width="100%" height="100%" />
+      </svg>
+      <div class="name">Results incomplete</div>
+    </div>
+  <% } %>
 </div>

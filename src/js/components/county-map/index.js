@@ -17,6 +17,19 @@ class CountyMap extends ElementBase {
   static get template() {
     return `
       <div class="container" data-as="container">
+        <svg class="patterns" style="opacity: 0; position: absolute; left: -1000px">
+          <pattern id="pending"
+            width="10" height="10"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(-45)"
+          >
+            <path
+              d="M5,0L5,10"
+              stroke="rgba(0, 0, 0, .2)"
+              stroke-width="4"
+            ></path>
+          </pattern>
+        </svg>
         <div class="key" data-as="key"></div>
         <div class="map-container" data-as="mapContainer">
           <div class="map" data-as="map"></div>
@@ -110,6 +123,7 @@ class CountyMap extends ElementBase {
 
     if (!this.cache || !this.svg) return;
     var { palette, results, state } = this.cache;
+    var incomplete = false;
 
     this.classList.toggle("chonky", specialStates.has(state));
 
@@ -130,8 +144,15 @@ class CountyMap extends ElementBase {
       path.classList.add("painted");
       var pigment = palette[top.id];
       var hitThreshold = r.reportingPercentage > 25;
+      var paint = "#bbb";
+      if (hitThreshold) {
+        paint = pigment.color || "#bbb"
+      } else {
+        paint = `url(#pending)`;
+        incomplete = true;
+      }
 
-      path.style.fill = hitThreshold ? pigment ? pigment.color : "#bbb" : "white";
+      path.style.fill = paint;
     }
 
     var pKeys = Object.keys(palette);
@@ -140,7 +161,7 @@ class CountyMap extends ElementBase {
       .sort((a, b) => (a.order < b.order ? -1 : 1));
     var filtered = keyData.filter(p => winners.has(p.id));
     keyData = filtered.length < 2 ? keyData.slice(0, 2) : filtered;
-    elements.key.innerHTML = key({ keyData });
+    elements.key.innerHTML = key({ keyData, incomplete });
   }
 
   onClick(e) {
@@ -168,6 +189,9 @@ class CountyMap extends ElementBase {
       tooltip.innerHTML = `
         <div class="name">${countyDisplay}</div>
         <div class="pop">Pop. ${result.population.toLocaleString()}</div>
+        <div class="reporting">
+        ${result.reportingPercentage.toFixed(1)}% reporting
+        </div>
       `;
     }
 

@@ -1,28 +1,30 @@
 @import "../../../css/base.less";
 
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
+county-map {
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
 
-  &.horizontal {
-    flex-direction: row;
-
-    @media @mobile {
-      flex-direction: column;
-    }
-
-    .key {
-      order: 1;
-      margin-left: 30px;
-      margin-bottom: 0;
+    &.horizontal {
+      flex-direction: row;
 
       @media @mobile {
-        order: 0;
-        margin-left: 0;
-        margin-bottom: 25px;
+        flex-direction: column;
+      }
+
+      .key {
+        order: 1;
+        margin-left: 30px;
+        margin-bottom: 0;
+
+        @media @mobile {
+          order: 0;
+          margin-left: 0;
+          margin-bottom: 25px;
+        }
       }
     }
   }
@@ -32,109 +34,109 @@
       padding: 0 10vw;
     }
   }
-}
 
-.tooltip {
-  position: absolute;
-  border: 1px solid #bbb;
-  background-color: #eee;
-  padding: 6px 8px;
-  display: none;
-  pointer-events: none;
+  .tooltip {
+    position: absolute;
+    border: 1px solid #bbb;
+    background-color: #eee;
+    padding: 6px 8px;
+    display: none;
+    pointer-events: none;
 
-  &.shown {
-    display: block;
+    &.shown {
+      display: block;
+    }
+
+    .name {
+      .gotham();
+      font-weight: bold;
+    }
+
+    .pop, .reporting {
+      font-size: .9rem;
+      .knockout();
+      color: #787878;
+    }
   }
 
-  .name {
-    .gotham();
-    font-weight: bold;
+  .map-container {
+    position: relative;
+    margin-bottom: 25px;
+    max-width: 100%;
+
+    .map, svg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
   }
 
-  .pop {
-    font-size: .9rem;
-    .knockout();
-    color: #787878;
-  }
-}
-
-.map-container {
-  position: relative;
-  margin-bottom: 25px;
-  max-width: 100%;
-}
-
-
-.map, svg {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-path {
-  stroke: #ddd;
-  fill-opacity: 0;
-  fill: white;
-  stroke-width: 1;
-  /*transition: fill-opacity 1s linear;*/
-
-  &.painted {
-    fill-opacity: .6;
-    stroke: #eee;
+  .map path {
+    stroke: #ddd;
+    fill-opacity: 0;
+    fill: white;
     stroke-width: 1;
+    /*transition: fill-opacity 1s linear;*/
+
+    &.painted {
+      fill-opacity: .6;
+      stroke: #eee;
+      stroke-width: 1;
+    }
+
+    &:hover {
+      cursor: pointer;
+      fill-opacity: 1;
+      stroke-width: 2;
+      /*transition-duration: 0s !important;*/
+      paint-order: stroke fill;
+    }
+
+    &.clicked {
+      stroke: #787878;
+      stroke-width: 3;
+      paint-order: stroke fill;
+      fill-opacity: 1;
+    }
   }
 
-  &:hover {
-    cursor: pointer;
-    fill-opacity: 1;
-    stroke-width: 2;
-    /*transition-duration: 0s !important;*/
-    paint-order: stroke fill;
+  .key {
+    margin-bottom: 25px;
   }
 
-  &.clicked {
-    stroke: #787878;
-    stroke-width: 3;
-    paint-order: stroke fill;
-    fill-opacity: 1;
-  }
-}
-
-.key {
-  margin-bottom: 25px;
-}
-
-.key-row {
-  display: inline-block;
-  line-height: 1em;
-
-  .horizontal & {
-    display: block;
-    margin-bottom: 8px;
-  }
-
-  .name {
-    font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    font-size: 0.9em;
+  .key-row {
     display: inline-block;
-    vertical-align: top;
-    margin: 1px 8px 0 1px;
+    line-height: 1em;
+
+    .horizontal & {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .name {
+      font-family: 'Gotham SSm', Helvetica, Arial, sans-serif;
+      font-weight: normal;
+      font-size: 0.9em;
+      display: inline-block;
+      vertical-align: top;
+      margin: 1px 8px 0 1px;
+    }
   }
-}
 
-.label {
-  font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-  font-weight: normal;
-  color: #787878;
-  letter-spacing: 0.025em;
-  line-height: 1.2em;
-}
+  .label {
+    font-family: 'Knockout 31 4r','Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-weight: normal;
+    color: #787878;
+    letter-spacing: 0.025em;
+    line-height: 1.2em;
+  }
 
-.swatch {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
+  .swatch {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+  }
+
 }
