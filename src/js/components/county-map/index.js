@@ -1,7 +1,6 @@
 var ElementBase = require("../elementBase");
 var dot = require("../../lib/dot");
 var key = dot.compile(require("./_key.html"));
-var fipsKey = require("fips.sheet.json");
 require("./county-map.less");
 
 class CountyMap extends ElementBase {
@@ -10,20 +9,23 @@ class CountyMap extends ElementBase {
     this.cache = null;
     this.selected = null;
     this.svg = null;
+    this.fipsLookup = {};
   }
 
   static get template() {
     return `
       <div class="container" data-as="container">
         <div class="key" data-as="key"></div>
-        <div class="map" data-as="map"></div>
-        <div class="tooltip" data-as="tooltip"></div>
+        <div class="map-container">
+          <div class="map" data-as="map"></div>
+          <div class="tooltip" data-as="tooltip"></div>
+        </div>
       </div>
     `;
   }
 
   static get boundMethods() {
-    return ["onClick"];
+    return ["onClick", "onMove"];
   }
 
   static get observedAttributes() {
@@ -40,6 +42,13 @@ class CountyMap extends ElementBase {
         this.loadSVG(value);
         break;
     }
+  }
+
+  illuminate() {
+    var elements = super.illuminate();
+    elements.map.addEventListener("click", this.onClick);
+    elements.map.addEventListener("mousemove", this.onMove);
+    return elements;
   }
 
   highlightCounty(fips) {
@@ -59,8 +68,6 @@ class CountyMap extends ElementBase {
     var response = await fetch(url);
     var content = await response.text();
     elements.map.innerHTML = content;
-
-    var tooltip = elements.tooltip;
 
     var svg = elements.map.querySelector("svg");
     svg.setAttribute("preserveAspectRatio", "xMaxYMid meet");
@@ -87,27 +94,6 @@ class CountyMap extends ElementBase {
     elements.container.classList.toggle("horizontal", width < height);
 
     this.svg = svg;
-    this.svg.addEventListener("click", this.onClick);
-    this.svg.addEventListener("mousemove", function(e) {
-      var fips = e.target.id.replace("fips-", "");
-      tooltip.innerHTML = fipsKey[fips].name;
-
-      var bounds = elements.map.getBoundingClientRect();
-      var x = e.clientX - bounds.left;
-      var y = e.clientY - bounds.top;
-      if (x > bounds.width / 2) {
-        x -= tooltip.offsetWidth + 10;
-      } else {
-        x += 10;
-      }
-      tooltip.style.left = x + "px";
-      tooltip.style.top = y + "px";
-
-      tooltip.classList.add("shown");
-    });
-    this.svg.addEventListener("mouseout", function(e) {
-      tooltip.classList.remove("shown");
-    });
 
     this.paint();
   }
@@ -124,9 +110,10 @@ class CountyMap extends ElementBase {
     var { palette, results } = this.cache;
 
     var winners = new Set();
-    results.forEach(function(r) {
+    results.forEach(r => {
       var [top] = r.candidates.sort((a, b) => b.percentage - a.percentage);
       winners.add(top.id in palette ? top.id : "other");
+      this.fipsLookup[r.fips] = r.county;
     });
 
     var lookup = {};
@@ -160,6 +147,29 @@ class CountyMap extends ElementBase {
       this.dispatch("map-click", { fips });
       this.highlightCounty(fips);
     }
+  }
+
+  onMove(e) {
+    var { tooltip, map } = this.illuminate();
+    var fips = e.target.id.replace("fips-", "");
+    if (!fips) {
+      return tooltip.classList.remove("shown");
+    }
+
+    tooltip.innerHTML = this.fipsLookup[fips];
+
+    var bounds = map.getBoundingClientRect();
+    var x = e.clientX - bounds.left;
+    var y = e.clientY - bounds.top;
+    if (x > bounds.width / 2) {
+      x -= tooltip.offsetWidth + 10;
+    } else {
+      x += 10;
+    }
+    tooltip.style.left = x + "px";
+    tooltip.style.top = y + "px";
+
+    tooltip.classList.add("shown");
   }
 }
 
