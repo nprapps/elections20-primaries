@@ -175,7 +175,7 @@ class CountyDetail extends ElementBase {
       };
     }
 
-    elements.map.render(palette, race.results);
+    elements.map.render(palette, race.results, this.dataset.state);
 
     counties = Object.keys(counties)
       .sort()

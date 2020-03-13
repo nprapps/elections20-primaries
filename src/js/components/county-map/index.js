@@ -3,6 +3,8 @@ var dot = require("../../lib/dot");
 var key = dot.compile(require("./_key.html"));
 require("./county-map.less");
 
+var specialStates = new Set(['IA', 'MA', 'OK', 'WA']);
+
 class CountyMap extends ElementBase {
   constructor() {
     super();
@@ -98,8 +100,8 @@ class CountyMap extends ElementBase {
     this.paint();
   }
 
-  render(palette, results) {
-    this.cache = { palette, results };
+  render(palette, results, state) {
+    this.cache = { palette, results, state };
     this.paint();
   }
 
@@ -107,7 +109,9 @@ class CountyMap extends ElementBase {
     var elements = this.illuminate();
 
     if (!this.cache || !this.svg) return;
-    var { palette, results } = this.cache;
+    var { palette, results, state } = this.cache;
+
+    this.classList.toggle("chonky", specialStates.has(state));
 
     var winners = new Set();
     results.forEach(r => {
