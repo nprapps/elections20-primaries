@@ -42,27 +42,30 @@ svg {
 }
 
 path {
-  stroke: white;
+  stroke: #ddd;
   fill-opacity: 0;
-  fill: transparent;
+  fill: white;
   stroke-width: 1;
   transition: fill-opacity 1s linear;
 
   &.painted {
     fill-opacity: .6;
+    stroke: #eee;
+    stroke-width: 1;
   }
 
   &:hover {
     cursor: pointer;
-    stroke-width: 2;
     fill-opacity: 1;
+    stroke-width: 2;
     transition-duration: 0s !important;
+    paint-order: stroke fill;
   }
 
   &.clicked {
+    stroke: #787878;
     stroke-width: 4;
     paint-order: stroke fill;
-    // stroke: fade(white, .5);
     fill-opacity: 1;
   }
 }
@@ -86,7 +89,7 @@ path {
     font-size: 0.9em;
     display: inline-block;
     vertical-align: top;
-    margin-right: 8px;
+    margin: 1px 8px 0 1px;
   }
 }
 
