@@ -127,7 +127,7 @@ class CountyMap extends ElementBase {
       var pigment = palette[top.id];
       var hitThreshold = r.reportingPercentage > 25;
 
-      path.style.fill = hitThreshold ? pigment ? pigment.color : "#787878" : "white";
+      path.style.fill = hitThreshold ? pigment ? pigment.color : "#bbb" : "white";
     }
 
     var pKeys = Object.keys(palette);

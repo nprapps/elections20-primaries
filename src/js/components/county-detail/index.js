@@ -170,7 +170,7 @@ class CountyDetail extends ElementBase {
       palette.other = {
         id: "other",
         last: "Other",
-        color: "#787878",
+        color: "#bbb",
         order: 999
       };
     }
