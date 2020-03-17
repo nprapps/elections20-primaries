@@ -29,7 +29,7 @@ president-results-multiple {
   }
 
   &[lineup="march17"] {
-    --primary-width: 85px;
+    --primary-width: 80px;
   }
 
   &[test]::before {
@@ -468,19 +468,13 @@ president-results-multiple {
   }
 
   &[lineup="march17"] {
-    @media @mobile-above {
-      .board-multiple .primary {
-        width: calc(100% / 4);
-      }
-    }
-
-    @media (min-width: 470px) and @desktop {
+    @media @tiny-above {
       .board-multiple {
         .results {
           width: 100%;
         }
         .primary {
-          width: calc(100% / 4);
+          width: calc(100% / 3);
         }
       }
     }
