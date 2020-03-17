@@ -63,6 +63,7 @@ class CountyMap extends ElementBase {
     var elements = super.illuminate();
     elements.map.addEventListener("click", this.onClick);
     elements.map.addEventListener("mousemove", this.onMove);
+    elements.map.addEventListener("mouseleave", this.onMove);
     return elements;
   }
 
@@ -177,7 +178,7 @@ class CountyMap extends ElementBase {
   onMove(e) {
     var { tooltip, map } = this.illuminate();
     var fips = e.target.id.replace("fips-", "");
-    if (!fips) {
+    if (!fips || e.type == "mouseleave") {
       return tooltip.classList.remove("shown");
     }
 
