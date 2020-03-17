@@ -7,13 +7,14 @@
       .replace(/^-+|[^\w\-]|-+$/g, "");
   };
 
-  var { activeMugs, schedule, stateRaces } = data;
+  var { activeMugs, schedule, stateRaces, eventDate } = data;
+  console.log(data.eventDate);
 %>
 
 <% Object.keys(schedule).forEach(function(closing) { %>
-  <% 
+  <%
   var races = schedule[closing];
-  races.forEach(function(r, i) { 
+  races.forEach(function(r, i) {
     var race = stateRaces[r.state];
   %>
   <!-- one "row" per state -->
@@ -28,23 +29,23 @@
       </div>
       <div class="state">
         <a
-          href="../states/<%= r.state %>.html#date=3%2F3%2F2020&office=P&party=Dem&counties=true"
+          href="../states/<%= r.state %>.html#date=<%= data.eventDate %>&office=P&party=Dem&counties=true"
           aria-label="See full results for <%= r.state %>">
-          <%= r.ap %>    
+          <%= r.ap %>
         </a>
       </div>
       <div class="dels"><%= r.delegates %> <span class="sr-only">delegates</span></div>
     </td>
 
     <% Object.keys(activeMugs).forEach(function(name) { %>
-    <% 
+    <%
         var candidate = race.results.byName[name];
         var leader = race.results.leader;
         var classes = [];
         if (candidate.winner) classes.push("winner");
         if (leader == candidate) classes.push("leader");
     %>
-    <td 
+    <td
       role="cell"
       data-candidate="<%= name %>"
       class="cand <%= classify(name) %> <%= classes.join(" ") %>"

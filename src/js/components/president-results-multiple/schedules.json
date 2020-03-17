@@ -1,5 +1,6 @@
 {
   "supertuesday": {
+    "eventDate": "3/3/2020",
     "schedule": {
       "7 p.m. ET": [
         { "state": "VT", "ap": "Vt.", "delegates": 16 },
@@ -33,6 +34,7 @@
     "candidates": ["Biden", "Bloomberg", "Gabbard", "Sanders", "Warren"]
   },
   "march10": {
+    "eventDate": "3/10/2020",
     "schedule": {
       "8 p.m. ET": [
         { "state": "MS", "ap": "Miss.", "delegates": 36 },
@@ -50,6 +52,7 @@
     "candidates": ["Biden", "Gabbard", "Sanders"]
   },
   "march17": {
+    "eventDate": "3/17/2020",
     "schedule": {
       "8 p.m. ET": [
         { "state": "FL", "ap": "Fla.", "delegates": 219 },

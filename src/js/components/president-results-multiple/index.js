@@ -183,13 +183,17 @@ class PresidentResultsMultiple extends ElementBase {
     });
 
     var schedule = getSchedule(lineup);
+    var eventDate = scheduleInfo[lineup].eventDate;
+    console.log(eventDate);
+    console.log(scheduleInfo[lineup].eventDate);
 
     // template!
     elements.resultsHeader.innerHTML = headerTemplate({ activeMugs });
     elements.results.innerHTML = resultTemplate({
       activeMugs,
       schedule,
-      stateRaces
+      stateRaces,
+      eventDate
     });
 
     this.checkIfOverflow();
