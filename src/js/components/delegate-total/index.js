@@ -27,7 +27,7 @@ class DelegateTotal extends ElementBase {
   }
 
   static get observedAttributes() {
-    return ["src"]
+    return ["src", "shown"]
   }
 
   attributeChangedCallback(attr, was, value) {
@@ -43,8 +43,13 @@ class DelegateTotal extends ElementBase {
     var timestamp = new Date(data.sum.updated);
     var updated = `As of ${formatTime(timestamp)} on ${formatAPDate(timestamp)}`;
 
+    var numShown = 3;
+    if (this.getAttribute("shown")) {
+      numShown = this.getAttribute("shown");
+    }
+
     candidates.sort((a, b) => b.total - a.total);
-    candidates = candidates.slice(0, 3);
+    candidates = candidates.slice(0, numShown);
 
     this.innerHTML = template({ needed, candidates, updated });
   }
