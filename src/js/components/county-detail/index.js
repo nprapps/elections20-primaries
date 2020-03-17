@@ -82,6 +82,7 @@ class CountyDetail extends ElementBase {
     var colors = colorKey.slice();
 
     var elements = this.illuminate();
+    this.classList.remove("uncontested");
     var data = this.cache;
     if (!data) return;
     var { races, test } = data;
@@ -98,12 +99,7 @@ class CountyDetail extends ElementBase {
     var fips = {};
     var totals = {};
 
-    // // TEST DATA
-    // results.forEach(function(r) {
-    //   r.candidates.forEach(function(c) {
-    //     c.votes = c.votes * (Math.floor(Math.random() * Math.floor(3)));
-    //   })
-    // })
+    var candidates = new Set();
 
     results.forEach(function(r) {
       var top = null;
@@ -120,6 +116,7 @@ class CountyDetail extends ElementBase {
           top = candidate;
         }
         delete candidate.winner;
+        candidates.add(candidate.id);
       });
       if (r.reportingPercentage == 100) {
         top.winner = true;
@@ -127,6 +124,11 @@ class CountyDetail extends ElementBase {
       counties[r.county] = r.fips;
       fips[r.fips] = r.county;
     });
+
+    if (candidates.size == 1) {
+      // suppress display for uncontested races
+      return this.classList.add("uncontested");
+    }
 
     // for future map use: determine the palette by statewide total position
     var statewide = Object.values(totals);

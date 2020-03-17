@@ -129,9 +129,13 @@ class CountyMap extends ElementBase {
     this.classList.toggle("chonky", specialStates.has(state));
 
     var winners = new Set();
+    var hasVotes = false;
     results.forEach(r => {
       var [top] = r.candidates.sort((a, b) => b.percentage - a.percentage);
-      winners.add(top.id in palette ? top.id : "other");
+      if (top.votes) {
+        winners.add(top.id in palette ? top.id : "other");
+        hasVotes = true;
+      }
       this.fipsLookup[r.fips] = r;
     });
 
@@ -156,13 +160,15 @@ class CountyMap extends ElementBase {
       path.style.fill = paint;
     }
 
-    var pKeys = Object.keys(palette);
-    var keyData = pKeys
-      .map(p => palette[p])
-      .sort((a, b) => (a.order < b.order ? -1 : 1));
-    var filtered = keyData.filter(p => winners.has(p.id));
-    keyData = filtered.length < 2 ? keyData.slice(0, 2) : filtered;
-    elements.key.innerHTML = key({ keyData, incomplete });
+    if (hasVotes) {
+      var pKeys = Object.keys(palette);
+      var keyData = pKeys
+        .map(p => palette[p])
+        .sort((a, b) => (a.order < b.order ? -1 : 1));
+      var filtered = keyData.filter(p => winners.has(p.id));
+      keyData = filtered.length < 2 ? keyData.slice(0, 2) : filtered;
+      elements.key.innerHTML = key({ keyData, incomplete });
+    }
   }
 
   onClick(e) {

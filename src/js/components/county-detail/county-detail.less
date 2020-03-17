@@ -1,6 +1,21 @@
 @import "../../../css/base.less";
 
 county-detail {
+  .uncontested-message {
+    font-style: italic;
+    display: none;
+  }
+
+  &.uncontested {
+    .uncontested-message {
+      display: block;
+    }
+
+    county-map, .county-results {
+      display: none;
+    }
+  }
+
   .controls {
 
     label {
