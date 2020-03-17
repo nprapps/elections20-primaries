@@ -66,18 +66,30 @@ delegate-total {
         width: 100%;
       }
     }
+  }
 
-    li {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px;
-      background: var(--shaded);
-      color: var(--primary);
-      margin-bottom: 4px;
-      align-items: center;
-      height: 4em;
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+    background: var(--shaded);
+    color: var(--primary);
+    margin-bottom: 4px;
+    align-items: center;
+    height: 4em;
 
-      @media @tablet {
+    @media @tablet {
+      display: block;
+      width: 33%;
+
+      span {
+        display: block;
+        text-align: center;
+      }
+    }
+
+    .extra-data-column & {
+      @media @desktop {
         display: block;
         width: 33%;
 
@@ -86,33 +98,33 @@ delegate-total {
           text-align: center;
         }
       }
+    }
+  }
 
-      .extra-data-column & {
-        @media @desktop {
-          display: block;
-          width: 33%;
-
-          span {
-            display: block;
-            text-align: center;
-          }
-        }
-      }
+  &[shown="2"] li {
+    @media @tablet {
+      width: calc(50% - 1px);
     }
 
-    .count {
-      text-align: right;
+    .extra-data-column & {
+      @media @desktop {
+        width: calc(50% - 1px);
+      }
+    }
+  }
 
-      @media @tablet {
+  .count {
+    text-align: right;
+
+    @media @tablet {
+      text-align: center;
+      margin-top: 3px;
+    }
+
+    .extra-data-column & {
+      @media @desktop {
         text-align: center;
         margin-top: 3px;
-      }
-
-      .extra-data-column & {
-        @media @desktop {
-          text-align: center;
-          margin-top: 3px;
-        }
       }
     }
   }
