@@ -51,9 +51,6 @@
   },
   "march17": {
     "schedule": {
-      "7:30 p.m. ET": [
-        { "state": "OH", "ap": "Ohio", "delegates": 136 }
-      ],
       "8 p.m. ET": [
         { "state": "FL", "ap": "Fla.", "delegates": 219 },
         { "state": "IL", "ap": "Ill.", "delegates": 155 }
