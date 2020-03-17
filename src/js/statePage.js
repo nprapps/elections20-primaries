@@ -196,6 +196,7 @@ selectBox.addEventListener("change", function() {
 // listen for update events and fix the footer if heard
 var lastUpdate = 0;
 var updateSpan = $.one(".page-timestamp");
+
 document.body.addEventListener("updatedtime", function(e) {
   var { updated } = e.detail;
   if (updated > lastUpdate) {

@@ -7,6 +7,7 @@ Things passed into this page:
 * stateFull: the full state name
 * stateAP: AP abbreviation
   */
+
 var { seo, strings } = grunt.data.json;
 var metadata = {
   project: Object.assign({}, grunt.data.json.project, {
@@ -174,7 +175,7 @@ var getDescriptors = function(item) {
               <% } %>
               results by county
             </h2>
-            <%= t.include("statePartials/_counties.html", { row }) %>
+            <%= t.include("statePartials/_counties.html", { row, state }) %>
           </div>
           <% } %>
 
