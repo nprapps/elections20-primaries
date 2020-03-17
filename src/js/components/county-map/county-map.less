@@ -2,7 +2,7 @@
 
 county-map {
   display: block;
-  
+
   .container {
     display: flex;
     align-items: center;
@@ -54,10 +54,14 @@ county-map {
       font-weight: bold;
     }
 
-    .pop, .reporting {
+    .pop,
+    .reporting,
+    .result {
       font-size: .9rem;
       .knockout();
       color: #787878;
+
+      &:empty { display: none; }
     }
   }
 
@@ -83,7 +87,7 @@ county-map {
     /*transition: fill-opacity 1s linear;*/
 
     &.painted {
-      fill-opacity: .6;
+      fill-opacity: .75;
       stroke: #eee;
       stroke-width: 1;
     }

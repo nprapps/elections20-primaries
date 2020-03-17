@@ -139,7 +139,7 @@ class CountyMap extends ElementBase {
       var { fips, candidates } = r;
       var [top] = candidates.sort((a, b) => b.percentage - a.percentage);
       if (!top.votes) continue;
-      
+
       var path = this.svg.querySelector(`[id="fips-${fips}"]`);
       path.classList.add("painted");
       var pigment = palette[top.id];
@@ -183,15 +183,21 @@ class CountyMap extends ElementBase {
 
     var result = this.fipsLookup[fips];
     if (result) {
+      var candText = "";
+      if (result.reportingPercentage > 25) {
+        var leadingCandidate = result.candidates[0];
+        var prefix = leadingCandidate.winner ? "Winner: " : "Leading: ";
+        var candText = prefix + leadingCandidate.last + " (" + leadingCandidate.percentage.toFixed(1) + "%)";
+      }
+
       var countyDisplay = result.county.replace(/\s[a-z]/g, match =>
         match.toUpperCase()
       );
       tooltip.innerHTML = `
         <div class="name">${countyDisplay}</div>
         <div class="pop">Pop. ${result.population.toLocaleString()}</div>
-        <div class="reporting">
-        ${result.reportingPercentage.toFixed(1)}% reporting
-        </div>
+        <div class="result">${ candText }</div>
+        <div class="reporting">${result.reportingPercentage.toFixed(1)}% reporting</div>
       `;
     }
 
