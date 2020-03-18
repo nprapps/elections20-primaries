@@ -76,6 +76,7 @@ class HousePrimary extends ElementBase {
     var max = this.getAttribute("max");
     var party = this.getAttribute("party");
     var host = this.getAttribute("host");
+    var district = this.getAttribute("district");
 
     var groupedResults = groupBy(this.cache.races, "seat");
     var seats = Object.keys(groupedResults).map(function(id) {
@@ -94,11 +95,12 @@ class HousePrimary extends ElementBase {
 
       seatElements.seat.innerHTML = `District ${race.id}`;
 
+      toggleAttribute(element, "hidden", district && race.id != district);
+
       element.dataset.count = race.results.length;
 
       race.results.sort((a, b) => a.party < b.party ? -1 : 1);
 
-      toggleAttribute(element, "hidden", party && race.party != party);
       // create result tables
       var pairs = mapToElements(seatElements.results, race.results, "results-table");
 
@@ -109,6 +111,8 @@ class HousePrimary extends ElementBase {
         if (href) child.setAttribute("href", href);
         child.setAttribute("max", 99);
         toggleAttribute(child, "test", test);
+
+        toggleAttribute(child, "hidden", party && data.party != party);
         
         var readableParty = data.party == "Dem" ? "Democratic" : (data.party || "Open");
         var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;

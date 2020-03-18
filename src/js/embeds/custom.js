@@ -47,4 +47,8 @@ if (!elementMap[race]) {
     row.innerHTML = "";
     row.appendChild(tag);
   }
+
+  if (search.has("district")) {
+    tag.setAttribute("district", search.get("district"));
+  }
 }
