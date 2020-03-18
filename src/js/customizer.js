@@ -61,6 +61,9 @@ var onFormChange = function() {
     if (formData.link) {
       url.searchParams.set("link", `${prefix}states/${stateSelect.value}.html`);
     }
+    if (formData.district) {
+      url.searchParams.set("district", formData.district);
+    }
   }
   var embedHTML = `<p
   data-pym-loader
@@ -74,7 +77,10 @@ var onFormChange = function() {
   preview.setAttribute("src", url.toString().replace(prefix, ""));
 }
 
-$("select[name], input[name]").forEach(el => el.addEventListener("change", onFormChange));
+$("select[name], input[name]").forEach(el => {
+  el.addEventListener("change", onFormChange);
+  el.addEventListener("keyup", onFormChange);
+});
 
 var onStateChange = function() {
   raceSelect.innerHTML = "";
