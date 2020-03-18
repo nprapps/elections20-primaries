@@ -106,7 +106,7 @@ class CountyMap extends ElementBase {
       var ratio = width / height;
       var basis;
       if (embedded) {
-        basis = 30;
+        basis = window.innerWidth > 500 ? 30 : 20;
       } else {
         basis = height > width * 1.1 ? 65 : 55;
       }
