@@ -96,13 +96,20 @@ class CountyMap extends ElementBase {
 
     var width = svg.getAttribute("width") * 1;
     var height = svg.getAttribute("height") * 1;
+    var embedded = document.querySelector("body").classList.contains("embedded");
+
     if (width > height * 1.4) {
       var ratio = height / width;
       elements.mapContainer.style.width = "100%";
       elements.mapContainer.style.paddingBottom = `${100 * ratio}%`;
     } else {
       var ratio = width / height;
-      var basis = height > width * 1.1 ? 65 : 55;
+      var basis;
+      if (embedded) {
+        basis = 30;
+      } else {
+        basis = height > width * 1.1 ? 65 : 55;
+      }
       elements.mapContainer.style.height = basis + "vh";
       elements.mapContainer.style.width = `${basis * ratio}vh`;
     }
