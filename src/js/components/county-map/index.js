@@ -96,7 +96,8 @@ class CountyMap extends ElementBase {
 
     var width = svg.getAttribute("width") * 1;
     var height = svg.getAttribute("height") * 1;
-    var embedded = document.querySelector("body").classList.contains("embedded");
+    var embedded = document.body.classList.contains("embedded");
+    var bounds = this.getBoundingClientRect();
 
     if (width > height * 1.4) {
       var ratio = height / width;
@@ -104,14 +105,20 @@ class CountyMap extends ElementBase {
       elements.mapContainer.style.paddingBottom = `${100 * ratio}%`;
     } else {
       var ratio = width / height;
-      var basis;
       if (embedded) {
-        basis = window.innerWidth > 500 ? 30 : 20;
+        var w = 500;
+        var h = w * ratio;
+        if (w > window.innerWidth) {
+          w = window.innerWidth - 32;
+          h = w * ratio;
+        }
+        elements.mapContainer.style.height = w + "px";
+        elements.mapContainer.style.width = h + "px";
       } else {
-        basis = height > width * 1.1 ? 65 : 55;
+        var basis = height > width * 1.1 ? 65 : 55;
+        elements.mapContainer.style.height = basis + "vh";
+        elements.mapContainer.style.width = `${basis * ratio}vh`;
       }
-      elements.mapContainer.style.height = basis + "vh";
-      elements.mapContainer.style.width = `${basis * ratio}vh`;
     }
     // elements.aspect.style.paddingBottom = height / width * 100 + "%";
     elements.container.classList.toggle("horizontal", width < height);
