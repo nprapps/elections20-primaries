@@ -62,7 +62,8 @@ module.exports = function(grunt) {
     });
 
     //generate state pages
-    var states = [...new Set(grunt.data.json.races.map(r => r.state))].sort();
+    var nonFeed = grunt.data.json.races.filter(r => !r.feedOnly && r.states);
+    var states = [...new Set(nonFeed.flatMap(r => r.states))].sort();
     if (grunt.option("state")) {
       var filter = grunt.option("state");
       states = states.filter(s => filter instanceof Array ? filter.indexOf(s) > -1 : s == filter);
