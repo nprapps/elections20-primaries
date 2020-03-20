@@ -121,8 +121,8 @@
           Object.keys(byDay).sort((a, b) => a - b).forEach(function(d) {
             var day = byDay[d];
             day.sort(function(a, b) {
-              var aIndex = a.implicit ? 1 : 0;
-              var bIndex = b.implicit ? 1 : 0;
+              var aIndex = a.link ? 0 : 1;
+              var bIndex = b.link ? 0 : 1;
               if (aIndex == bIndex) {
                 return a.title < b.title ? -1 : 1;
               }
