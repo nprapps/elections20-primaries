@@ -154,7 +154,7 @@
                 |
                 </span>
                 <% }%>
-                <% if (event.races) { %>
+                <% if (event.races && event.races.length) { %>
                 <span class="results-label">Results:</span>
                   <%= event.races.map(r => `
   <a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}">
