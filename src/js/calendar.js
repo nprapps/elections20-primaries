@@ -21,3 +21,19 @@ events.forEach(function(event) {
     coverageLink.forEach(a => a.remove());
   }
 });
+
+var months = $("section.month");
+var pastMonths = months.filter(function(section) {
+  var month = section.dataset.month;
+  var thisMonth = now.getMonth() + 1;
+  return month < thisMonth;
+});
+
+if (pastMonths.length) {
+  var previousLink = $.one("a.jump-to-past");
+  previousLink.classList.add("show");
+
+  var previousContainer = $.one("#past-months");
+  previousContainer.classList.add("show");
+  pastMonths.forEach(p => previousContainer.appendChild(p));
+}

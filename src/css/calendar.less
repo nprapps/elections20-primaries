@@ -167,4 +167,27 @@ main.calendar {
     }
 
   }
+
+  #past-months {
+    display: none;
+
+    & > h2 {
+      font-size: 1.6em;
+      padding-bottom: 20px;
+    }
+
+    &.show {
+      display: block;
+    }
+  }
+
+  .jump-to-past {
+    display: none;
+    text-transform: uppercase;
+    text-align: right;
+
+    &.show {
+      display: block;
+    }
+  }
 }

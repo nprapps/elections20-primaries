@@ -45,6 +45,9 @@
 
       <div class="main">
         <h1>2020 Election Calendar</h1>
+
+        <a class="jump-to-past" href="#past-months">See past calendar months &darr;</a>
+
         <%
           var { races, nonraces, strings } = grunt.data.json;
           // make a copy
@@ -115,59 +118,67 @@
           Object.keys(byMonth).sort((a, b) => a - b).forEach(function(m) {
         %>
 
-        <h2><%= monthNames[m] %></h2>
-        <%
-          var byDay = groupBy(byMonth[m], "day");
-          Object.keys(byDay).sort((a, b) => a - b).forEach(function(d) {
-            var day = byDay[d];
-            day.sort(function(a, b) {
-              var aIndex = a.link ? 0 : 1;
-              var bIndex = b.link ? 0 : 1;
-              if (aIndex == bIndex) {
-                return a.title < b.title ? -1 : 1;
-              }
-              return aIndex - bIndex;
-            })
-            day.forEach(function(event, i) {
-        %>
+        <section class="month" data-month="<%= m %>">
 
-        <div class="event-row index-<%= i%> " data-days="<%= event.days %>">
-          <div class="date">
-            <% if (event.date_prose) { %>
-              <%= event.date_prose %>
-            <% } else { %>
-              <%= event.dateText %><% if (event.dateTextEnd) { %>-<%= event.dateTextEnd %><% } %>
-            <% } %>
-          </div>
+          <h2><%= monthNames[m] %></h2>
+          <%
+            var byDay = groupBy(byMonth[m], "day");
+            Object.keys(byDay).sort((a, b) => a - b).forEach(function(d) {
+              var day = byDay[d];
+              day.sort(function(a, b) {
+                var aIndex = a.link ? 0 : 1;
+                var bIndex = b.link ? 0 : 1;
+                if (aIndex == bIndex) {
+                  return a.title < b.title ? -1 : 1;
+                }
+                return aIndex - bIndex;
+              })
+              day.forEach(function(event, i) {
+          %>
 
-            <div class="category <%= classify(event.category) %>"><span class="pill"><%= event.category %></span></div>
+          <div class="event-row index-<%= i%> " data-days="<%= event.days %>">
+            <div class="date">
+              <% if (event.date_prose) { %>
+                <%= event.date_prose %>
+              <% } else { %>
+                <%= event.dateText %><% if (event.dateTextEnd) { %>-<%= event.dateTextEnd %><% } %>
+              <% } %>
+            </div>
 
-            <div class="content">
-              <div class="title"><%= event.title %></div>
-              <div class="desc"><%= event.description %></div>
-              <div class="links">
-                <% if (event.link) { %>
-                <a class="coverage-link" href="<%= event.link %>">NPR coverage</a>
-                <% } %>
-                <% if (event.link && event.races) { %>
-                <span class="results-label">
-                |
-                </span>
-                <% }%>
-                <% if (event.races && event.races.length) { %>
-                <span class="results-label">Results:</span>
-                  <%= event.races.map(r => `
-  <a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}">
-  ${strings[r.office]}${r.special || r.general || r.runoff ? " - " + getDescriptors(r) : ""}</a>`).join(", ") %>
-                <% } %>
+              <div class="category <%= classify(event.category) %>"><span class="pill"><%= event.category %></span></div>
+
+              <div class="content">
+                <div class="title"><%= event.title %></div>
+                <div class="desc"><%= event.description %></div>
+                <div class="links">
+                  <% if (event.link) { %>
+                  <a class="coverage-link" href="<%= event.link %>">NPR coverage</a>
+                  <% } %>
+                  <% if (event.link && event.races) { %>
+                  <span class="results-label">
+                  |
+                  </span>
+                  <% }%>
+                  <% if (event.races && event.races.length) { %>
+                  <span class="results-label">Results:</span>
+                    <%= event.races.map(r => `
+    <a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}">
+    ${strings[r.office]}${r.special || r.general || r.runoff ? " - " + getDescriptors(r) : ""}</a>`).join(", ") %>
+                  <% } %>
+                </div>
               </div>
             </div>
-          </div>
-        <%
-              }); //event
-            }); // day
+          <%
+                }); //event
+              }); // day
+          %>
+          </section>
+          <%
           }); // month
         %>
+        <div id="past-months">
+          <h2 class="section-header">Past events</h2>
+        </div>
       </div> <!-- the content div -->
     </main>
 
