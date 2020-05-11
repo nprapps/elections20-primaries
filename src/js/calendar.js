@@ -13,7 +13,7 @@ events.forEach(function(event) {
     // var links = $.one(".links", event);
     // links.remove();
     // if we just want liks to not be clickable
-    var links = $("[href]", event);
+    var links = $(".links [href]", event);
     links.forEach(a => a.removeAttribute("href"));
     var resultsLabel = $(".results-label", event);
     resultsLabel.forEach(a => a.remove());
