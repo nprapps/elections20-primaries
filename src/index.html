@@ -7,7 +7,7 @@
       .replace(/^-+|[^\w\-]|-+$/g, "");
   };
 
-  var { seo } = grunt.data.json;  
+  var { seo } = grunt.data.json;
   var metadata = {
     project: Object.assign({}, grunt.data.json.project, {
       title: seo.calendarTitle,
@@ -46,7 +46,7 @@
       <div class="main">
         <h1>2020 Election Calendar</h1>
 
-        <a class="jump-to-past" href="#past-months">See past calendar months &darr;</a>
+        <a class="jump-to-past" href="#past-months">See past months &darr;</a>
 
         <%
           var { races, nonraces, strings } = grunt.data.json;
