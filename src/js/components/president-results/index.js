@@ -62,10 +62,12 @@ class PresidentResults extends ElementBase {
     this.setAttribute("party", data.party);
     // assign mugs and normalize percentages
     var hasIncumbent = false;
+    var called = false
     candidates.forEach(function(c) {
       c.mugshot = mugs[c.last] ? mugs[c.last].src : "";
       c.percentage = c.percentage || 0;
       hasIncumbent = c.incumbent || hasIncumbent;
+      called = !!c.winner || called;
     });
     elements.incumbency.style.display = hasIncumbent ? "" : "none";
     // check for existing votes
@@ -106,7 +108,7 @@ class PresidentResults extends ElementBase {
       }
       return true;
     });
-    if (hasVotes && others.votes == 0) {
+    if ((hasVotes || called) && !others.votes) {
       candidates = candidates.filter(c => c != others);
     }
 
@@ -119,6 +121,9 @@ class PresidentResults extends ElementBase {
     } else {
       this.removeAttribute("overflow");
     }
+
+    // if we only have one candidate (uncontested) don't show county results
+    elements.resultsLink.style.display = candidates.length < 2 ? "none" : "";
 
     // insert content
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));

@@ -83,6 +83,10 @@ president-results {
       }
     }
 
+    &.uncontested .thead .duplicate {
+      display: none;
+    }
+
     .thead {
       .knockout-header();
       color: var(--secondary);
@@ -219,6 +223,10 @@ president-results {
 
     .incumbent .incumbent-icon {
       display: inline-block;
+    }
+
+    .uncontested.votes {
+      font-style: italic;
     }
 
   }
