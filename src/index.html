@@ -76,7 +76,7 @@
             if (n.state) {
               n.races = [];
               races = races.filter(function(r) {
-                if (r.state == n.state && r.date == n.date) {
+                if (r.state == n.state && (r.displayDate || r.date) == n.date) {
                   n.races.push(r);
                   return false;
                 }
@@ -87,10 +87,11 @@
           // now add orphan races
           while (races.length) {
             var r = races.shift();
-            var [m, d, y] = r.date.split("/").map(Number);
+            var date = r.displayDate || r.date;
+            var [m, d, y] = date.split("/").map(Number);
             // create dummy event
             var event = {
-              date: r.date,
+              date,
               month: m,
               day: d,
               days: r.days,
@@ -103,7 +104,7 @@
             events.push(event);
             // add matching races to the event
             races = races.filter(function(race) {
-              if (race.state == r.state && race.date == r.date) {
+              if (race.state == r.state && (race.displayDate || race.date) == date) {
                 event.races.push(race);
                 return false;
               }
@@ -162,7 +163,7 @@
                   <% if (event.races && event.races.length) { %>
                   <span class="results-label">Results:</span>
                     <%= event.races.map(r => `
-    <a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}">
+    <a href="states/${r.state}.html#date=${r.date}&office=${r.office}${r.special ? "&special=true" : ""}" data-days="${r.days}">
     ${strings[r.office]}${r.special || r.general || r.runoff ? " - " + getDescriptors(r) : ""}</a>`).join(", ") %>
                   <% } %>
                 </div>

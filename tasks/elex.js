@@ -73,6 +73,9 @@ module.exports = function(grunt) {
       // assign a timestamp
       var [m, d, y] = r.date.split("/");
       r.days = inDays(r.date);
+      if (r.displayDate) {
+        r.displayDays = inDays(r.displayDate);
+      }
       if (r.days < today && r.days > latest) latest = r.days;
       r.timestamp = moment(r.date, "MM/DD/YYYY").toDate();
       // split race IDs

@@ -87,7 +87,8 @@ module.exports = function(grunt) {
       var months = "Jan. Feb. March April May June July Aug. Sept. Oct. Nov. Dec.".split(" ");
       
       var displays = schedule.slice().sort(oldestFirst).map(function(race) {
-        var [m, d] = race.date.split("/").map(Number);
+        var date = race.displayDate || race.date;
+        var [m, d] = date.split("/").map(Number);
         var item = {
           office: grunt.data.json.strings[race.office],
           date: [months[m - 1], d].join(" "),
