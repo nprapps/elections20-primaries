@@ -63,5 +63,27 @@
       ]
     },
     "candidates": ["Biden", "Sanders"]
+  },
+  "june2": {
+    "eventDate": "6/2/2020",
+    "schedule": {
+      "7 p.m. ET": [
+        { "state": "IN", "ap": "Ind.", "delegates": 82 }
+      ],
+      "8 p.m. ET": [
+        { "state": "DC", "ap": "D.C.", "delegates": 20 },
+        { "state": "MD", "ap": "Md.", "delegates": 96 },
+        { "state": "PA", "ap": "Pa.", "delegates": 186 },
+        { "state": "RI", "ap": "R.I.", "delegates": 26 }
+      ],
+      "9 p.m. ET": [
+        { "state": "NM", "ap": "N.M.", "delegates": 34 },
+        { "state": "SD", "ap": "S.D.", "delegates": 16 }
+      ],
+      "10 p.m. ET": [
+        { "state": "MT", "ap": "Mont.", "delegates": 19 }
+      ]
+    },
+    "candidates": ["Biden", "Sanders"]
   }
 }
