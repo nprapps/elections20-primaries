@@ -78,6 +78,10 @@ class HousePrimary extends ElementBase {
     var host = this.getAttribute("host");
     var district = this.getAttribute("district");
 
+    this.cache.races.forEach(function(race) {
+      if (!race.seat) race.seat = "(at-large)";
+    });
+
     var groupedResults = groupBy(this.cache.races, "seat");
     var seats = Object.keys(groupedResults).map(function(id) {
       return {
@@ -93,9 +97,7 @@ class HousePrimary extends ElementBase {
 
       var seatElements = element.illuminate();
 
-      var d = !race.id || race.id == "undefined" ? "(at-large)" : race.id;
-
-      seatElements.seat.innerHTML = `District ${d}`;
+      seatElements.seat.innerHTML = `District ${race.id}`;
 
       toggleAttribute(element, "hidden", district && race.id != district);
 
