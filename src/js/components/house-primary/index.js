@@ -93,7 +93,9 @@ class HousePrimary extends ElementBase {
 
       var seatElements = element.illuminate();
 
-      seatElements.seat.innerHTML = `District ${race.id}`;
+      var d = !race.id || race.id == "undefined" ? "(at-large)" : race.id;
+
+      seatElements.seat.innerHTML = `District ${d}`;
 
       toggleAttribute(element, "hidden", district && race.id != district);
 
