@@ -65,10 +65,11 @@ var onFormChange = function() {
       url.searchParams.set("district", formData.district);
     }
   }
+  var idParts = [stateSelect.value, race, date || "state", formData.district];
   var embedHTML = `<p
   data-pym-loader
   data-child-src="${url.toString()}"
-  id="responsive-embed-${stateSelect.value}-${race}-${(date || "state").replace(/\//g, "")}-">
+  id="responsive-embed-${idParts.filter(p => p).join("-").replace(/\//g, "-")}">
     Loading...
 </p>
 <script src="https://pym.nprapps.org/npr-pym-loader.v2.min.js"></script>`;
