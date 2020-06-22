@@ -99,7 +99,7 @@ class StandardPrimary extends ElementBase {
         }
 
         if (href && href != "false") child.setAttribute("href", href);
-        if (max) child.setAttribute("max", max);
+        child.setAttribute("max", max || 99);
         toggleAttribute(child, "test", test);
 
         child.setAttribute("headline", headline);
