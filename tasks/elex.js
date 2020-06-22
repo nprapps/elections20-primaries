@@ -157,6 +157,9 @@ module.exports = function(grunt) {
             closing: contest.closing,
             chatter: contest.chatter,
             footnote: contest.footnote,
+            special: contest.special,
+            general: contest.general,
+            runoff: contest.runoff,
             races: subsetResults("state")
           };
 

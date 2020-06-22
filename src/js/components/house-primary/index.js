@@ -67,7 +67,7 @@ class HousePrimary extends ElementBase {
     var elements = this.illuminate();
 
     if (!this.cache) return;
-    var { races, chatter, footnote } = this.cache;
+    var { races, chatter, footnote, general, special, runoff } = this.cache;
 
     elements.chatter.innerHTML = chatter || "";
     elements.footnote.innerHTML = footnote || "";
@@ -119,10 +119,12 @@ class HousePrimary extends ElementBase {
         toggleAttribute(child, "hidden", party && data.party != party);
         
         var readableParty = data.party == "Dem" ? "Democratic" : (data.party || "Open");
-        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
+        var raceType = general ? "election" : "primary";
+        if (special) raceType = "special " + raceType;
+        var headline = `${strings[race.state + "-AP"]} ${readableParty} ${raceType}`;
 
         if (host == "statepage") {
-          headline = `${readableParty} primary`;
+          headline = `${readableParty} ${raceType}`;
         }
 
         child.setAttribute("headline", headline);
