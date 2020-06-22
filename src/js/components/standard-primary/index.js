@@ -81,10 +81,14 @@ class StandardPrimary extends ElementBase {
         var max = this.getAttribute("max");
         var host = this.getAttribute("host");
 
+        if (max) child.setAttribute("max", max);
+
         var readableParty = data.party == "Dem" ? "Democratic" : data.party;
         var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
 
+
         if (host == "statepage") {
+          child.setAttribute("max", 99);
           headline = `${readableParty} primary`;
           if (href != "false") {
             var search = new URLSearchParams("counties=true");
@@ -99,7 +103,6 @@ class StandardPrimary extends ElementBase {
         }
 
         if (href && href != "false") child.setAttribute("href", href);
-        child.setAttribute("max", max || 99);
         toggleAttribute(child, "test", test);
 
         child.setAttribute("headline", headline);
