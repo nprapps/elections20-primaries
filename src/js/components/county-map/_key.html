@@ -8,7 +8,7 @@
   <% if (data.incomplete) { %>
     <div class="key-row">
       <svg class="swatch" viewBox="0 0 40 40">
-        <rect fill="url(#pending)" width="100%" height="100%" />
+        <rect fill="url(#pending-<%= data.guid %>)" width="100%" height="100%" />
       </svg>
       <div class="name">Early results in</div>
     </div>

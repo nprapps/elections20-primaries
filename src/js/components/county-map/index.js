@@ -187,7 +187,7 @@ class CountyMap extends ElementBase {
         .sort((a, b) => (a.order < b.order ? -1 : 1));
       var filtered = keyData.filter(p => winners.has(p.id));
       keyData = filtered.length < 2 ? keyData.slice(0, 2) : filtered;
-      elements.key.innerHTML = key({ keyData, incomplete });
+      elements.key.innerHTML = key({ keyData, incomplete, guid: this.guid });
     }
   }
 
