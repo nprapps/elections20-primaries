@@ -5,6 +5,8 @@ require("./county-map.less");
 
 var specialStates = new Set(['IA', 'MA', 'OK', 'WA']);
 
+var guid = 0;
+
 class CountyMap extends ElementBase {
   constructor() {
     super();
@@ -12,6 +14,7 @@ class CountyMap extends ElementBase {
     this.selected = null;
     this.svg = null;
     this.fipsLookup = {};
+    this.guid = guid++;
   }
 
   static get template() {
@@ -19,6 +22,7 @@ class CountyMap extends ElementBase {
       <div class="container" data-as="container">
         <svg class="patterns" style="opacity: 0; position: absolute; left: -1000px">
           <pattern id="pending"
+            class="stripes"
             width="10" height="10"
             patternUnits="userSpaceOnUse"
             patternTransform="rotate(-45)"
@@ -64,6 +68,8 @@ class CountyMap extends ElementBase {
     elements.map.addEventListener("click", this.onClick);
     elements.map.addEventListener("mousemove", this.onMove);
     elements.map.addEventListener("mouseleave", this.onMove);
+    var pattern = this.querySelector("pattern.stripes");
+    pattern.id = `pending-${this.guid}`;
     return elements;
   }
 
@@ -167,7 +173,7 @@ class CountyMap extends ElementBase {
       if (hitThreshold) {
         paint = pigment ? pigment.color : "#bbb"
       } else {
-        paint = `url(#pending)`;
+        paint = `url(#pending-${this.guid})`;
         incomplete = true;
       }
 
