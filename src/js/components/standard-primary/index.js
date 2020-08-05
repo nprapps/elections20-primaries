@@ -83,7 +83,7 @@ class StandardPrimary extends ElementBase {
 
         if (max) child.setAttribute("max", max);
 
-        var readableParty = data.party == "Dem" ? "Democratic" : data.party;
+        var readableParty = data.party == "Dem" ? "Democratic" : data.party || "Open";
         var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
 
 

@@ -88,10 +88,11 @@ class CountyDetail extends ElementBase {
     var { races, test } = data;
 
     var party = this.getAttribute("party");
+    if (!party || party == "undefined") party = false;
 
     // filter races by type - no weird alignments
     var [race] = races.filter(
-      r => r.party == party && r.type && !r.type.match(/alignment/i)
+      r => (party ? r.party == party : true) && r.type && !r.type.match(/alignment/i)
     );
 
     var results = race.results;
@@ -212,12 +213,13 @@ class CountyDetail extends ElementBase {
     var { resultsTable } = elements;
     var data = this.cache;
     var party = this.getAttribute("party");
-    if (!data || !party) return;
+    if (!party || party == "undefined") party = false;
+    if (!data) return;
 
     var { races } = data;
     // filter races by type - no weird alignments
     var [race] = races.filter(
-      r => r.party == party && r.type && !r.type.match(/alignment/i)
+      r => (party ? r.party == party : true) && r.type && !r.type.match(/alignment/i)
     );
     var [result] = race.results.filter(r => r.fips == fips);
 
