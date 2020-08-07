@@ -214,7 +214,7 @@ class CountyMap extends ElementBase {
       if (result.reportingPercentage > 25) {
         var leadingCandidate = result.candidates[0];
         var prefix = leadingCandidate.winner ? "Winner: " : "Leading: ";
-        var candText = prefix + leadingCandidate.last + " (" + leadingCandidate.percentage.toFixed(1) + "%)";
+        var candText = prefix + leadingCandidate.last + " (" + (leadingCandidate.percentage || 0).toFixed(1) + "%)";
       }
 
       var countyDisplay = result.county.replace(/\s[a-z]/g, match =>
