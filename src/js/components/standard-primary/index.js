@@ -64,6 +64,7 @@ class StandardPrimary extends ElementBase {
     elements.footnote.innerHTML = footnote || "";
 
     var party = this.getAttribute("party");
+    if (party == "undefined") party = null;
 
     var races = mapToElements(elements.results, this.cache.races);
     races.forEach(([race, element]) => {
@@ -93,7 +94,7 @@ class StandardPrimary extends ElementBase {
           if (href != "false") {
             var search = new URLSearchParams("counties=true");
             search.set("date", race.date);
-            search.set("party", race.party);
+            search.set("party", race.party || "");
             search.set("office", race.office)
             href = "#" + search.toString();
 

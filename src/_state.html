@@ -93,7 +93,7 @@ var getDescriptors = function(item) {
 
                 <% if (item.parties) item.parties.forEach(function(p) { %>
                 <option
-                  value="<%= hashRace(item.race) %>&party=<%= p %>&counties=true&state"
+                  value="<%= hashRace(item.race) %>&party=<%= p || "" %>&counties=true&state"
                   data-days="<%= item.race.days %>">
                   <%= item.office %>
                   <% if (item.race.runoff || item.race.special || item.race.general) { %>
@@ -122,7 +122,7 @@ var getDescriptors = function(item) {
               <% if (item.parties) { %>
               <span class="parties">
                 <%= item.parties.map(p => `
-                <a href="#${hashRace(item.race)}&party=${p}&counties=true&state">
+                <a href="#${hashRace(item.race)}&party=${p || ""}&counties=true&state">
                   ${p == "Dem" ? "Dem." : p}
                 </a>
                   `).join("|") %>
