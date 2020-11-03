@@ -90,10 +90,14 @@ class LiveblogHeadlines extends ElementBase {
       var pubDate = $.one("pubDate", element).innerHTML
       var date = Date.parse(pubDate);
       var relative = relativeTime(date);
+      var articleURL = $.one("link", element).textContent;
+      var link = new URL(articleURL);
+      // remove UTM parameters
+      ["utm_medium", "utm_campaign"].forEach(p => link.searchParams.delete(p));
+      link = link.toString();
       return {
         headline: $.one("title", element).innerHTML,
-        link: $.one("link", element).innerHTML,
-        date, relative, tags, flag
+        link, date, relative, tags, flag
       }
     });
     var max = this.hasAttribute("max") ? this.getAttribute("max") : 6;
