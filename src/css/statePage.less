@@ -189,9 +189,6 @@ nav.race-calendar {
   font-family: @serif;
   font-size: 16px;
   line-height: 1.5em;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 22px;
-  margin-bottom: 22px;
 
   &:empty { display: none; }
 
@@ -203,6 +200,27 @@ nav.race-calendar {
     border-bottom: none;
     padding-bottom: 0;
   }
+}
+
+
+a.general-link,
+a.general-link:visited {
+  font-style: italic;
+  display: block;
+  border: 1px solid darken(#ffe8a2, 10%);
+  background: lighten(#ffe8a2, 10%);
+  padding: 20px;
+  color: black;
+  text-decoration: none;
+
+  &:focus, &:hover {
+    text-decoration: underline;
+  }
+}
+
+hr {
+  border-bottom: 2px solid #ccc;
+  margin: 22px 0;
 }
 
 h3.latest-results {
