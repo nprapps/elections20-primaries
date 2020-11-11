@@ -3,62 +3,59 @@ Build a bundled app.js file using browserify
 */
 module.exports = function(grunt) {
 
-  var async = require("async");
-  var babel = require("babelify");
-  var browserify = require("browserify");
-  var exorcist = require("exorcist");
+  var rollup = require("rollup");
   var fs = require("fs");
   var path = require("path");
-  var through = require("through2");
 
-  grunt.registerTask("bundle", "Build app.js using browserify", function(mode) {
-    //run in dev mode unless otherwise specified
-    mode = mode || "dev";
-    var done = this.async();
+  var plugins = {
+    resolve: require("@rollup/plugin-node-resolve").nodeResolve,
+    cjs: require("@rollup/plugin-commonjs"),
+    less: require("./lib/rollup-less"),
+    text: require("./lib/rollup-text"),
+    json: require("@rollup/plugin-json"),
+    babel: require("@rollup/plugin-babel").babel
+  };
+
+
+  var bundle = async function(mode) {
 
     //specify starter files here - if you need additionally built JS, just add it.
     var config = grunt.file.readJSON("project.json");
     var seeds = config.scripts;
 
-    async.forEachOf(seeds, function(dest, src, c) {
-      var b = browserify({ debug: mode == "dev", paths: ["data"] });
-      b.plugin(require("browser-pack-flat/plugin"));
-      b.transform("babelify", { global: true, presets: [
-        ["@babel/preset-env", {
-          targets: { browsers: ["safari >= 11"]},
-          loose: true,
-          modules: false
-        }]
-      ]});
-
-      //make sure build/ exists
-      grunt.file.mkdir(path.dirname(dest));
-      var output = fs.createWriteStream(dest);
-
-      b.add(src);
-      var assembly = b.bundle();
-
-      assembly.on("error", function(err) {
-        grunt.log.errorlns(err.message);
-        done();
+    for (var [src, dest] of Object.entries(seeds)) {
+      var bundle = await rollup.rollup({
+        input: src,
+        external: ["fs"],
+        plugins: [
+          plugins.resolve({
+            browser: true,
+            customResolveOptions: {
+              paths: ["data"]
+            }
+          }),
+          plugins.cjs({ sourceMap: false, requireReturnsDefault: "auto" }),
+          plugins.less(),
+          plugins.text(),
+          plugins.json()
+        ]
       });
-      var mapFile = dest + ".map"
-
-      if (mode == "dev") {
-        //output sourcemap
-        assembly = assembly.pipe(exorcist(mapFile, null, null, "."));
-      }
-      assembly.pipe(output).on("finish", function() {
-        if (mode != "dev") return;
-
-        //correct path separators in the sourcemap for Windows
-        var sourcemap = grunt.file.readJSON(mapFile);
-        sourcemap.sources = sourcemap.sources.map(function(s) { return s.replace(/\\/g, "/") });
-        grunt.file.write(mapFile, JSON.stringify(sourcemap, null, 2));
-
-        c();
+      bundle.write({
+        format: "iife",
+        name: "nprnewsapps",
+        // sourceMap: true,
+        file: dest
       });
-    }, done);
+    }
+
+  }
+
+  grunt.registerTask("bundle", "Compile JS files", function(mode) {
+    //run in dev mode unless otherwise specified
+    mode = mode || "dev";
+    var done = this.async();
+
+    bundle(mode).then(done);
 
   });
 

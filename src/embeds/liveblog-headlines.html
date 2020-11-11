@@ -17,9 +17,16 @@
     <liveblog-headlines></liveblog-headlines>
     <script>
       var widget = document.querySelector("liveblog-headlines");
-      if (here.searchParams.get("feed")) {
-        widget.setAttribute("src", here.searchParams.get("feed"));
+      var applyParams = function(query, attribute) {
+        if (here.searchParams.has(query)) {
+          widget.setAttribute(attribute, here.searchParams.get(query));
+        }
       }
+
+      applyParams("feed", "src");
+      applyParams("link", "href");
+      applyParams("headline", "headline");
+      applyParams("limit", "max");
     </script>
 
     <script src="headlines.js" async></script>
