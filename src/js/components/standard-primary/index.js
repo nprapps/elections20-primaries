@@ -56,7 +56,7 @@ class StandardPrimary extends ElementBase {
     var elements = this.illuminate();
 
     if (!this.cache) return;
-    var { races, chatter, footnote } = this.cache;
+    var { races, chatter, footnote, general } = this.cache;
     
     races.sort((a, b) => a.party < b.party ? -1 : 1 );
 
@@ -84,8 +84,16 @@ class StandardPrimary extends ElementBase {
 
         if (max) child.setAttribute("max", max);
 
-        var readableParty = data.party == "Dem" ? "Democratic" : data.party || "Open";
-        var headline = `${strings[race.state + "-AP"]} ${readableParty} primary`;
+        var readableParty = general ? "" : 
+          data.party == "Dem" ? "Democratic" : data.party || "Open";
+        var readableOffice = strings[race.office];
+        var typeCode = "";
+        if (this.cache.general) typeCode += "G";
+        if (this.cache.runoff) typeCode += "R";
+        if (this.cache.special) typeCode += "S";
+        var readableType = strings[`race-${typeCode}`];
+        var apState = strings[race.state + "-AP"]
+        var headline = `${apState} ${general ? `${readableType}` : `${readableParty} primary`}`;
 
 
         if (host == "statepage") {

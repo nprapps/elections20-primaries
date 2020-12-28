@@ -2,7 +2,7 @@ require("@nprapps/sidechain");
 var $ = require("./lib/qsa");
 
 var strings = require("strings.sheet.json");
-var races = require("races.sheet.json").filter(r => !r.feedOnly && r.office != "R");
+var races = require("races.sheet.json");
 
 var form = $.one("form");
 var preview = $.one("side-chain");
