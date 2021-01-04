@@ -19,12 +19,18 @@ var moment = require("moment-timezone");
 
 var TIMESPAN = 3;
 
-var monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+var leapLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+var monthLengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 var inDays = function(dateString) {
   var [m, d, y] = dateString.split("/").map(Number);
   var days = 0;
+  var elapsedYears = y - 2020;
+  for (var i = 0; i < elapsedYears; i++) {
+    days += i % 4 == 0 ? 366 : 365;
+  }
+  var lengths = (y - 2020) % 4 == 0 ? leapLengths : monthLengths;
   for (var i = 0; i < m - 1; i++) {
-    days += monthLengths[i];
+    days += lengths[i];
   }
   days += d;
   return days;
