@@ -67,7 +67,8 @@ class ResultsTable extends ElementBase {
       precincts,
       reporting,
       reportingPercentage,
-      updated
+      updated,
+      eevp
     } = result;
 
     // copy the array before mutating
@@ -150,21 +151,28 @@ class ResultsTable extends ElementBase {
     var highest = Math.max(...result.candidates.map(r => r.percentage || 0));
     elements.content.innerHTML = table({ candidates, highest, fold, party });
 
-    // adjust reporting numbers
-    if (reporting > 0 && reportingPercentage < 1) {
-      reportingPercentage = "<1";
-    } else if (reporting < precincts && reportingPercentage > 99 && reportingPercentage < 100) {
-      reportingPercentage = ">99";
-    } else {
-      reportingPercentage = reportingPercentage.toFixed(0);
-    }
+    // updated timestamp
     var updated = new Date(updated);
     var updateString = `as of ${formatTime(updated)} on ${formatAPDate(
       updated
     )}`;
     elements.updated.innerHTML = updateString;
 
-    var reportingString = `${reportingPercentage}% of precincts reporting`;
+    // adjust reporting numbers
+    var reportingString = "";
+    if (typeof eevp == "number") {
+      reportingString = `${eevp.toFixed(0)}% results in`;
+    } else {
+      if (reporting > 0 && reportingPercentage < 1) {
+        reportingPercentage = "<1";
+      } else if (reporting < precincts && reportingPercentage > 99 && reportingPercentage < 100) {
+        reportingPercentage = ">99";
+      } else {
+        reportingPercentage = reportingPercentage.toFixed(0);
+      }
+
+      reportingString = `${reportingPercentage}% of precincts reporting`;
+    }
     elements.reporting.innerHTML = reportingString;
     if (candidates.length < 2 ) elements.reporting.style.display = "none";
   }

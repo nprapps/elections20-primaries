@@ -95,7 +95,8 @@ module.exports = function(resultArray, overrides) {
             updated,
             precincts,
             reporting,
-            reportingPercentage
+            reportingPercentage,
+            eevp
           };
 
           if (ru.level == "FIPSCode") {
