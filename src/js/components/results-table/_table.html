@@ -13,6 +13,7 @@
       if (c.winner) classes.push("winner");
       if (c.incumbent) classes.push("incumbent");
       if (c.runoff) classes.push("runoff");
+      if (!data.party && c.party) classes.push(c.party);
     %>
     <tr
       class="tr candidate <%= data.fold.indexOf(c.last) > -1 ? "shown" : "foldable" %> <%= classes.join(" ") %>" role="row">
