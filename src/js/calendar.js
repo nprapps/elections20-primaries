@@ -1,4 +1,5 @@
 require("./ads");
+require("./analytics")
 // var $ = require("./lib/qsa");
 
 // var events = $("[data-days]");
@@ -20,7 +21,7 @@ require("./ads");
 // });
 
 // // also get rid of links for future results inside of past events
-// // time is bad and increasingly meaningless
+// // time is bad and increasingly meaningless 
 // $("a[data-days]").forEach(function(a) {
 //   var aDays = a.dataset.days;
 //   if (aDays > days) {

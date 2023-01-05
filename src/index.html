@@ -184,7 +184,9 @@
     </main>
 
     <%= t.include("partials/_footer.html", { prefix: "states/" }) %>
-
+    <script>
+    window.PROJECT_ANALYTICS = <%= JSON.stringify(json.project.analytics || {}) %>;
+    </script>
     <script src="calendar.js" async></script>
     <%= t.include("partials/_analytics.html") %>
   </body>
