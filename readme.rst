@@ -17,7 +17,7 @@ With those installed, you can then set the project up using your terminal:
 #. Pull the code - ``git clone git@github.com:nprapps/elections20-primaries``
 #. Enter the project folder - ``cd elections20-primaries``
 #. Install dependencies from NPM - ``npm install``
-#. Update from the google sheets - ``grunt sheets`
+#. Update from the google sheets - ``grunt sheets``
 #. Start the server - ``grunt``
 
 Running tasks
